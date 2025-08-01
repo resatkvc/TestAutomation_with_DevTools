@@ -267,12 +267,4 @@ Bu proje MIT lisansı altında lisanslanmıştır.
 4. Push yapın (`git push origin feature/amazing-feature`)
 5. Pull Request oluşturun
 
-## 📞 İletişim
-
-Proje hakkında sorularınız için:
-- **Email**: [your-email@example.com]
-- **GitHub**: [your-github-profile]
-
 ---
-
-**Not**: Bu proje eğitim ve öğrenme amaçlı geliştirilmiştir. Production ortamında kullanmadan önce güvenlik ve performans testlerini yapmanız önerilir. 
