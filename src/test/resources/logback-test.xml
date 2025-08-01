@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    
+    <!-- Console Appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <!-- File Appender for Test Logs -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/saucedemo-test.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/saucedemo-test.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <!-- Zipkin Appender for Distributed Tracing -->
+    <appender name="ZIPKIN" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [ZIPKIN] %-5level - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <!-- Root Logger -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
+    
+    <!-- Application Loggers -->
+    <logger name="proje.com.saucedemo" level="INFO" />
+    <logger name="proje.com.saucedemo.utils.ZipkinTracer" level="DEBUG" />
+    <logger name="proje.com.saucedemo.verification.VerificationHelper" level="INFO" />
+    
+    <!-- Selenium Loggers -->
+    <logger name="org.openqa.selenium" level="WARN" />
+    <logger name="org.apache.http" level="WARN" />
+    <logger name="org.apache.http.wire" level="WARN" />
+    
+    <!-- WebDriverManager Logger -->
+    <logger name="io.github.bonigarcia" level="INFO" />
+    
+    <!-- Zipkin Logger -->
+    <logger name="zipkin" level="INFO">
+        <appender-ref ref="ZIPKIN" />
+    </logger>
+    
+    <!-- Brave Logger -->
+    <logger name="brave" level="INFO">
+        <appender-ref ref="ZIPKIN" />
+    </logger>
+    
+</configuration> 

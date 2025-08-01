@@ -1,0 +1,248 @@
+2025-08-02 02:50:22.452 [main] INFO  p.c.saucedemo.SauceDemoCompleteTest - === Starting SauceDemo Complete Test Suite ===
+2025-08-02 02:50:22.527 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Zipkin tracing initialized successfully with trace ID: 3fbfb4bb-1894-4387-a5dc-8d6f77214c5a
+2025-08-02 02:50:22.531 [main] INFO  p.c.saucedemo.SauceDemoCompleteTest - Zipkin tracing initialized
+2025-08-02 02:50:24.124 [main] INFO  i.g.bonigarcia.wdm.WebDriverManager - Using chromedriver 138.0.7204.183 (resolved driver for Chrome 138)
+2025-08-02 02:50:24.171 [main] INFO  i.g.bonigarcia.wdm.WebDriverManager - Exporting webdriver.chrome.driver as C:\Users\kavci\.cache\selenium\chromedriver\win64\138.0.7204.183\chromedriver.exe
+2025-08-02 02:50:26.873 [main] INFO  p.c.saucedemo.config.WebDriverConfig - WebDriver initialized successfully for browser: chrome
+2025-08-02 02:50:26.876 [main] INFO  p.c.saucedemo.SauceDemoCompleteTest - Test setup completed successfully
+2025-08-02 02:50:26.901 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: test-login with ID: 86d06219-4b7e-42a4-b8c0-7e49c6d44cef
+2025-08-02 02:50:26.903 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: test_step = login
+2025-08-02 02:50:26.903 [main] INFO  p.c.saucedemo.SauceDemoCompleteTest - === Step 1: Login Test ===
+2025-08-02 02:50:26.903 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: navigate-to-login-page with ID: 982e2ef0-8d2c-423f-a6cd-687762c8131a
+2025-08-02 02:50:26.903 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: base_url = https://www.saucedemo.com
+2025-08-02 02:50:27.788 [main] INFO  proje.com.saucedemo.pages.LoginPage - Successfully navigated to login page: https://www.saucedemo.com/
+2025-08-02 02:50:27.788 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: login_page_loaded = true
+2025-08-02 02:50:27.788 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: navigate-to-login-page (Duration: 885ms)
+2025-08-02 02:50:27.788 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {login_page_loaded=true, base_url=https://www.saucedemo.com}
+2025-08-02 02:50:27.789 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: perform-login with ID: 2f61ea64-0883-4325-a0f5-bcb7870779e5
+2025-08-02 02:50:27.789 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: username = standard_user
+2025-08-02 02:50:27.789 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: password_provided = true
+2025-08-02 02:50:27.789 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: enter-username with ID: be565d61-3d1c-4377-945e-c0e1f3b67595
+2025-08-02 02:50:27.789 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: username = standard_user
+2025-08-02 02:50:27.976 [main] INFO  proje.com.saucedemo.pages.LoginPage - Username entered: standard_user
+2025-08-02 02:50:27.977 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: username_entered = true
+2025-08-02 02:50:27.977 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: enter-username (Duration: 188ms)
+2025-08-02 02:50:27.977 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {username_entered=true, username=standard_user}
+2025-08-02 02:50:27.977 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: enter-password with ID: 2820d903-4047-4d73-b423-0926746c89c5
+2025-08-02 02:50:27.977 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: password_provided = true
+2025-08-02 02:50:28.134 [main] INFO  proje.com.saucedemo.pages.LoginPage - Password entered successfully
+2025-08-02 02:50:28.134 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: password_entered = true
+2025-08-02 02:50:28.134 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: enter-password (Duration: 157ms)
+2025-08-02 02:50:28.134 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {password_entered=true, password_provided=true}
+2025-08-02 02:50:28.134 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: click-login-button with ID: 6905143d-9d26-4050-91e3-cdacd41ac59e
+2025-08-02 02:50:28.273 [main] INFO  proje.com.saucedemo.pages.LoginPage - Login button clicked
+2025-08-02 02:50:28.273 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: login_button_clicked = true
+2025-08-02 02:50:28.273 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: click-login-button (Duration: 139ms)
+2025-08-02 02:50:28.273 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {login_button_clicked=true}
+2025-08-02 02:50:28.273 [main] INFO  proje.com.saucedemo.pages.LoginPage - Login performed for user: standard_user
+2025-08-02 02:50:28.273 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: verify-login-successful with ID: 861b9fb0-7870-4c24-bb21-e8494cf789d7
+2025-08-02 02:50:28.273 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: verification = login
+2025-08-02 02:50:28.302 [main] INFO  p.c.s.v.VerificationHelper - Login verification result: true
+2025-08-02 02:50:28.302 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: login_successful = true
+2025-08-02 02:50:28.302 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: verify-login-successful (Duration: 29ms)
+2025-08-02 02:50:28.303 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {verification=login, login_successful=true}
+2025-08-02 02:50:28.304 [main] INFO  p.c.saucedemo.SauceDemoCompleteTest - Login test passed successfully
+2025-08-02 02:50:28.317 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: test-add-products-to-cart with ID: 12b612bd-0f7c-4014-88b0-881dc7391ec4
+2025-08-02 02:50:28.317 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: test_step = add_products
+2025-08-02 02:50:28.317 [main] INFO  p.c.saucedemo.SauceDemoCompleteTest - === Step 2: Add Products to Cart Test ===
+2025-08-02 02:50:28.317 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: wait-for-inventory-page-load with ID: 5ebfdb61-cdfa-4107-bac0-0177ba8f3738
+2025-08-02 02:50:28.358 [main] INFO  p.com.saucedemo.pages.InventoryPage - Inventory page loaded successfully
+2025-08-02 02:50:28.359 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: inventory_page_loaded = true
+2025-08-02 02:50:28.360 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: wait-for-inventory-page-load (Duration: 43ms)
+2025-08-02 02:50:28.360 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {inventory_page_loaded=true}
+2025-08-02 02:50:28.422 [main] INFO  p.c.s.utils.TestDataGenerator - Generated 2 random products: [Sauce Labs Bike Light, Sauce Labs Fleece Jacket]
+2025-08-02 02:50:28.422 [main] INFO  p.c.saucedemo.SauceDemoCompleteTest - Selected products to add: [Sauce Labs Bike Light, Sauce Labs Fleece Jacket]
+2025-08-02 02:50:28.422 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: add-multiple-products-to-cart with ID: 1012b48c-e5f5-42d8-a4a6-4fed4b56a0b2
+2025-08-02 02:50:28.423 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: products_count = 2
+2025-08-02 02:50:28.423 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: add-product-to-cart with ID: cfac018e-338b-4a0d-b09f-bbf4a1ae6f39
+2025-08-02 02:50:28.423 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: product_name = Sauce Labs Bike Light
+2025-08-02 02:50:28.540 [main] INFO  p.com.saucedemo.pages.InventoryPage - Product added to cart: Sauce Labs Bike Light
+2025-08-02 02:50:28.541 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: product_added = true
+2025-08-02 02:50:28.541 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: add-product-to-cart (Duration: 118ms)
+2025-08-02 02:50:28.541 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {product_added=true, product_name=Sauce Labs Bike Light}
+2025-08-02 02:50:28.541 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: add-product-to-cart with ID: ceb84820-c857-4804-b621-1697b0db18bc
+2025-08-02 02:50:28.541 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: product_name = Sauce Labs Fleece Jacket
+2025-08-02 02:50:28.670 [main] INFO  p.com.saucedemo.pages.InventoryPage - Product added to cart: Sauce Labs Fleece Jacket
+2025-08-02 02:50:28.670 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: product_added = true
+2025-08-02 02:50:28.670 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: add-product-to-cart (Duration: 129ms)
+2025-08-02 02:50:28.670 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {product_added=true, product_name=Sauce Labs Fleece Jacket}
+2025-08-02 02:50:28.670 [main] INFO  p.com.saucedemo.pages.InventoryPage - Added 2 out of 2 products to cart
+2025-08-02 02:50:28.672 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: get-cart-badge-count with ID: ee8e4a72-48a9-4035-826a-9ed4d6be4373
+2025-08-02 02:50:28.707 [main] INFO  p.com.saucedemo.pages.InventoryPage - Cart badge count: 2
+2025-08-02 02:50:28.707 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: cart_badge_count = 2
+2025-08-02 02:50:28.708 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: get-cart-badge-count (Duration: 36ms)
+2025-08-02 02:50:28.708 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {cart_badge_count=2}
+2025-08-02 02:50:28.708 [main] INFO  p.c.saucedemo.SauceDemoCompleteTest - Add products test passed successfully. Added 2 products
+2025-08-02 02:50:28.715 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: test-verify-cart-products with ID: e5c8feba-6acf-4ccf-bb48-0b25d00b4217
+2025-08-02 02:50:28.715 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: test_step = verify_cart
+2025-08-02 02:50:28.715 [main] INFO  p.c.saucedemo.SauceDemoCompleteTest - === Step 3: Verify Cart Products Test ===
+2025-08-02 02:50:28.716 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: click-cart-link with ID: 330f7275-c6fe-4fad-9f9e-85dfc9bf3cec
+2025-08-02 02:50:28.817 [main] INFO  p.com.saucedemo.pages.InventoryPage - Cart link clicked, navigated to cart page
+2025-08-02 02:50:28.818 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: cart_link_clicked = true
+2025-08-02 02:50:28.818 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: click-cart-link (Duration: 102ms)
+2025-08-02 02:50:28.818 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {cart_link_clicked=true}
+2025-08-02 02:50:28.818 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: wait-for-cart-page-load with ID: 9474c6d9-5fbe-4660-a813-87c099b2d32a
+2025-08-02 02:50:28.854 [main] INFO  proje.com.saucedemo.pages.CartPage - Cart page loaded successfully
+2025-08-02 02:50:28.854 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: cart_page_loaded = true
+2025-08-02 02:50:28.854 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: wait-for-cart-page-load (Duration: 36ms)
+2025-08-02 02:50:28.855 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {cart_page_loaded=true}
+2025-08-02 02:50:28.855 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: verify-products-in-cart with ID: f4846508-bf26-4d6f-b142-d5be48903ac0
+2025-08-02 02:50:28.855 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: expected_products_count = 2
+2025-08-02 02:50:28.988 [main] INFO  p.c.s.v.VerificationHelper - Product found in cart: Sauce Labs Bike Light
+2025-08-02 02:50:29.017 [main] INFO  p.c.s.v.VerificationHelper - Product found in cart: Sauce Labs Fleece Jacket
+2025-08-02 02:50:29.018 [main] INFO  p.c.s.v.VerificationHelper - Cart verification result: true (Expected: 2, Found: 2)
+2025-08-02 02:50:29.018 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: cart_verification_successful = true
+2025-08-02 02:50:29.018 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: actual_products_count = 2
+2025-08-02 02:50:29.018 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: verify-products-in-cart (Duration: 163ms)
+2025-08-02 02:50:29.018 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {expected_products_count=2, actual_products_count=2, cart_verification_successful=true}
+2025-08-02 02:50:29.019 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: get-cart-item-count with ID: 46ef324f-e92b-4cda-a532-72d732c0eb5f
+2025-08-02 02:50:29.037 [main] INFO  proje.com.saucedemo.pages.CartPage - Cart item count: 2
+2025-08-02 02:50:29.037 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: cart_item_count = 2
+2025-08-02 02:50:29.038 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: get-cart-item-count (Duration: 19ms)
+2025-08-02 02:50:29.038 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {cart_item_count=2}
+2025-08-02 02:50:29.038 [main] INFO  p.c.saucedemo.SauceDemoCompleteTest - Cart verification test passed successfully
+2025-08-02 02:50:29.041 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: test-proceed-to-checkout with ID: 8fbced38-a6eb-43f5-953e-0a36923a8605
+2025-08-02 02:50:29.041 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: test_step = proceed_checkout
+2025-08-02 02:50:29.041 [main] INFO  p.c.saucedemo.SauceDemoCompleteTest - === Step 4: Proceed to Checkout Test ===
+2025-08-02 02:50:29.042 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: click-checkout-button with ID: 89770041-92c8-44c5-8107-a5773a331b13
+2025-08-02 02:50:29.167 [main] INFO  proje.com.saucedemo.pages.CartPage - Checkout button clicked, navigated to checkout page
+2025-08-02 02:50:29.168 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: checkout_button_clicked = true
+2025-08-02 02:50:29.168 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: click-checkout-button (Duration: 126ms)
+2025-08-02 02:50:29.168 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {checkout_button_clicked=true}
+2025-08-02 02:50:29.168 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: wait-for-checkout-page-load with ID: b139de73-0b6a-4f4c-8bf8-477be7a59d8d
+2025-08-02 02:50:29.218 [main] INFO  p.com.saucedemo.pages.CheckoutPage - Checkout page loaded successfully
+2025-08-02 02:50:29.219 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: checkout_page_loaded = true
+2025-08-02 02:50:29.219 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: wait-for-checkout-page-load (Duration: 51ms)
+2025-08-02 02:50:29.219 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {checkout_page_loaded=true}
+2025-08-02 02:50:29.219 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: verify-checkout-page with ID: 5efa815d-bacb-4acb-8c44-d91fb53c924c
+2025-08-02 02:50:39.277 [main] INFO  p.c.s.v.VerificationHelper - Checkout page verification result: false
+2025-08-02 02:50:39.277 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: checkout_page_displayed = false
+2025-08-02 02:50:39.278 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: verify-checkout-page (Duration: 10059ms)
+2025-08-02 02:50:39.278 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {checkout_page_displayed=false}
+2025-08-02 02:50:39.308 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: test-fill-checkout-information with ID: b6c20912-84da-478a-b19f-4165c16cc076
+2025-08-02 02:50:39.308 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: test_step = fill_checkout_info
+2025-08-02 02:50:39.308 [main] INFO  p.c.saucedemo.SauceDemoCompleteTest - === Step 5: Fill Checkout Information Test ===
+2025-08-02 02:50:39.308 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: fill-checkout-information-random with ID: 2b53a1a9-187b-4de9-9c63-76e20792d209
+2025-08-02 02:50:39.457 [main] INFO  p.c.s.utils.TestDataGenerator - Generated checkout info: CheckoutInfo{firstName='Francis', lastName='Pacocha', postalCode='16034'}
+2025-08-02 02:50:39.461 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: enter-first-name with ID: 0211a929-4582-4b0b-9253-bd299aa95e1e
+2025-08-02 02:50:39.461 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: first_name = Francis
+2025-08-02 02:50:39.578 [main] INFO  p.com.saucedemo.pages.CheckoutPage - First name entered: Francis
+2025-08-02 02:50:39.579 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: first_name_entered = true
+2025-08-02 02:50:39.579 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: enter-first-name (Duration: 118ms)
+2025-08-02 02:50:39.579 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {first_name_entered=true, first_name=Francis}
+2025-08-02 02:50:39.579 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: enter-last-name with ID: 6b360db0-f43b-48c2-bb8b-8475d5aedf33
+2025-08-02 02:50:39.579 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: last_name = Pacocha
+2025-08-02 02:50:39.674 [main] INFO  p.com.saucedemo.pages.CheckoutPage - Last name entered: Pacocha
+2025-08-02 02:50:39.675 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: last_name_entered = true
+2025-08-02 02:50:39.675 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: enter-last-name (Duration: 96ms)
+2025-08-02 02:50:39.675 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {last_name_entered=true, last_name=Pacocha}
+2025-08-02 02:50:39.675 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: enter-postal-code with ID: dffd392c-4629-43c7-aa3c-68d06efb5bfd
+2025-08-02 02:50:39.675 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: postal_code = 16034
+2025-08-02 02:50:39.797 [main] INFO  p.com.saucedemo.pages.CheckoutPage - Postal code entered: 16034
+2025-08-02 02:50:39.797 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: postal_code_entered = true
+2025-08-02 02:50:39.798 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: enter-postal-code (Duration: 122ms)
+2025-08-02 02:50:39.798 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {postal_code_entered=true, postal_code=16034}
+2025-08-02 02:50:39.798 [main] INFO  p.com.saucedemo.pages.CheckoutPage - Checkout information filled with random data: CheckoutInfo{firstName='Francis', lastName='Pacocha', postalCode='16034'}
+2025-08-02 02:50:39.798 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: click-continue-button with ID: 08f05b8a-5c6f-44d0-b162-1f1f370413da
+2025-08-02 02:50:39.933 [main] INFO  p.com.saucedemo.pages.CheckoutPage - Continue button clicked, navigated to overview page
+2025-08-02 02:50:39.933 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: continue_button_clicked = true
+2025-08-02 02:50:39.933 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: click-continue-button (Duration: 135ms)
+2025-08-02 02:50:39.933 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {continue_button_clicked=true}
+2025-08-02 02:50:39.933 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: wait-for-checkout-overview-page-load with ID: 21ac8b45-8216-443a-be1c-f4d0da388959
+2025-08-02 02:50:39.966 [main] INFO  p.c.s.pages.CheckoutOverviewPage - Checkout overview page loaded successfully
+2025-08-02 02:50:39.966 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: overview_page_loaded = true
+2025-08-02 02:50:39.966 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: wait-for-checkout-overview-page-load (Duration: 33ms)
+2025-08-02 02:50:39.966 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {overview_page_loaded=true}
+2025-08-02 02:50:39.966 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: verify-checkout-overview with ID: 7756df05-d445-4e8e-bed0-22464e8bf050
+2025-08-02 02:50:39.985 [main] INFO  p.c.s.v.VerificationHelper - Checkout overview verification result: true
+2025-08-02 02:50:39.986 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: overview_page_displayed = true
+2025-08-02 02:50:39.986 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: verify-checkout-overview (Duration: 20ms)
+2025-08-02 02:50:39.986 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {overview_page_displayed=true}
+2025-08-02 02:50:39.986 [main] INFO  p.c.saucedemo.SauceDemoCompleteTest - Fill checkout information test passed successfully
+2025-08-02 02:50:39.988 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: test-complete-order with ID: d8bfa433-838f-4018-83f9-3f802e583597
+2025-08-02 02:50:39.988 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: test_step = complete_order
+2025-08-02 02:50:39.988 [main] INFO  p.c.saucedemo.SauceDemoCompleteTest - === Step 6: Complete Order Test ===
+2025-08-02 02:50:39.988 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: click-finish-button with ID: 5a21e645-bc43-4c6d-93fa-a24430aed25e
+2025-08-02 02:50:40.117 [main] INFO  p.c.s.pages.CheckoutOverviewPage - Finish button clicked, navigated to completion page
+2025-08-02 02:50:40.117 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: finish_button_clicked = true
+2025-08-02 02:50:40.117 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: click-finish-button (Duration: 129ms)
+2025-08-02 02:50:40.117 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {finish_button_clicked=true}
+2025-08-02 02:50:40.117 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: wait-for-checkout-complete-page-load with ID: b494f185-a0bc-4702-8a97-43f4b9165746
+2025-08-02 02:50:40.156 [main] INFO  p.c.s.pages.CheckoutCompletePage - Checkout complete page loaded successfully
+2025-08-02 02:50:40.157 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: complete_page_loaded = true
+2025-08-02 02:50:40.157 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: wait-for-checkout-complete-page-load (Duration: 40ms)
+2025-08-02 02:50:40.157 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {complete_page_loaded=true}
+2025-08-02 02:50:40.157 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: verify-order-completion with ID: a6c84676-f6f7-48ec-92df-7725c2a1ca22
+2025-08-02 02:50:40.229 [main] INFO  p.c.s.v.VerificationHelper - Order completion verification result: true
+2025-08-02 02:50:40.229 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: order_completion_verified = true
+2025-08-02 02:50:40.229 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: verify-order-completion (Duration: 72ms)
+2025-08-02 02:50:40.229 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {order_completion_verified=true}
+2025-08-02 02:50:40.229 [main] INFO  p.c.saucedemo.SauceDemoCompleteTest - Complete order test passed successfully
+2025-08-02 02:50:40.231 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: test-verify-order-completion-and-return-home with ID: 36e6db75-d4e3-4af2-bc17-4ace5dcb81fb
+2025-08-02 02:50:40.231 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: test_step = verify_completion_and_return
+2025-08-02 02:50:40.232 [main] INFO  p.c.saucedemo.SauceDemoCompleteTest - === Step 7: Verify Order Completion and Return Home Test ===
+2025-08-02 02:50:40.232 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: verify-order-completion with ID: 57568f05-d3f6-4322-b553-439914031768
+2025-08-02 02:50:40.232 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: check-completion-message with ID: 684ff14e-a331-470e-b365-d3fa62de766c
+2025-08-02 02:50:40.278 [main] INFO  p.c.s.pages.CheckoutCompletePage - Completion message displayed: Thank you for your order!
+2025-08-02 02:50:40.279 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: completion_message = Thank you for your order!
+2025-08-02 02:50:40.279 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: completion_message_displayed = true
+2025-08-02 02:50:40.279 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: check-completion-message (Duration: 47ms)
+2025-08-02 02:50:40.279 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {completion_message=Thank you for your order!, completion_message_displayed=true}
+2025-08-02 02:50:40.279 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: check-dispatch-message with ID: 397b572b-5f39-4109-a80b-06bc8ff492f5
+2025-08-02 02:50:40.326 [main] INFO  p.c.s.pages.CheckoutCompletePage - Dispatch message displayed: Your order has been dispatched, and will arrive just as fast as the pony can get there!
+2025-08-02 02:50:40.327 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: dispatch_message = Your order has been dispatched, and will arrive just as fast as the pony can get there!
+2025-08-02 02:50:40.327 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: dispatch_message_displayed = true
+2025-08-02 02:50:40.327 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: check-dispatch-message (Duration: 48ms)
+2025-08-02 02:50:40.327 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {dispatch_message_displayed=true, dispatch_message=Your order has been dispatched, and will arrive just as fast as the pony can get there!}
+2025-08-02 02:50:40.327 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: check-pony-image with ID: b27120d3-46f6-4405-acc8-bfd5122ef30d
+2025-08-02 02:50:40.352 [main] INFO  p.c.s.pages.CheckoutCompletePage - Pony image displayed: true
+2025-08-02 02:50:40.353 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: pony_image_displayed = true
+2025-08-02 02:50:40.353 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: check-pony-image (Duration: 26ms)
+2025-08-02 02:50:40.353 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {pony_image_displayed=true}
+2025-08-02 02:50:40.353 [main] INFO  p.c.s.pages.CheckoutCompletePage - Order completion verification: completion=true, dispatch=true, pony=true, overall=true
+2025-08-02 02:50:40.353 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: click-back-home-button with ID: 7598f9fa-669f-4016-88ee-b0075fccb8d6
+2025-08-02 02:50:40.461 [main] INFO  p.c.s.pages.CheckoutCompletePage - Back home button clicked, navigated to inventory page
+2025-08-02 02:50:40.462 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: back_home_clicked = true
+2025-08-02 02:50:40.462 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: click-back-home-button (Duration: 109ms)
+2025-08-02 02:50:40.462 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {back_home_clicked=true}
+2025-08-02 02:50:40.462 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: verify-back-to-home with ID: 654f82f6-1800-40ec-8342-f3fbc83d93c7
+2025-08-02 02:51:01.066 [main] ERROR p.c.s.v.VerificationHelper - Back to home verification failed: Expected condition failed: waiting for element to be clickable: By.id: back-to-products (tried for 15 second(s) with 500 milliseconds interval)
+Build info: version: '4.18.1', revision: 'b1d3319b48'
+System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '21'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 138.0.7204.184, chrome: {chromedriverVersion: 138.0.7204.183 (e90faf484dd..., userDataDir: C:\Users\kavci\AppData\Loca...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:54410}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:54410/devtoo..., se:cdpVersion: 138.0.7204.184, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: ef4c4d09199935f4c99a9bfda3a5d94e
+2025-08-02 02:51:01.066 [main] ERROR p.com.saucedemo.utils.ZipkinTracer - Added error to span: Expected condition failed: waiting for element to be clickable: By.id: back-to-products (tried for 15 second(s) with 500 milliseconds interval)
+Build info: version: '4.18.1', revision: 'b1d3319b48'
+System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '21'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 138.0.7204.184, chrome: {chromedriverVersion: 138.0.7204.183 (e90faf484dd..., userDataDir: C:\Users\kavci\AppData\Loca...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:54410}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:54410/devtoo..., se:cdpVersion: 138.0.7204.184, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: ef4c4d09199935f4c99a9bfda3a5d94e
+2025-08-02 02:51:01.066 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: verify-back-to-home (Duration: 20604ms)
+2025-08-02 02:51:01.066 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {error_type=TimeoutException, error=Expected condition failed: waiting for element to be clickable: By.id: back-to-products (tried for 15 second(s) with 500 milliseconds interval)
+Build info: version: '4.18.1', revision: 'b1d3319b48'
+System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '21'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 138.0.7204.184, chrome: {chromedriverVersion: 138.0.7204.183 (e90faf484dd..., userDataDir: C:\Users\kavci\AppData\Loca...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:54410}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:54410/devtoo..., se:cdpVersion: 138.0.7204.184, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: ef4c4d09199935f4c99a9bfda3a5d94e}
+2025-08-02 02:51:01.071 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: test-complete-end-to-end-flow with ID: 51591c3d-e90e-41e8-8fe1-1abcdaba3922
+2025-08-02 02:51:01.071 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: test_step = complete_e2e_flow
+2025-08-02 02:51:01.071 [main] INFO  p.c.saucedemo.SauceDemoCompleteTest - === Complete End-to-End Test Flow ===
+2025-08-02 02:51:01.071 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: wait-for-inventory-page-load with ID: f4d00fdb-0d17-450a-97b2-6168d989b12e
+2025-08-02 02:51:01.103 [main] INFO  p.com.saucedemo.pages.InventoryPage - Inventory page loaded successfully
+2025-08-02 02:51:01.103 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: inventory_page_loaded = true
+2025-08-02 02:51:01.103 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: wait-for-inventory-page-load (Duration: 32ms)
+2025-08-02 02:51:01.103 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {inventory_page_loaded=true}
+2025-08-02 02:51:01.103 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: get-cart-badge-count with ID: 25572b47-bd01-4ef8-865a-d92178fc512a
+2025-08-02 02:51:11.155 [main] INFO  p.com.saucedemo.pages.InventoryPage - No cart badge found, cart is empty
+2025-08-02 02:51:11.155 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Added tag: cart_badge_count = 0
+2025-08-02 02:51:11.155 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Finished span: get-cart-badge-count (Duration: 10052ms)
+2025-08-02 02:51:11.155 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Span tags: {cart_badge_count=0}
+2025-08-02 02:51:11.155 [main] INFO  p.c.saucedemo.SauceDemoCompleteTest - Complete end-to-end test flow passed successfully
+2025-08-02 02:51:11.155 [main] INFO  p.c.saucedemo.SauceDemoCompleteTest - === All test steps completed successfully ===
+2025-08-02 02:51:11.158 [main] INFO  p.c.saucedemo.SauceDemoCompleteTest - === Cleaning up test resources ===
+2025-08-02 02:51:12.108 [main] INFO  p.c.saucedemo.config.WebDriverConfig - WebDriver quit successfully
+2025-08-02 02:51:12.108 [main] INFO  p.c.saucedemo.SauceDemoCompleteTest - WebDriver quit successfully
+2025-08-02 02:51:12.108 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Zipkin tracing closed successfully
+2025-08-02 02:51:12.108 [main] INFO  p.c.saucedemo.SauceDemoCompleteTest - Zipkin tracing closed
+2025-08-02 02:51:12.108 [main] INFO  p.c.saucedemo.SauceDemoCompleteTest - === Test suite cleanup completed ===
