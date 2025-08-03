@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import proje.com.saucedemo.utils.ZipkinTracer;
+import proje.com.saucedemo.utils.SeleniumTracer;
 
 import java.time.Duration;
 
@@ -19,6 +20,7 @@ public class LoginPage {
     private static final Logger logger = LoggerFactory.getLogger(LoginPage.class);
     private final WebDriver driver;
     private final WebDriverWait wait;
+    private final SeleniumTracer seleniumTracer;
     
     // Page elements
     private final By usernameField = By.id("user-name");
@@ -29,6 +31,7 @@ public class LoginPage {
     public LoginPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        this.seleniumTracer = new SeleniumTracer(driver);
     }
     
     /**
@@ -67,9 +70,8 @@ public class LoginPage {
             ZipkinTracer.startSpan("enter-username");
             ZipkinTracer.addTag("username", username);
             
-            WebElement usernameElement = wait.until(ExpectedConditions.elementToBeClickable(usernameField));
-            usernameElement.clear();
-            usernameElement.sendKeys(username);
+            WebElement usernameElement = seleniumTracer.waitForElement(usernameField, "Username Field");
+            seleniumTracer.sendKeys(usernameElement, username, "Username Input");
             
             logger.info("Username entered: {}", username);
             ZipkinTracer.addTag("username_entered", "true");
@@ -92,9 +94,8 @@ public class LoginPage {
             ZipkinTracer.startSpan("enter-password");
             ZipkinTracer.addTag("password_provided", password != null ? "true" : "false");
             
-            WebElement passwordElement = wait.until(ExpectedConditions.elementToBeClickable(passwordField));
-            passwordElement.clear();
-            passwordElement.sendKeys(password);
+            WebElement passwordElement = seleniumTracer.waitForElement(passwordField, "Password Field");
+            seleniumTracer.sendKeys(passwordElement, password, "Password Input");
             
             logger.info("Password entered successfully");
             ZipkinTracer.addTag("password_entered", "true");
@@ -115,8 +116,8 @@ public class LoginPage {
         try {
             ZipkinTracer.startSpan("click-login-button");
             
-            WebElement loginElement = wait.until(ExpectedConditions.elementToBeClickable(loginButton));
-            loginElement.click();
+            WebElement loginElement = seleniumTracer.waitForElement(loginButton, "Login Button");
+            seleniumTracer.click(loginElement, "Login Button Click");
             
             logger.info("Login button clicked");
             ZipkinTracer.addTag("login_button_clicked", "true");

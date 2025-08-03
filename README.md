@@ -1,278 +1,249 @@
-# 🧪 SauceDemo UI Test Automation with Zipkin Integration
+# Zipkin-Integrated UI Test Automation
 
-Bu proje, [SauceDemo](https://www.saucedemo.com/) sitesi için profesyonel bir UI test otomasyonu projesidir. Selenium WebDriver, JUnit 5, ve basitleştirilmiş Zipkin tracing entegrasyonu ile geliştirilmiştir.
+Professional UI test automation framework with distributed tracing capabilities using Zipkin for monitoring and debugging test execution.
 
-## 🎯 Proje Özellikleri
+## 🚀 Features
 
-- **Selenium WebDriver 4.18.1** - Modern web otomasyonu
-- **JUnit 5** - Test framework
-- **Page Object Model (POM)** - Sürdürülebilir test yapısı
-- **Simplified Zipkin Integration** - Basitleştirilmiş distributed tracing
-- **Docker Compose** - Kolay deployment
-- **Random Test Data** - Faker ile dinamik test verileri
-- **Comprehensive Logging** - Detaylı loglama
-- **Professional Structure** - Modüler ve genişletilebilir yapı
+- **Selenium WebDriver** based UI automation
+- **Distributed Tracing** with Zipkin integration
+- **Professional Logging** with SLF4J and Logback
+- **Test Data Generation** with JavaFaker
+- **Docker Support** for easy deployment
+- **Health Monitoring** for test execution
+- **Modern Java 21** with latest dependencies
 
-## 📋 Test Senaryosu
+## 📋 Prerequisites
 
-Proje aşağıdaki end-to-end test senaryosunu gerçekleştirir:
+- Java 21 or higher
+- Maven 3.6+
+- Docker Desktop
+- Chrome/Firefox browser
 
-1. **Login** - `standard_user` ile giriş yapma
-2. **Add Products** - Random 2 ürün sepete ekleme
-3. **Cart Verification** - Sepetteki ürünleri doğrulama
-4. **Checkout** - Ödeme sürecine geçiş
-5. **Fill Information** - Random checkout bilgileri doldurma
-6. **Order Completion** - Siparişi tamamlama
-7. **Verification** - Sipariş tamamlanma mesajını doğrulama
-8. **Return Home** - Ana sayfaya dönme
+## 🛠️ Installation & Setup
 
-## 🏗️ Proje Yapısı
-
-```
-src/
-├── main/
-│   └── java/
-│       └── proje/
-│           └── com/
-│               └── Main.java
-└── test/
-    ├── java/
-    │   └── proje/
-    │       └── com/
-    │           └── saucedemo/
-    │               ├── config/
-    │               │   └── WebDriverConfig.java
-    │               ├── pages/
-    │               │   ├── LoginPage.java
-    │               │   ├── InventoryPage.java
-    │               │   ├── CartPage.java
-    │               │   ├── CheckoutPage.java
-    │               │   ├── CheckoutOverviewPage.java
-    │               │   └── CheckoutCompletePage.java
-    │               ├── utils/
-    │               │   ├── ZipkinTracer.java
-    │               │   └── TestDataGenerator.java
-    │               ├── verification/
-    │               │   └── VerificationHelper.java
-    │               └── SauceDemoCompleteTest.java
-    └── resources/
-        └── logback-test.xml
-```
-
-## 🚀 Kurulum ve Çalıştırma
-
-### Gereksinimler
-
-- Java 21
-- Maven 3.8+
-- Docker & Docker Compose
-- Chrome/Firefox/Edge browser
-
-### 1. Projeyi Klonlayın
-
+### 1. Clone the Repository
 ```bash
 git clone <repository-url>
 cd Zipkin-Integrated_UI_Test_Automation
 ```
 
-### 2. Docker Servislerini Başlatın
-
+### 2. Start Zipkin with Docker
 ```bash
-docker-compose up -d
+# Start Zipkin server
+docker-compose up -d zipkin
 ```
 
-Bu komut aşağıdaki servisleri başlatır:
-- **Zipkin** (http://localhost:9411)
-- **Selenium Grid Hub** (http://localhost:4444)
-- **Chrome Node**
-- **Firefox Node**
-- **Edge Node**
+### 3. Verify Zipkin is Running
+- Open http://localhost:9411 in your browser
+- You should see the Zipkin UI interface
+- Check Docker Desktop to ensure containers are healthy
 
-### 3. Testleri Çalıştırın
-
-#### Tüm Testleri Çalıştırma
+### 4. Build the Project
 ```bash
-mvn clean test
+mvn clean compile
 ```
 
-#### Belirli Test Sınıfını Çalıştırma
+## 🧪 Running Tests
+
+### Run All Tests
+```bash
+mvn test
+```
+
+### Run Specific Test Class
 ```bash
 mvn test -Dtest=SauceDemoCompleteTest
 ```
 
-#### Selenium Grid ile Çalıştırma
+### Run with Zipkin Tracing
 ```bash
-mvn test -Dtest=SauceDemoCompleteTest -Dbrowser=chrome -DuseGrid=true
+# The tests automatically integrate with Zipkin
+mvn test -Dzipkin.enabled=true
 ```
 
-## 🔧 Konfigürasyon
-
-### WebDriver Konfigürasyonu
-
-`WebDriverConfig.java` dosyasında aşağıdaki ayarları değiştirebilirsiniz:
-
-```java
-// Local Chrome kullanımı
-driver = webDriverConfig.initializeDriver("chrome", false);
-
-// Selenium Grid kullanımı
-driver = webDriverConfig.initializeDriver("chrome", true);
+### Using IDE or Terminal
+```bash
+# From IDE: Right-click on test class and "Run"
+# From Terminal: mvn test
 ```
 
-### Zipkin Konfigürasyonu
+## 📊 Monitoring & Tracing
 
-`ZipkinTracer.java` dosyasında Zipkin endpoint'ini değiştirebilirsiniz:
+### Zipkin Dashboard
+- **URL**: http://localhost:9411
+- **Features**:
+  - Real-time trace visualization
+  - Performance metrics
+  - Error tracking
+  - Service dependencies
 
-```java
-private static final String ZIPKIN_ENDPOINT = "http://localhost:9411/api/v2/spans";
+### Trace Information
+Each test execution creates:
+- **Root Span**: Test execution
+- **Child Spans**: Individual test steps
+- **Tags**: Test metadata (browser, URL, test data)
+- **Duration**: Performance metrics
+
+### Sample Trace Structure
+```
+Test Execution (Root Span)
+├── Login Step
+├── Navigation Step
+├── Data Entry Step
+└── Verification Step
 ```
 
-## 📊 Monitoring ve Tracing
+## 🏗️ Project Structure
 
-### Simplified Zipkin Integration
-
-Bu proje basitleştirilmiş bir Zipkin entegrasyonu kullanır:
-- **Trace ID**: Her test oturumu için benzersiz ID
-- **Span ID**: Her test adımı için benzersiz ID
-- **Duration Tracking**: Her span'in süresini ölçer
-- **Tag System**: Test verilerini span'lere ekler
-- **Error Tracking**: Hataları span'lere kaydeder
-
-### Trace Bilgileri
-
-Her test adımı için aşağıdaki trace'ler oluşturulur:
-- `test-login`
-- `test-add-products-to-cart`
-- `test-verify-cart-products`
-- `test-proceed-to-checkout`
-- `test-fill-checkout-information`
-- `test-complete-order`
-- `test-verify-order-completion-and-return-home`
-
-## 📝 Log Dosyaları
-
-Test logları aşağıdaki konumlarda saklanır:
-- **Console**: Gerçek zamanlı log çıktısı
-- **File**: `logs/saucedemo-test.log`
-- **Rolling**: Günlük log dosyaları
-
-## 🧪 Test Verileri
-
-### Random Test Data
-
-`TestDataGenerator.java` sınıfı aşağıdaki random verileri üretir:
-- **First Name**: Faker ile random isim
-- **Last Name**: Faker ile random soyisim
-- **Postal Code**: Faker ile random posta kodu
-- **Products**: 6 farklı üründen random seçim
-
-### SauceDemo Credentials
-
-```java
-public static final String STANDARD_USER = "standard_user";
-public static final String STANDARD_PASSWORD = "secret_sauce";
+```
+src/
+└── test/java/
+    └── proje/com/saucedemo/
+        ├── config/
+        │   └── WebDriverConfig.java
+        ├── pages/
+        │   ├── CartPage.java
+        │   ├── CheckoutCompletePage.java
+        │   ├── CheckoutOverviewPage.java
+        │   ├── CheckoutPage.java
+        │   ├── InventoryPage.java
+        │   └── LoginPage.java
+        ├── utils/
+        │   ├── TestDataGenerator.java
+        │   ├── ZipkinTracer.java
+        │   ├── SeleniumTracer.java
+        │   └── NetworkTracer.java
+        ├── verification/
+        │   └── VerificationHelper.java
+        └── SauceDemoCompleteTest.java
 ```
 
-## 🔍 Verification Helper
+## 🔧 Configuration
 
-`VerificationHelper.java` sınıfı tüm doğrulama işlemlerini merkezi olarak yönetir:
-
-- Login doğrulama
-- Cart ürün doğrulama
-- Checkout sayfa doğrulama
-- Order completion doğrulama
-- Back to home doğrulama
-
-## 🐳 Docker Servisleri
-
-### Zipkin
+### Docker Compose Configuration
 ```yaml
-zipkin:
-  image: openzipkin/zipkin:latest
-  ports:
-    - "9411:9411"
+services:
+  zipkin:
+    image: openzipkin/zipkin:latest
+    ports:
+      - "9411:9411"
+    environment:
+      - STORAGE_TYPE=memory
+      - JAVA_OPTS=-Xmx512m -Xms256m
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:9411/health || exit 1"]
 ```
 
-### Selenium Grid
-```yaml
-selenium-hub:
-  image: selenium/hub:4.18.1
-  ports:
-    - "4444:4444"
-```
+### Logging Configuration
+- **File**: `src/test/resources/logback-test.xml`
+- **Level**: INFO
+- **Output**: Console + File
+- **Rotation**: Daily with size limits
 
-## 📈 Performans ve Monitoring
+## 📈 Performance Monitoring
 
-### Simplified Tracing Metrics
-- **Trace Duration**: Her test adımının süresi
-- **Span Count**: Toplam span sayısı
-- **Error Rate**: Hata oranı
-- **Tag Information**: Test verileri
+### Key Metrics Tracked
+- **Test Duration**: Total execution time
+- **Step Duration**: Individual step performance
+- **Browser Performance**: Page load times
+- **Error Rates**: Test failure tracking
+- **Resource Usage**: Memory and CPU utilization
 
-### Test Metrics
-- **Test Duration**: Toplam test süresi
-- **Success Rate**: Başarı oranı
-- **Product Count**: Eklenen ürün sayısı
-- **Cart Verification**: Sepet doğrulama durumu
-
-## 🛠️ Geliştirme
-
-### Yeni Test Ekleme
-
-1. `pages/` klasörüne yeni Page Object ekleyin
-2. `verification/` klasörüne verification method'ları ekleyin
-3. `utils/` klasörüne utility method'ları ekleyin
-4. Test sınıfında yeni test method'u ekleyin
-
-### Yeni Browser Desteği
-
-`WebDriverConfig.java` dosyasında yeni browser desteği ekleyin:
-
-```java
-case "safari":
-    WebDriverManager.safaridriver().setup();
-    return new SafariDriver();
-```
+### Zipkin Integration Benefits
+- **Real-time Monitoring**: Live trace visualization
+- **Performance Analysis**: Identify bottlenecks
+- **Error Debugging**: Detailed error context
+- **Test Optimization**: Performance improvement insights
 
 ## 🐛 Troubleshooting
 
-### Selenium Grid Bağlantı Sorunu
-```bash
-# Grid durumunu kontrol edin
-curl http://localhost:4444/status
+### Zipkin Loading Issues
+1. **Check Docker Status**:
+   ```bash
+   docker ps
+   docker logs zipkin
+   ```
+
+2. **Restart Zipkin**:
+   ```bash
+   docker-compose restart zipkin
+   ```
+
+3. **Check Health**:
+   ```bash
+   curl http://localhost:9411/health
+   ```
+
+### Test Execution Issues
+1. **Check WebDriver**:
+   - Ensure Chrome/Firefox is installed
+   - Verify WebDriverManager configuration
+
+2. **Check Logs**:
+   ```bash
+   tail -f logs/saucedemo-test.log
+   ```
+
+3. **Verify Network**:
+   - Ensure test URLs are accessible
+   - Check proxy settings if applicable
+
+## 🔄 Continuous Integration
+
+### GitHub Actions Example
+```yaml
+name: UI Tests with Zipkin
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      zipkin:
+        image: openzipkin/zipkin:latest
+        ports:
+          - 9411:9411
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+      - run: mvn test
 ```
 
-### Zipkin Bağlantı Sorunu
-```bash
-# Zipkin durumunu kontrol edin
-curl http://localhost:9411/health
-```
+## 📝 Logging
 
-### Chrome Driver Sorunu
-```bash
-# WebDriverManager cache'ini temizleyin
-mvn clean
-rm -rf ~/.cache/selenium
-```
+### Log Levels
+- **ERROR**: Test failures, system errors
+- **WARN**: Performance issues, warnings
+- **INFO**: Test execution, important events
+- **DEBUG**: Detailed debugging information
 
-## 📄 Lisans
+### Log Files
+- **Location**: `logs/` directory
+- **Format**: `saucedemo-test.YYYY-MM-DD.log`
+- **Rotation**: Daily with size limits
 
-Bu proje MIT lisansı altında lisanslanmıştır.
+## 🤝 Contributing
 
-## 🤝 Katkıda Bulunma
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new functionality
+5. Ensure all tests pass
+6. Submit a pull request
 
-1. Fork yapın
-2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
-3. Commit yapın (`git commit -m 'Add amazing feature'`)
-4. Push yapın (`git push origin feature/amazing-feature`)
-5. Pull Request oluşturun
+## 📄 License
 
-## 📞 İletişim
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-Proje hakkında sorularınız için:
-- **Email**: [your-email@example.com]
-- **GitHub**: [your-github-profile]
+## 🆘 Support
+
+For issues and questions:
+1. Check the troubleshooting section
+2. Review existing issues
+3. Create a new issue with detailed information
+4. Include logs and trace IDs when applicable
 
 ---
 
-**Not**: Bu proje eğitim ve öğrenme amaçlı geliştirilmiştir. Production ortamında kullanmadan önce güvenlik ve performans testlerini yapmanız önerilir. 
+**Happy Testing! 🧪✨** 

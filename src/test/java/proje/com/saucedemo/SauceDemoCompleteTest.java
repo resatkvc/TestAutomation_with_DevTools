@@ -8,6 +8,8 @@ import proje.com.saucedemo.config.WebDriverConfig;
 import proje.com.saucedemo.pages.*;
 import proje.com.saucedemo.utils.TestDataGenerator;
 import proje.com.saucedemo.utils.ZipkinTracer;
+import proje.com.saucedemo.utils.SeleniumTracer;
+import proje.com.saucedemo.utils.NetworkTracer;
 import proje.com.saucedemo.verification.VerificationHelper;
 
 import java.util.List;
@@ -25,6 +27,8 @@ public class SauceDemoCompleteTest {
     private static WebDriver driver;
     private static WebDriverConfig webDriverConfig;
     private static VerificationHelper verificationHelper;
+    private static SeleniumTracer seleniumTracer;
+    private static NetworkTracer networkTracer;
     
     // Page Objects
     private static LoginPage loginPage;
@@ -52,6 +56,14 @@ public class SauceDemoCompleteTest {
             
             // Initialize verification helper
             verificationHelper = new VerificationHelper(driver);
+            
+            // Initialize Selenium tracer
+            seleniumTracer = new SeleniumTracer(driver);
+            
+            // Initialize Network tracer
+            networkTracer = new NetworkTracer(driver);
+            networkTracer.enableNetworkLogging();
+            networkTracer.monitorNetworkActivity("Test Automation Network Monitoring");
             
             // Initialize page objects
             loginPage = new LoginPage(driver);
@@ -98,14 +110,40 @@ public class SauceDemoCompleteTest {
         try {
             ZipkinTracer.startSpan("test-login");
             ZipkinTracer.addTag("test_step", "login");
+            ZipkinTracer.addTag("base_url", BASE_URL);
             
             logger.info("=== Step 1: Login Test ===");
             
-            // Navigate to login page
-            loginPage.navigateToLoginPage(BASE_URL);
+            // Navigate to login page with detailed tracing
+            seleniumTracer.navigateTo(BASE_URL);
+            seleniumTracer.waitForPageLoad("Login Page");
+            
+            // Get page details
+            String pageTitle = seleniumTracer.getPageTitle();
+            String currentUrl = seleniumTracer.getCurrentUrl();
+            ZipkinTracer.addTag("page_title", pageTitle);
+            ZipkinTracer.addTag("current_url", currentUrl);
+            
+            // Clear previous network requests
+            networkTracer.clearCapturedRequests();
             
             // Perform login with standard user
             loginPage.login(TestDataGenerator.STANDARD_USER, TestDataGenerator.STANDARD_PASSWORD);
+            
+            // Wait for network requests to complete
+            networkTracer.waitForNetworkIdle(5);
+            
+            // Capture network requests during login
+            networkTracer.captureNetworkRequests("Login Operation");
+            
+            // Wait for inventory page to load after login
+            seleniumTracer.waitForPageLoad("Inventory Page");
+            
+            // Get post-login page details
+            String postLoginTitle = seleniumTracer.getPageTitle();
+            String postLoginUrl = seleniumTracer.getCurrentUrl();
+            ZipkinTracer.addTag("post_login_title", postLoginTitle);
+            ZipkinTracer.addTag("post_login_url", postLoginUrl);
             
             // Verify login was successful
             boolean loginSuccessful = verificationHelper.verifyLoginSuccessful();
@@ -126,13 +164,13 @@ public class SauceDemoCompleteTest {
     
     @Test
     @Order(2)
-    @DisplayName("Step 2: Add Random Products to Cart")
+    @DisplayName("Step 2: Add Random Products to Cart with Network Tracing")
     void testAddProductsToCart() {
         try {
             ZipkinTracer.startSpan("test-add-products-to-cart");
             ZipkinTracer.addTag("test_step", "add_products");
             
-            logger.info("=== Step 2: Add Products to Cart Test ===");
+            logger.info("=== Step 2: Add Products to Cart Test with Network Tracing ===");
             
             // Wait for inventory page to load
             inventoryPage.waitForPageLoad();
@@ -141,21 +179,43 @@ public class SauceDemoCompleteTest {
             selectedProducts = TestDataGenerator.generateRandomProducts(2);
             logger.info("Selected products to add: {}", selectedProducts);
             
-            // Add products to cart
-            int addedCount = inventoryPage.addMultipleProductsToCart(selectedProducts);
+            // Clear previous network requests
+            networkTracer.clearCapturedRequests();
+            
+            // Add products to cart with network monitoring
+            for (String product : selectedProducts) {
+                logger.info("Adding product to cart: {}", product);
+                
+                // Start network monitoring for this specific product
+                networkTracer.monitorNetworkActivity("Add to Cart: " + product);
+                
+                // Find and click add to cart button for this product
+                // This will trigger any network requests
+                inventoryPage.addProductToCart(product);
+                
+                // Wait for network requests to complete
+                networkTracer.waitForNetworkIdle(3);
+                
+                // Capture network requests for this specific action
+                networkTracer.captureNetworkRequests("Add to Cart: " + product);
+                
+                logger.info("Product added to cart: {}", product);
+            }
+            
+            // Get all captured network requests
+            List<String> capturedRequests = networkTracer.getCapturedRequests();
+            logger.info("Captured {} network requests during add to cart operations", capturedRequests.size());
             
             // Verify products were added
+            int addedCount = inventoryPage.getCartBadgeCount();
             Assertions.assertEquals(selectedProducts.size(), addedCount, 
                     "All selected products should be added to cart");
             
-            // Verify cart badge count
-            int cartBadgeCount = inventoryPage.getCartBadgeCount();
-            Assertions.assertEquals(selectedProducts.size(), cartBadgeCount, 
-                    "Cart badge count should match number of added products");
-            
             logger.info("Add products test passed successfully. Added {} products", addedCount);
+            logger.info("Network requests captured: {}", capturedRequests.size());
             
             ZipkinTracer.addTag("products_added_count", String.valueOf(addedCount));
+            ZipkinTracer.addTag("network_requests_captured", String.valueOf(capturedRequests.size()));
             ZipkinTracer.addTag("add_products_test_passed", "true");
             ZipkinTracer.finishSpan();
             

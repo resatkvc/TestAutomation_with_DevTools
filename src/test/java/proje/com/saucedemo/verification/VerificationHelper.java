@@ -116,9 +116,13 @@ public class VerificationHelper {
             ZipkinTracer.startSpan("verify-checkout-page");
             
             boolean isOnCheckoutPage = driver.getCurrentUrl().contains("/checkout-step-one.html");
-            boolean hasCheckoutForm = driver.findElements(By.id("checkout_info")).size() > 0;
+            boolean hasFirstNameField = driver.findElements(By.id("first-name")).size() > 0;
+            boolean hasLastNameField = driver.findElements(By.id("last-name")).size() > 0;
+            boolean hasPostalCodeField = driver.findElements(By.id("postal-code")).size() > 0;
+            boolean hasContinueButton = driver.findElements(By.id("continue")).size() > 0;
             
-            boolean checkoutPageDisplayed = isOnCheckoutPage && hasCheckoutForm;
+            boolean checkoutPageDisplayed = isOnCheckoutPage && hasFirstNameField && hasLastNameField && 
+                    hasPostalCodeField && hasContinueButton;
             
             logger.info("Checkout page verification result: {}", checkoutPageDisplayed);
             ZipkinTracer.addTag("checkout_page_displayed", String.valueOf(checkoutPageDisplayed));
@@ -204,15 +208,16 @@ public class VerificationHelper {
         try {
             ZipkinTracer.startSpan("verify-back-to-home");
             
-            // Click back home button
-            WebElement backHomeButton = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.id("back-to-products")));
-            backHomeButton.click();
-            
-            // Verify we're back on inventory page
+            // Verify we're on inventory page
             wait.until(ExpectedConditions.urlContains("/inventory.html"));
             
-            boolean backToHomeSuccessful = driver.getCurrentUrl().contains("/inventory.html");
+            // Check for inventory page elements
+            boolean hasInventoryItems = driver.findElements(By.className("inventory_item")).size() > 0;
+            boolean hasShoppingCart = driver.findElements(By.className("shopping_cart_link")).size() > 0;
+            boolean hasMenuButton = driver.findElements(By.id("react-burger-menu-btn")).size() > 0;
+            
+            boolean backToHomeSuccessful = driver.getCurrentUrl().contains("/inventory.html") && 
+                    hasInventoryItems && hasShoppingCart && hasMenuButton;
             
             logger.info("Back to home verification result: {}", backToHomeSuccessful);
             ZipkinTracer.addTag("back_to_home_successful", String.valueOf(backToHomeSuccessful));
