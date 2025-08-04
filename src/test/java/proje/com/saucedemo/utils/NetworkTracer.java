@@ -40,13 +40,23 @@ public class NetworkTracer {
             if (driver instanceof HasDevTools) {
                 try {
                     logger.info("Chrome driver detected, initializing DevTools...");
+                    
+                    // Get DevTools instance
                     devTools = ((HasDevTools) driver).getDevTools();
+                    
+                    // Create DevTools session
                     devTools.createSession();
                     logger.info("DevTools session created successfully");
+                    
+                    // Wait a bit for session to be ready
+                    Thread.sleep(1000);
                     
                     // Enable network monitoring
                     devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
                     logger.info("Network monitoring enabled");
+                    
+                    // Wait a bit for network monitoring to be ready
+                    Thread.sleep(500);
                     
                     // Listen for network requests
                     devTools.addListener(Network.requestWillBeSent(), request -> {

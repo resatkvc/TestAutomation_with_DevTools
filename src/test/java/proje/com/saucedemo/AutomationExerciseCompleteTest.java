@@ -65,9 +65,8 @@ public class AutomationExerciseCompleteTest {
             // Initialize Selenium tracer
             seleniumTracer = new SeleniumTracer(driver);
             
-            // Initialize NetworkTracer with DevTools monitoring
+            // Initialize NetworkTracer (DevTools will be enabled after first page load)
             networkTracer = new NetworkTracer(driver);
-            networkTracer.enableNetworkLogging();
             
             // Initialize page objects
             homePage = new HomePage(driver);
@@ -143,6 +142,11 @@ public class AutomationExerciseCompleteTest {
             // Navigate to home page
             homePage.navigateToHome();
             zipkinTracer.trackPageNavigation("Home", BASE_URL, System.currentTimeMillis() - startTime);
+            
+            // Enable DevTools network monitoring AFTER page load
+            logger.info("Enabling DevTools network monitoring...");
+            networkTracer.enableNetworkLogging();
+            logger.info("DevTools network monitoring enabled successfully");
             
             // Click on signup/login link
             homePage.clickSignupLogin();
