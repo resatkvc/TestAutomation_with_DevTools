@@ -1,343 +1,455 @@
 package proje.com.saucedemo.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.time.Instant;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.UUID;
 
 /**
- * Professional Zipkin Tracer utility for distributed tracing in test automation
- * Sends real spans to Zipkin server for monitoring and debugging
+ * Zipkin Tracer for AutomationExercise Test Automation
+ * Optimized for distributed tracing with proper categorization
  */
 public class ZipkinTracer {
     
     private static final Logger logger = LoggerFactory.getLogger(ZipkinTracer.class);
-    private static final String ZIPKIN_ENDPOINT = "http://localhost:9411/api/v2/spans";
-    private static final String SERVICE_NAME = "saucedemo-test-automation";
+    private static final String ZIPKIN_BASE_URL = "http://localhost:9411";
+    private static final String DEFAULT_SERVICE_NAME = "automation-exercise-test";
     
-    private static final HttpClient httpClient = HttpClient.newHttpClient();
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private final HttpClient httpClient;
+    private final ObjectMapper objectMapper;
+    private final String traceId;
+    private final String spanId;
+    private final Instant startTime;
+    private final String serviceName;
     
-    private static String currentTraceId;
-    private static String currentSpanId;
-    private static String currentOperationName;
-    private static Instant spanStartTime;
-    private static Map<String, String> currentTags = new ConcurrentHashMap<>();
-    private static final Map<String, SpanInfo> activeSpans = new ConcurrentHashMap<>();
+    public ZipkinTracer() {
+        this(DEFAULT_SERVICE_NAME);
+    }
     
-    /**
-     * Initialize Zipkin tracing
-     */
-    public static void initializeTracing() {
-        try {
-            currentTraceId = generateTraceId();
-            logger.info("Zipkin tracing initialized successfully with trace ID: {}", currentTraceId);
-            
-            // Test connection to Zipkin
-            testZipkinConnection();
-            
-        } catch (Exception e) {
-            logger.error("Failed to initialize Zipkin tracing: {}", e.getMessage());
-        }
+    public ZipkinTracer(String serviceName) {
+        this.httpClient = HttpClient.newBuilder()
+                .connectTimeout(Duration.ofSeconds(10))
+                .build();
+        this.objectMapper = new ObjectMapper();
+        this.traceId = generateTraceId();
+        this.spanId = generateSpanId();
+        this.startTime = Instant.now();
+        this.serviceName = serviceName;
+        
+        // Set MDC for logging correlation
+        MDC.put("traceId", traceId);
+        MDC.put("spanId", spanId);
+        MDC.put("serviceName", this.serviceName);
+        
+        logger.info("ZipkinTracer initialized with traceId: {}, spanId: {}, serviceName: {}", traceId, spanId, this.serviceName);
     }
     
     /**
-     * Test connection to Zipkin server
+     * Start a new trace span
      */
-    private static void testZipkinConnection() {
+    public void startSpan(String operationName, String description) {
         try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:9411/health"))
-                    .GET()
+            ZipkinSpan span = ZipkinSpan.builder()
+                    .traceId(traceId)
+                    .id(spanId)
+                    .name(operationName)
+                    .timestamp(startTime.toEpochMilli() * 1000) // Convert to microseconds
+                    .duration(0)
+                    .localEndpoint(ZipkinEndpoint.builder()
+                            .serviceName(serviceName)
+                            .ipv4("127.0.0.1")
+                            .port(8080)
+                            .build())
+                    .tags(java.util.Map.of(
+                            "description", description,
+                            "operation", operationName,
+                            "test.type", "ui.automation",
+                            "target.site", "automationexercise.com"
+                    ))
                     .build();
             
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            
-            if (response.statusCode() == 200) {
-                logger.info("Zipkin server is accessible and healthy");
-            } else {
-                logger.warn("Zipkin server responded with status: {}", response.statusCode());
-            }
-            
-        } catch (Exception e) {
-            logger.warn("Could not connect to Zipkin server: {}", e.getMessage());
-        }
-    }
-    
-    /**
-     * Start a new span for test operation
-     * @param operationName Name of the operation
-     * @return Span info object
-     */
-    public static SpanInfo startSpan(String operationName) {
-        try {
-            currentSpanId = generateSpanId();
-            currentOperationName = operationName;
-            spanStartTime = Instant.now();
-            currentTags.clear();
-            
-            SpanInfo spanInfo = new SpanInfo(currentSpanId, operationName, currentTraceId);
-            activeSpans.put(currentSpanId, spanInfo);
-            
-            logger.info("Started span: {} with ID: {}", operationName, currentSpanId);
-            
-            return spanInfo;
+            sendSpan(span);
+            logger.info("Started span: {} - {}", operationName, description);
             
         } catch (Exception e) {
             logger.error("Failed to start span: {}", e.getMessage());
         }
-        return null;
     }
     
     /**
-     * Finish current span and send to Zipkin
+     * End current span
      */
-    public static void finishSpan() {
+    public void endSpan(String operationName, boolean success) {
         try {
-            if (currentSpanId != null && spanStartTime != null) {
-                long duration = Instant.now().toEpochMilli() - spanStartTime.toEpochMilli();
-                
-                // Create Zipkin span format
-                Map<String, Object> span = createZipkinSpan(currentSpanId, currentOperationName, duration);
-                
-                // Send to Zipkin
-                sendSpanToZipkin(span);
-                
-                logger.info("Finished span: {} (Duration: {}ms)", currentOperationName, duration);
-                logger.info("Span tags: {}", currentTags);
-                
-                // Clean up
-                activeSpans.remove(currentSpanId);
-                currentSpanId = null;
-                currentOperationName = null;
-                spanStartTime = null;
-                currentTags.clear();
-            }
+            Instant endTime = Instant.now();
+            long duration = (endTime.toEpochMilli() - startTime.toEpochMilli()) * 1000; // Convert to microseconds
+            
+            ZipkinSpan span = ZipkinSpan.builder()
+                    .traceId(traceId)
+                    .id(spanId)
+                    .name(operationName)
+                    .timestamp(startTime.toEpochMilli() * 1000)
+                    .duration(duration)
+                    .localEndpoint(ZipkinEndpoint.builder()
+                            .serviceName(serviceName)
+                            .ipv4("127.0.0.1")
+                            .port(8080)
+                            .build())
+                    .tags(java.util.Map.of(
+                            "status", success ? "success" : "failed",
+                            "duration.ms", String.valueOf(duration / 1000),
+                            "test.result", success ? "PASS" : "FAIL"
+                    ))
+                    .build();
+            
+            sendSpan(span);
+            logger.info("Ended span: {} - Duration: {}ms, Success: {}", operationName, duration / 1000, success);
+            
         } catch (Exception e) {
-            logger.error("Failed to finish span: {}", e.getMessage());
+            logger.error("Failed to end span: {}", e.getMessage());
         }
     }
     
     /**
-     * Create Zipkin span format
+     * Add child span for specific test steps
      */
-    private static Map<String, Object> createZipkinSpan(String spanId, String operationName, long duration) {
-        Map<String, Object> span = new HashMap<>();
-        span.put("traceId", currentTraceId);
-        span.put("id", spanId);
-        span.put("name", operationName);
-        span.put("timestamp", spanStartTime.toEpochMilli() * 1000); // Microseconds
-        span.put("duration", duration * 1000); // Microseconds
-        
-        // Add local endpoint
-        Map<String, Object> localEndpoint = new HashMap<>();
-        localEndpoint.put("serviceName", SERVICE_NAME);
-        span.put("localEndpoint", localEndpoint);
-        
-        // Add tags
-        if (!currentTags.isEmpty()) {
-            span.put("tags", new HashMap<>(currentTags));
-        }
-        
-        return span;
-    }
-    
-    /**
-     * Send span to Zipkin server
-     */
-    private static void sendSpanToZipkin(Map<String, Object> span) {
+    public void addChildSpan(String parentSpanId, String operationName, String description, long duration) {
         try {
-            String spanJson = objectMapper.writeValueAsString(Collections.singletonList(span));
+            String childSpanId = generateSpanId();
+            
+            ZipkinSpan span = ZipkinSpan.builder()
+                    .traceId(traceId)
+                    .id(childSpanId)
+                    .parentId(parentSpanId)
+                    .name(operationName)
+                    .timestamp(Instant.now().toEpochMilli() * 1000)
+                    .duration(duration * 1000) // Convert to microseconds
+                    .localEndpoint(ZipkinEndpoint.builder()
+                            .serviceName(serviceName)
+                            .ipv4("127.0.0.1")
+                            .port(8080)
+                            .build())
+                    .tags(java.util.Map.of(
+                            "description", description,
+                            "step.type", "test.step",
+                            "target.element", operationName
+                    ))
+                    .build();
+            
+            sendSpan(span);
+            logger.info("Added child span: {} - {}", operationName, description);
+            
+        } catch (Exception e) {
+            logger.error("Failed to add child span: {}", e.getMessage());
+        }
+    }
+    
+    /**
+     * Track page navigation
+     */
+    public void trackPageNavigation(String pageName, String url, long loadTime) {
+        try {
+            String spanId = generateSpanId();
+            
+            ZipkinSpan span = ZipkinSpan.builder()
+                    .traceId(traceId)
+                    .id(spanId)
+                    .name("page.navigation")
+                    .timestamp(Instant.now().toEpochMilli() * 1000)
+                    .duration(loadTime * 1000)
+                    .localEndpoint(ZipkinEndpoint.builder()
+                            .serviceName(serviceName)
+                            .ipv4("127.0.0.1")
+                            .port(8080)
+                            .build())
+                    .tags(java.util.Map.of(
+                            "page.name", pageName,
+                            "page.url", url,
+                            "load.time.ms", String.valueOf(loadTime),
+                            "operation.type", "navigation"
+                    ))
+                    .build();
+            
+            sendSpan(span);
+            logger.info("Tracked page navigation: {} - {} ({}ms)", pageName, url, loadTime);
+            
+        } catch (Exception e) {
+            logger.error("Failed to track page navigation: {}", e.getMessage());
+        }
+    }
+    
+    /**
+     * Track element interaction
+     */
+    public void trackElementInteraction(String elementName, String action, long duration) {
+        try {
+            String spanId = generateSpanId();
+            
+            ZipkinSpan span = ZipkinSpan.builder()
+                    .traceId(traceId)
+                    .id(spanId)
+                    .name("element.interaction")
+                    .timestamp(Instant.now().toEpochMilli() * 1000)
+                    .duration(duration * 1000)
+                    .localEndpoint(ZipkinEndpoint.builder()
+                            .serviceName(serviceName)
+                            .ipv4("127.0.0.1")
+                            .port(8080)
+                            .build())
+                    .tags(java.util.Map.of(
+                            "element.name", elementName,
+                            "action.type", action,
+                            "duration.ms", String.valueOf(duration),
+                            "operation.type", "interaction"
+                    ))
+                    .build();
+            
+            sendSpan(span);
+            logger.info("Tracked element interaction: {} - {} ({}ms)", elementName, action, duration);
+            
+        } catch (Exception e) {
+            logger.error("Failed to track element interaction: {}", e.getMessage());
+        }
+    }
+    
+    /**
+     * Track test step completion
+     */
+    public void trackTestStep(String stepName, String description, boolean success, long duration) {
+        try {
+            String spanId = generateSpanId();
+            
+            ZipkinSpan span = ZipkinSpan.builder()
+                    .traceId(traceId)
+                    .id(spanId)
+                    .name("test.step")
+                    .timestamp(Instant.now().toEpochMilli() * 1000)
+                    .duration(duration * 1000)
+                    .localEndpoint(ZipkinEndpoint.builder()
+                            .serviceName(serviceName)
+                            .ipv4("127.0.0.1")
+                            .port(8080)
+                            .build())
+                    .tags(java.util.Map.of(
+                            "step.name", stepName,
+                            "step.description", description,
+                            "step.status", success ? "PASS" : "FAIL",
+                            "duration.ms", String.valueOf(duration),
+                            "operation.type", "test.step"
+                    ))
+                    .build();
+            
+            sendSpan(span);
+            logger.info("Tracked test step: {} - {} ({}ms, {})", stepName, description, duration, success ? "PASS" : "FAIL");
+            
+        } catch (Exception e) {
+            logger.error("Failed to track test step: {}", e.getMessage());
+        }
+    }
+    
+    /**
+     * Send span to Zipkin
+     */
+    private void sendSpan(ZipkinSpan span) {
+        try {
+            String jsonPayload = objectMapper.writeValueAsString(java.util.List.of(span));
             
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(ZIPKIN_ENDPOINT))
+                    .uri(URI.create(ZIPKIN_BASE_URL + "/api/v2/spans"))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(spanJson))
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
                     .build();
             
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             
             if (response.statusCode() == 202) {
-                logger.debug("Span sent to Zipkin successfully");
+                logger.debug("Span sent successfully to Zipkin");
             } else {
                 logger.warn("Failed to send span to Zipkin. Status: {}", response.statusCode());
             }
             
-        } catch (Exception e) {
-            logger.error("Failed to send span to Zipkin: {}", e.getMessage());
+        } catch (IOException | InterruptedException e) {
+            logger.error("Error sending span to Zipkin: {}", e.getMessage());
         }
     }
     
     /**
-     * Add tag to current span
-     * @param key Tag key
-     * @param value Tag value
+     * Generate unique trace ID
      */
-    public static void addTag(String key, String value) {
-        try {
-            if (currentSpanId != null) {
-                currentTags.put(key, value);
-                logger.debug("Added tag: {} = {}", key, value);
-            }
-        } catch (Exception e) {
-            logger.error("Failed to add tag: {}", e.getMessage());
-        }
+    private String generateTraceId() {
+        return UUID.randomUUID().toString().replace("-", "").substring(0, 16);
     }
     
     /**
-     * Add error to current span
-     * @param error Error to add
+     * Generate unique span ID
      */
-    public static void addError(Throwable error) {
-        try {
-            if (currentSpanId != null) {
-                currentTags.put("error", error.getMessage());
-                currentTags.put("error_type", error.getClass().getSimpleName());
-                logger.error("Added error to span: {}", error.getMessage());
-            }
-        } catch (Exception e) {
-            logger.error("Failed to add error to span: {}", e.getMessage());
-        }
-    }
-    
-    /**
-     * Create child span
-     * @param operationName Name of the child operation
-     * @return Child span info
-     */
-    public static SpanInfo startChildSpan(String operationName) {
-        try {
-            String childSpanId = generateSpanId();
-            String parentSpanId = currentSpanId;
-            
-            SpanInfo childSpan = new SpanInfo(childSpanId, operationName, currentTraceId, parentSpanId);
-            activeSpans.put(childSpanId, childSpan);
-            
-            logger.info("Started child span: {} with ID: {} (parent: {})", operationName, childSpanId, parentSpanId);
-            return childSpan;
-            
-        } catch (Exception e) {
-            logger.error("Failed to start child span: {}", e.getMessage());
-        }
-        return null;
-    }
-    
-    /**
-     * Get current span info
-     * @return Current span info
-     */
-    public static SpanInfo getCurrentSpan() {
-        if (currentSpanId != null) {
-            return activeSpans.get(currentSpanId);
-        }
-        return null;
-    }
-    
-    /**
-     * Close tracing resources
-     */
-    public static void closeTracing() {
-        try {
-            // Finish any remaining spans
-            for (SpanInfo span : activeSpans.values()) {
-                logger.warn("Force finishing span: {}", span.getOperationName());
-            }
-            activeSpans.clear();
-            
-            logger.info("Zipkin tracing closed successfully");
-            currentTraceId = null;
-            currentSpanId = null;
-            currentOperationName = null;
-            spanStartTime = null;
-            currentTags.clear();
-            
-        } catch (Exception e) {
-            logger.error("Failed to close tracing: {}", e.getMessage());
-        }
-    }
-    
-    /**
-     * Check if tracing is initialized
-     * @return True if tracing is initialized
-     */
-    public static boolean isInitialized() {
-        return currentTraceId != null;
+    private String generateSpanId() {
+        return UUID.randomUUID().toString().replace("-", "").substring(0, 16);
     }
     
     /**
      * Get current trace ID
-     * @return Current trace ID
      */
-    public static String getCurrentTraceId() {
-        return currentTraceId;
+    public String getTraceId() {
+        return traceId;
     }
     
     /**
-     * Generate trace ID (16 characters hex)
+     * Get current span ID
      */
-    private static String generateTraceId() {
-        return UUID.randomUUID().toString().replace("-", "").substring(0, 16);
+    public String getSpanId() {
+        return spanId;
     }
     
     /**
-     * Generate span ID (16 characters hex)
+     * Cleanup MDC
      */
-    private static String generateSpanId() {
-        return UUID.randomUUID().toString().replace("-", "").substring(0, 16);
+    public void cleanup() {
+        MDC.clear();
+        logger.info("ZipkinTracer cleanup completed");
     }
     
-    /**
-     * Span info class
-     */
-    public static class SpanInfo {
-        private final String spanId;
-        private final String operationName;
-        private final String traceId;
-        private final String parentSpanId;
+    // Zipkin Span Data Classes
+    public static class ZipkinSpan {
+        private String traceId;
+        private String id;
+        private String parentId;
+        private String name;
+        private long timestamp;
+        private long duration;
+        private ZipkinEndpoint localEndpoint;
+        private java.util.Map<String, String> tags;
         
-        public SpanInfo(String spanId, String operationName, String traceId) {
-            this(spanId, operationName, traceId, null);
+        // Builder pattern
+        public static ZipkinSpanBuilder builder() {
+            return new ZipkinSpanBuilder();
         }
         
-        public SpanInfo(String spanId, String operationName, String traceId, String parentSpanId) {
-            this.spanId = spanId;
-            this.operationName = operationName;
-            this.traceId = traceId;
-            this.parentSpanId = parentSpanId;
+        // Getters and setters
+        public String getTraceId() { return traceId; }
+        public void setTraceId(String traceId) { this.traceId = traceId; }
+        
+        public String getId() { return id; }
+        public void setId(String id) { this.id = id; }
+        
+        public String getParentId() { return parentId; }
+        public void setParentId(String parentId) { this.parentId = parentId; }
+        
+        public String getName() { return name; }
+        public void setName(String name) { this.name = name; }
+        
+        public long getTimestamp() { return timestamp; }
+        public void setTimestamp(long timestamp) { this.timestamp = timestamp; }
+        
+        public long getDuration() { return duration; }
+        public void setDuration(long duration) { this.duration = duration; }
+        
+        public ZipkinEndpoint getLocalEndpoint() { return localEndpoint; }
+        public void setLocalEndpoint(ZipkinEndpoint localEndpoint) { this.localEndpoint = localEndpoint; }
+        
+        public java.util.Map<String, String> getTags() { return tags; }
+        public void setTags(java.util.Map<String, String> tags) { this.tags = tags; }
+        
+        public static class ZipkinSpanBuilder {
+            private ZipkinSpan span = new ZipkinSpan();
+            
+            public ZipkinSpanBuilder traceId(String traceId) {
+                span.traceId = traceId;
+                return this;
+            }
+            
+            public ZipkinSpanBuilder id(String id) {
+                span.id = id;
+                return this;
+            }
+            
+            public ZipkinSpanBuilder parentId(String parentId) {
+                span.parentId = parentId;
+                return this;
+            }
+            
+            public ZipkinSpanBuilder name(String name) {
+                span.name = name;
+                return this;
+            }
+            
+            public ZipkinSpanBuilder timestamp(long timestamp) {
+                span.timestamp = timestamp;
+                return this;
+            }
+            
+            public ZipkinSpanBuilder duration(long duration) {
+                span.duration = duration;
+                return this;
+            }
+            
+            public ZipkinSpanBuilder localEndpoint(ZipkinEndpoint localEndpoint) {
+                span.localEndpoint = localEndpoint;
+                return this;
+            }
+            
+            public ZipkinSpanBuilder tags(java.util.Map<String, String> tags) {
+                span.tags = tags;
+                return this;
+            }
+            
+            public ZipkinSpan build() {
+                return span;
+            }
+        }
+    }
+    
+    public static class ZipkinEndpoint {
+        private String serviceName;
+        private String ipv4;
+        private int port;
+        
+        // Builder pattern
+        public static ZipkinEndpointBuilder builder() {
+            return new ZipkinEndpointBuilder();
         }
         
-        public String getSpanId() {
-            return spanId;
-        }
+        // Getters and setters
+        public String getServiceName() { return serviceName; }
+        public void setServiceName(String serviceName) { this.serviceName = serviceName; }
         
-        public String getOperationName() {
-            return operationName;
-        }
+        public String getIpv4() { return ipv4; }
+        public void setIpv4(String ipv4) { this.ipv4 = ipv4; }
         
-        public String getTraceId() {
-            return traceId;
-        }
+        public int getPort() { return port; }
+        public void setPort(int port) { this.port = port; }
         
-        public String getParentSpanId() {
-            return parentSpanId;
-        }
-        
-        @Override
-        public String toString() {
-            return "SpanInfo{" +
-                    "spanId='" + spanId + '\'' +
-                    ", operationName='" + operationName + '\'' +
-                    ", traceId='" + traceId + '\'' +
-                    ", parentSpanId='" + parentSpanId + '\'' +
-                    '}';
+        public static class ZipkinEndpointBuilder {
+            private ZipkinEndpoint endpoint = new ZipkinEndpoint();
+            
+            public ZipkinEndpointBuilder serviceName(String serviceName) {
+                endpoint.serviceName = serviceName;
+                return this;
+            }
+            
+            public ZipkinEndpointBuilder ipv4(String ipv4) {
+                endpoint.ipv4 = ipv4;
+                return this;
+            }
+            
+            public ZipkinEndpointBuilder port(int port) {
+                endpoint.port = port;
+                return this;
+            }
+            
+            public ZipkinEndpoint build() {
+                return endpoint;
+            }
         }
     }
 } 

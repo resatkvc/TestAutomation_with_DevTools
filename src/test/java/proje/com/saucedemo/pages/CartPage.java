@@ -7,308 +7,278 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import proje.com.saucedemo.utils.ZipkinTracer;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Cart page object for SauceDemo
+ * Page Object for AutomationExercise Cart Page
  */
 public class CartPage {
-    
     private static final Logger logger = LoggerFactory.getLogger(CartPage.class);
     private final WebDriver driver;
     private final WebDriverWait wait;
-    
-    // Page elements
-    private final By cartItems = By.className("cart_item");
-    private final By cartItemNames = By.className("inventory_item_name");
-    private final By removeButtons = By.cssSelector("button[id^='remove']");
-    private final By checkoutButton = By.id("checkout");
-    private final By continueShoppingButton = By.id("continue-shopping");
-    private final By cartQuantity = By.className("cart_quantity");
-    
+
+    // Locators
+    private final By cartTitle = By.cssSelector(".breadcrumbs h2");
+    private final By cartItems = By.cssSelector("#cart_info_table tbody tr");
+    private final By productNames = By.cssSelector(".cart_description h4 a");
+    private final By productPrices = By.cssSelector(".cart_price p");
+    private final By productQuantities = By.cssSelector(".cart_quantity button");
+    private final By totalPrices = By.cssSelector(".cart_total_price p");
+    private final By deleteButtons = By.cssSelector(".cart_quantity_delete");
+    private final By proceedToCheckoutButton = By.cssSelector(".btn.check_out");
+    private final By continueShoppingButton = By.cssSelector(".btn.btn-default");
+    private final By emptyCartMessage = By.cssSelector(".empty_cart");
+    private final By cartEmptyMessage = By.cssSelector(".empty_cart p");
+    private final By quantityInputs = By.cssSelector(".cart_quantity input");
+    private final By updateCartButton = By.cssSelector(".btn.btn-default.btn-xs");
+    private final By cartTotal = By.cssSelector(".cart_total_price p");
+
     public CartPage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
-    
+
     /**
-     * Wait for cart page to load
+     * Navigate to cart page
      */
-    public void waitForPageLoad() {
-        try {
-            ZipkinTracer.startSpan("wait-for-cart-page-load");
-            
-            wait.until(ExpectedConditions.urlContains("/cart.html"));
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("cart_list")));
-            
-            logger.info("Cart page loaded successfully");
-            ZipkinTracer.addTag("cart_page_loaded", "true");
-            ZipkinTracer.finishSpan();
-            
-        } catch (Exception e) {
-            logger.error("Failed to load cart page: {}", e.getMessage());
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
-            throw new RuntimeException("Cart page load failed", e);
+    public void navigateToCart() {
+        logger.info("Navigating to cart page");
+        driver.get("https://www.automationexercise.com/view_cart");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(cartTitle));
+        logger.info("Successfully navigated to cart page");
+    }
+
+    /**
+     * Get all cart items
+     */
+    public List<WebElement> getCartItems() {
+        logger.info("Getting all cart items");
+        return driver.findElements(cartItems);
+    }
+
+    /**
+     * Get product names in cart
+     */
+    public List<String> getProductNames() {
+        logger.info("Getting product names in cart");
+        List<WebElement> elements = driver.findElements(productNames);
+        return elements.stream()
+                .map(WebElement::getText)
+                .toList();
+    }
+
+    /**
+     * Get product prices in cart
+     */
+    public List<String> getProductPrices() {
+        logger.info("Getting product prices in cart");
+        List<WebElement> elements = driver.findElements(productPrices);
+        return elements.stream()
+                .map(WebElement::getText)
+                .toList();
+    }
+
+    /**
+     * Get product quantities in cart
+     */
+    public List<String> getProductQuantities() {
+        logger.info("Getting product quantities in cart");
+        List<WebElement> elements = driver.findElements(productQuantities);
+        return elements.stream()
+                .map(WebElement::getText)
+                .toList();
+    }
+
+    /**
+     * Get total prices in cart
+     */
+    public List<String> getTotalPrices() {
+        logger.info("Getting total prices in cart");
+        List<WebElement> elements = driver.findElements(totalPrices);
+        return elements.stream()
+                .map(WebElement::getText)
+                .toList();
+    }
+
+    /**
+     * Delete product from cart by index
+     */
+    public void deleteProductByIndex(int index) {
+        logger.info("Deleting product from cart by index: {}", index);
+        List<WebElement> deleteButtons = driver.findElements(this.deleteButtons);
+        
+        if (index >= 0 && index < deleteButtons.size()) {
+            WebElement deleteButton = deleteButtons.get(index);
+            deleteButton.click();
+            logger.info("Product deleted from cart");
+        } else {
+            logger.warn("Invalid index: {}", index);
         }
     }
-    
+
     /**
-     * Get all cart item names
-     * @return List of cart item names
+     * Delete all products from cart
      */
-    public List<String> getCartItemNames() {
-        try {
-            ZipkinTracer.startSpan("get-cart-item-names");
-            
-            List<WebElement> itemElements = driver.findElements(cartItemNames);
-            List<String> itemNames = new ArrayList<>();
-            
-            for (WebElement element : itemElements) {
-                itemNames.add(element.getText());
+    public void deleteAllProducts() {
+        logger.info("Deleting all products from cart");
+        List<WebElement> deleteButtons = driver.findElements(this.deleteButtons);
+        
+        for (WebElement deleteButton : deleteButtons) {
+            deleteButton.click();
+            try {
+                Thread.sleep(1000); // Wait for deletion to complete
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
-            
-            logger.info("Retrieved {} cart item names", itemNames.size());
-            ZipkinTracer.addTag("cart_items_count", String.valueOf(itemNames.size()));
-            ZipkinTracer.finishSpan();
-            
-            return itemNames;
-            
-        } catch (Exception e) {
-            logger.error("Failed to get cart item names: {}", e.getMessage());
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
-            return new ArrayList<>();
         }
+        logger.info("All products deleted from cart");
     }
-    
+
     /**
-     * Get cart item count
-     * @return Number of items in cart
+     * Update product quantity by index
      */
-    public int getCartItemCount() {
-        try {
-            ZipkinTracer.startSpan("get-cart-item-count");
+    public void updateProductQuantity(int index, String newQuantity) {
+        logger.info("Updating product quantity by index: {} to: {}", index, newQuantity);
+        List<WebElement> quantityInputs = driver.findElements(this.quantityInputs);
+        
+        if (index >= 0 && index < quantityInputs.size()) {
+            WebElement quantityInput = quantityInputs.get(index);
+            quantityInput.clear();
+            quantityInput.sendKeys(newQuantity);
             
-            List<WebElement> cartItemsList = driver.findElements(cartItems);
-            int count = cartItemsList.size();
-            
-            logger.info("Cart item count: {}", count);
-            ZipkinTracer.addTag("cart_item_count", String.valueOf(count));
-            ZipkinTracer.finishSpan();
-            
-            return count;
-            
-        } catch (Exception e) {
-            logger.error("Failed to get cart item count: {}", e.getMessage());
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
-            return 0;
+            // Click update button if available
+            try {
+                WebElement updateButton = wait.until(ExpectedConditions.elementToBeClickable(updateCartButton));
+                updateButton.click();
+                logger.info("Product quantity updated");
+            } catch (Exception e) {
+                logger.warn("Update button not found");
+            }
+        } else {
+            logger.warn("Invalid index: {}", index);
         }
     }
-    
+
     /**
-     * Remove item from cart by name
-     * @param itemName Name of the item to remove
-     * @return True if item was removed successfully
+     * Click on Proceed to Checkout button
      */
-    public boolean removeItemFromCart(String itemName) {
-        try {
-            ZipkinTracer.startSpan("remove-item-from-cart");
-            ZipkinTracer.addTag("item_name", itemName);
-            
-            // Find item by name
-            WebElement itemElement = driver.findElement(
-                    By.xpath("//div[contains(@class, 'inventory_item_name') and text()='" + itemName + "']/ancestor::div[contains(@class, 'cart_item')]"));
-            
-            // Find remove button within this item
-            WebElement removeButton = itemElement.findElement(By.cssSelector("button[id^='remove']"));
-            
-            // Click remove button
-            removeButton.click();
-            
-            // Wait for item to be removed
-            wait.until(ExpectedConditions.invisibilityOf(itemElement));
-            
-            logger.info("Item removed from cart: {}", itemName);
-            ZipkinTracer.addTag("item_removed", "true");
-            ZipkinTracer.finishSpan();
-            
-            return true;
-            
-        } catch (Exception e) {
-            logger.error("Failed to remove item from cart: {}", e.getMessage());
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
-            return false;
-        }
+    public void clickProceedToCheckout() {
+        logger.info("Clicking on Proceed to Checkout button");
+        WebElement proceedButton = wait.until(ExpectedConditions.elementToBeClickable(proceedToCheckoutButton));
+        proceedButton.click();
+        logger.info("Successfully clicked on Proceed to Checkout button");
     }
-    
+
     /**
-     * Click checkout button
+     * Click on Continue Shopping button
      */
-    public void clickCheckoutButton() {
-        try {
-            ZipkinTracer.startSpan("click-checkout-button");
-            
-            WebElement checkoutElement = wait.until(ExpectedConditions.elementToBeClickable(checkoutButton));
-            checkoutElement.click();
-            
-            // Wait for checkout page to load
-            wait.until(ExpectedConditions.urlContains("/checkout-step-one.html"));
-            
-            logger.info("Checkout button clicked, navigated to checkout page");
-            ZipkinTracer.addTag("checkout_button_clicked", "true");
-            ZipkinTracer.finishSpan();
-            
-        } catch (Exception e) {
-            logger.error("Failed to click checkout button: {}", e.getMessage());
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
-            throw new RuntimeException("Failed to click checkout button", e);
-        }
+    public void clickContinueShopping() {
+        logger.info("Clicking on Continue Shopping button");
+        WebElement continueButton = wait.until(ExpectedConditions.elementToBeClickable(continueShoppingButton));
+        continueButton.click();
+        logger.info("Successfully clicked on Continue Shopping button");
     }
-    
-    /**
-     * Click continue shopping button
-     */
-    public void clickContinueShoppingButton() {
-        try {
-            ZipkinTracer.startSpan("click-continue-shopping-button");
-            
-            WebElement continueElement = wait.until(ExpectedConditions.elementToBeClickable(continueShoppingButton));
-            continueElement.click();
-            
-            // Wait for inventory page to load
-            wait.until(ExpectedConditions.urlContains("/inventory.html"));
-            
-            logger.info("Continue shopping button clicked, navigated to inventory page");
-            ZipkinTracer.addTag("continue_shopping_clicked", "true");
-            ZipkinTracer.finishSpan();
-            
-        } catch (Exception e) {
-            logger.error("Failed to click continue shopping button: {}", e.getMessage());
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
-            throw new RuntimeException("Failed to click continue shopping button", e);
-        }
-    }
-    
+
     /**
      * Check if cart is empty
-     * @return True if cart is empty
      */
     public boolean isCartEmpty() {
         try {
-            ZipkinTracer.startSpan("check-cart-empty");
-            
-            List<WebElement> cartItemsList = driver.findElements(cartItems);
-            boolean isEmpty = cartItemsList.isEmpty();
-            
-            logger.info("Cart is empty: {}", isEmpty);
-            ZipkinTracer.addTag("cart_empty", String.valueOf(isEmpty));
-            ZipkinTracer.finishSpan();
-            
-            return isEmpty;
-            
-        } catch (Exception e) {
-            logger.error("Failed to check if cart is empty: {}", e.getMessage());
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
+            wait.until(ExpectedConditions.visibilityOfElementLocated(emptyCartMessage));
             return true;
-        }
-    }
-    
-    /**
-     * Check if item is in cart
-     * @param itemName Name of the item to check
-     * @return True if item is in cart
-     */
-    public boolean isItemInCart(String itemName) {
-        try {
-            ZipkinTracer.startSpan("check-item-in-cart");
-            ZipkinTracer.addTag("item_name", itemName);
-            
-            List<WebElement> itemElements = driver.findElements(
-                    By.xpath("//div[contains(@class, 'inventory_item_name') and text()='" + itemName + "']"));
-            
-            boolean inCart = !itemElements.isEmpty();
-            
-            logger.info("Item '{}' in cart: {}", itemName, inCart);
-            ZipkinTracer.addTag("item_in_cart", String.valueOf(inCart));
-            ZipkinTracer.finishSpan();
-            
-            return inCart;
-            
         } catch (Exception e) {
-            logger.error("Failed to check if item is in cart: {}", e.getMessage());
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
             return false;
         }
     }
-    
+
     /**
-     * Get item price by name
-     * @param itemName Name of the item
-     * @return Item price
+     * Get cart empty message
      */
-    public String getItemPrice(String itemName) {
+    public String getCartEmptyMessage() {
         try {
-            ZipkinTracer.startSpan("get-item-price");
-            ZipkinTracer.addTag("item_name", itemName);
-            
-            WebElement itemElement = driver.findElement(
-                    By.xpath("//div[contains(@class, 'inventory_item_name') and text()='" + itemName + "']/ancestor::div[contains(@class, 'cart_item')]"));
-            
-            WebElement priceElement = itemElement.findElement(By.className("inventory_item_price"));
-            String price = priceElement.getText();
-            
-            logger.info("Item '{}' price: {}", itemName, price);
-            ZipkinTracer.addTag("item_price", price);
-            ZipkinTracer.finishSpan();
-            
-            return price;
-            
+            WebElement messageElement = wait.until(ExpectedConditions.visibilityOfElementLocated(cartEmptyMessage));
+            return messageElement.getText();
         } catch (Exception e) {
-            logger.error("Failed to get item price: {}", e.getMessage());
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
-            return "";
+            return "Cart is not empty";
         }
     }
-    
+
     /**
-     * Get item quantity by name
-     * @param itemName Name of the item
-     * @return Item quantity
+     * Get cart items count
      */
-    public String getItemQuantity(String itemName) {
+    public int getCartItemsCount() {
+        logger.info("Getting cart items count");
+        List<WebElement> items = getCartItems();
+        return items.size();
+    }
+
+    /**
+     * Get total cart value
+     */
+    public String getTotalCartValue() {
+        logger.info("Getting total cart value");
         try {
-            ZipkinTracer.startSpan("get-item-quantity");
-            ZipkinTracer.addTag("item_name", itemName);
-            
-            WebElement itemElement = driver.findElement(
-                    By.xpath("//div[contains(@class, 'inventory_item_name') and text()='" + itemName + "']/ancestor::div[contains(@class, 'cart_item')]"));
-            
-            WebElement quantityElement = itemElement.findElement(By.className("cart_quantity"));
-            String quantity = quantityElement.getText();
-            
-            logger.info("Item '{}' quantity: {}", itemName, quantity);
-            ZipkinTracer.addTag("item_quantity", quantity);
-            ZipkinTracer.finishSpan();
-            
-            return quantity;
-            
+            List<WebElement> totalElements = driver.findElements(cartTotal);
+            if (!totalElements.isEmpty()) {
+                return totalElements.get(totalElements.size() - 1).getText();
+            }
         } catch (Exception e) {
-            logger.error("Failed to get item quantity: {}", e.getMessage());
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
-            return "";
+            logger.warn("Could not get total cart value");
         }
+        return "0";
+    }
+
+    /**
+     * Check if page is loaded
+     */
+    public boolean isPageLoaded() {
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(cartTitle));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Get page title
+     */
+    public String getPageTitle() {
+        return driver.getTitle();
+    }
+
+    /**
+     * Get current URL
+     */
+    public String getCurrentUrl() {
+        return driver.getCurrentUrl();
+    }
+
+    /**
+     * Verify cart contains specific product
+     */
+    public boolean containsProduct(String productName) {
+        logger.info("Checking if cart contains product: {}", productName);
+        List<String> productNames = getProductNames();
+        return productNames.stream()
+                .anyMatch(name -> name.contains(productName));
+    }
+
+    /**
+     * Get product quantity by product name
+     */
+    public String getProductQuantityByName(String productName) {
+        logger.info("Getting quantity for product: {}", productName);
+        List<WebElement> productElements = driver.findElements(productNames);
+        List<WebElement> quantityElements = driver.findElements(quantityInputs);
+        
+        for (int i = 0; i < productElements.size(); i++) {
+            if (productElements.get(i).getText().contains(productName)) {
+                return quantityElements.get(i).getAttribute("value");
+            }
+        }
+        return "0";
     }
 } 

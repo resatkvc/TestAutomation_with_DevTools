@@ -1,249 +1,240 @@
-# Zipkin-Integrated UI Test Automation
+# AutomationExercise UI Test Automation with Zipkin Integration
 
-Professional UI test automation framework with distributed tracing capabilities using Zipkin for monitoring and debugging test execution.
+Bu proje, `https://www.automationexercise.com/` sitesi için geliştirilmiş kapsamlı UI test otomasyonu projesidir. Proje, end-to-end test senaryolarını destekler ve **Zipkin distributed tracing** entegrasyonu ile test süreçlerini detaylı olarak izler.
 
-## 🚀 Features
+## 🚀 Proje Özellikleri
 
-- **Selenium WebDriver** based UI automation
-- **Distributed Tracing** with Zipkin integration
-- **Professional Logging** with SLF4J and Logback
-- **Test Data Generation** with JavaFaker
-- **Docker Support** for easy deployment
-- **Health Monitoring** for test execution
-- **Modern Java 21** with latest dependencies
+### ✅ **Test Otomasyonu**
+- **End-to-End Test Senaryoları**: Kullanıcı kaydı, ürün ekleme, sepet işlemleri, ödeme
+- **Page Object Model (POM)**: Sürdürülebilir ve yeniden kullanılabilir kod yapısı
+- **Random Test Data**: JavaFaker ile gerçekçi test verileri
+- **Cross-Browser Testing**: Chrome, Firefox, Edge desteği
+- **WebDriverManager**: Otomatik driver yönetimi
 
-## 📋 Prerequisites
+### 🔍 **Zipkin Distributed Tracing**
+- **Comprehensive Tracing**: Tüm test adımlarının detaylı izlenmesi
+- **Performance Monitoring**: Sayfa yükleme süreleri, element etkileşimleri
+- **Error Tracking**: Test hatalarının detaylı analizi
+- **Service Categorization**: Test adımlarının kategorize edilmesi
+- **Real-time Monitoring**: Zipkin UI üzerinden canlı izleme
 
-- Java 21 or higher
-- Maven 3.6+
-- Docker Desktop
-- Chrome/Firefox browser
+### 📊 **Monitoring & Analytics**
+- **Network Monitoring**: Selenium Network API ile ağ trafiği izleme
+- **Selenium Tracing**: WebDriver işlemlerinin detaylı izlenmesi
+- **Logging**: SLF4J ve Logback ile kapsamlı loglama
+- **Reporting**: Test sonuçlarının detaylı raporlanması
 
-## 🛠️ Installation & Setup
+## 🛠️ Gereksinimler
 
-### 1. Clone the Repository
+- **Java 21** veya üzeri
+- **Maven 3.8+**
+- **Docker & Docker Compose** (Zipkin için)
+- **Chrome/Firefox/Edge** browser
+- **Git**
+
+## 🚀 Kurulum ve Çalıştırma
+
+### 1. **Projeyi Klonlayın**
 ```bash
 git clone <repository-url>
 cd Zipkin-Integrated_UI_Test_Automation
 ```
 
-### 2. Start Zipkin with Docker
+### 2. **Zipkin'i Başlatın**
 ```bash
-# Start Zipkin server
-docker-compose up -d zipkin
+# Zipkin'i Docker ile başlatın
+docker-compose up -d
+
+# Servislerin durumunu kontrol edin
+docker-compose ps
 ```
 
-### 3. Verify Zipkin is Running
-- Open http://localhost:9411 in your browser
-- You should see the Zipkin UI interface
-- Check Docker Desktop to ensure containers are healthy
-
-### 4. Build the Project
+### 3. **Projeyi Derleyin**
 ```bash
 mvn clean compile
 ```
 
-## 🧪 Running Tests
-
-### Run All Tests
+### 4. **Testleri Çalıştırın**
 ```bash
+# Tüm testleri çalıştırın
 mvn test
+
+# Belirli test sınıfını çalıştırın
+mvn test -Dtest=AutomationExerciseCompleteTest
+
+# Farklı browser ile test
+mvn test -Dbrowser=firefox
+mvn test -Dbrowser=edge
 ```
 
-### Run Specific Test Class
-```bash
-mvn test -Dtest=SauceDemoCompleteTest
+### 5. **Zipkin UI'ya Erişin**
+```
+http://localhost:9411
 ```
 
-### Run with Zipkin Tracing
-```bash
-# The tests automatically integrate with Zipkin
-mvn test -Dzipkin.enabled=true
-```
-
-### Using IDE or Terminal
-```bash
-# From IDE: Right-click on test class and "Run"
-# From Terminal: mvn test
-```
-
-## 📊 Monitoring & Tracing
-
-### Zipkin Dashboard
-- **URL**: http://localhost:9411
-- **Features**:
-  - Real-time trace visualization
-  - Performance metrics
-  - Error tracking
-  - Service dependencies
-
-### Trace Information
-Each test execution creates:
-- **Root Span**: Test execution
-- **Child Spans**: Individual test steps
-- **Tags**: Test metadata (browser, URL, test data)
-- **Duration**: Performance metrics
-
-### Sample Trace Structure
-```
-Test Execution (Root Span)
-├── Login Step
-├── Navigation Step
-├── Data Entry Step
-└── Verification Step
-```
-
-## 🏗️ Project Structure
+## 📁 Proje Yapısı
 
 ```
-src/
-└── test/java/
-    └── proje/com/saucedemo/
-        ├── config/
-        │   └── WebDriverConfig.java
-        ├── pages/
-        │   ├── CartPage.java
-        │   ├── CheckoutCompletePage.java
-        │   ├── CheckoutOverviewPage.java
-        │   ├── CheckoutPage.java
-        │   ├── InventoryPage.java
-        │   └── LoginPage.java
-        ├── utils/
-        │   ├── TestDataGenerator.java
-        │   ├── ZipkinTracer.java
-        │   ├── SeleniumTracer.java
-        │   └── NetworkTracer.java
-        ├── verification/
-        │   └── VerificationHelper.java
-        └── SauceDemoCompleteTest.java
+src/test/java/proje/com/saucedemo/
+├── AutomationExerciseCompleteTest.java    # Ana test sınıfı
+├── config/
+│   └── WebDriverConfig.java              # WebDriver konfigürasyonu
+├── pages/                                # Page Object Model
+│   ├── HomePage.java                     # Ana sayfa
+│   ├── SignupLoginPage.java              # Kayıt/Giriş sayfası
+│   ├── ProductsPage.java                 # Ürünler sayfası
+│   ├── CartPage.java                     # Sepet sayfası
+│   ├── CheckoutPage.java                 # Ödeme sayfası
+│   └── PaymentPage.java                  # Ödeme işlemi
+├── utils/                                # Yardımcı sınıflar
+│   ├── TestDataGenerator.java            # Test verisi üretici
+│   ├── ZipkinTracer.java                 # Zipkin entegrasyonu
+│   ├── NetworkTracer.java                # Ağ izleme
+│   └── SeleniumTracer.java              # Selenium izleme
+└── verification/
+    └── VerificationHelper.java           # Doğrulama yardımcısı
 ```
 
-## 🔧 Configuration
+## 🧪 Test Senaryoları
 
-### Docker Compose Configuration
+### **End-to-End Test Flow**
+1. **Kullanıcı Kaydı**: Random kullanıcı oluşturma
+2. **Ürün Ekleme**: Random ürünleri sepete ekleme
+3. **Sepet Doğrulama**: Sepetteki ürünleri kontrol etme
+4. **Ödeme İşlemi**: Checkout ve ödeme tamamlama
+5. **Sipariş Doğrulama**: Sipariş tamamlanmasını kontrol etme
+
+### **Zipkin Tracing Kategorileri**
+- **test.suite.setup**: Test suite başlatma
+- **test.create.account**: Kullanıcı kaydı
+- **test.add.products**: Ürün ekleme
+- **test.verify.cart**: Sepet doğrulama
+- **test.proceed.checkout**: Checkout işlemi
+- **test.fill.checkout**: Ödeme bilgileri
+- **test.complete.payment**: Ödeme tamamlama
+- **test.verify.completion**: Sipariş doğrulama
+
+## ⚙️ Konfigürasyon
+
+### **Docker Compose Services**
 ```yaml
 services:
-  zipkin:
+  zipkin:                    # Distributed tracing server
     image: openzipkin/zipkin:latest
-    ports:
-      - "9411:9411"
-    environment:
-      - STORAGE_TYPE=memory
-      - JAVA_OPTS=-Xmx512m -Xms256m
-    healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:9411/health || exit 1"]
+    ports: ["9411:9411"]
 ```
 
-### Logging Configuration
-- **File**: `src/test/resources/logback-test.xml`
-- **Level**: INFO
-- **Output**: Console + File
-- **Rotation**: Daily with size limits
+### **WebDriverManager Konfigürasyonu**
+```java
+// Otomatik driver yönetimi
+WebDriverManager.chromedriver().setup();
+WebDriverManager.firefoxdriver().setup();
+WebDriverManager.edgedriver().setup();
 
-## 📈 Performance Monitoring
-
-### Key Metrics Tracked
-- **Test Duration**: Total execution time
-- **Step Duration**: Individual step performance
-- **Browser Performance**: Page load times
-- **Error Rates**: Test failure tracking
-- **Resource Usage**: Memory and CPU utilization
-
-### Zipkin Integration Benefits
-- **Real-time Monitoring**: Live trace visualization
-- **Performance Analysis**: Identify bottlenecks
-- **Error Debugging**: Detailed error context
-- **Test Optimization**: Performance improvement insights
-
-## 🐛 Troubleshooting
-
-### Zipkin Loading Issues
-1. **Check Docker Status**:
-   ```bash
-   docker ps
-   docker logs zipkin
-   ```
-
-2. **Restart Zipkin**:
-   ```bash
-   docker-compose restart zipkin
-   ```
-
-3. **Check Health**:
-   ```bash
-   curl http://localhost:9411/health
-   ```
-
-### Test Execution Issues
-1. **Check WebDriver**:
-   - Ensure Chrome/Firefox is installed
-   - Verify WebDriverManager configuration
-
-2. **Check Logs**:
-   ```bash
-   tail -f logs/saucedemo-test.log
-   ```
-
-3. **Verify Network**:
-   - Ensure test URLs are accessible
-   - Check proxy settings if applicable
-
-## 🔄 Continuous Integration
-
-### GitHub Actions Example
-```yaml
-name: UI Tests with Zipkin
-on: [push, pull_request]
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    services:
-      zipkin:
-        image: openzipkin/zipkin:latest
-        ports:
-          - 9411:9411
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
-        with:
-          java-version: '21'
-      - run: mvn test
+// Browser seçimi
+driver = webDriverConfig.initializeDriver("chrome");
+driver = webDriverConfig.initializeDriver("firefox");
+driver = webDriverConfig.initializeDriver("edge");
 ```
 
-## 📝 Logging
+### **Zipkin Tracing Konfigürasyonu**
+```java
+// Service name for Zipkin categorization
+private static final String SERVICE_NAME = "automation-exercise-test";
 
-### Log Levels
-- **ERROR**: Test failures, system errors
-- **WARN**: Performance issues, warnings
-- **INFO**: Test execution, important events
-- **DEBUG**: Detailed debugging information
+// Tracing methods
+zipkinTracer.startSpan("operation.name", "description");
+zipkinTracer.trackPageNavigation("page.name", "url", duration);
+zipkinTracer.trackElementInteraction("element.name", "action", duration);
+zipkinTracer.trackTestStep("step.name", "description", success, duration);
+zipkinTracer.endSpan("operation.name", success);
+```
 
-### Log Files
-- **Location**: `logs/` directory
-- **Format**: `saucedemo-test.YYYY-MM-DD.log`
-- **Rotation**: Daily with size limits
+## 📊 Raporlama
 
-## 🤝 Contributing
+### **Zipkin UI Özellikleri**
+- **Trace Search**: Test adımlarını arama
+- **Service Dependencies**: Servis bağımlılıkları
+- **Performance Metrics**: Süre analizleri
+- **Error Tracking**: Hata izleme
+- **Real-time Monitoring**: Canlı izleme
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Ensure all tests pass
-6. Submit a pull request
+### **Test Raporları**
+- **JUnit Reports**: Test sonuçları
+- **Log Files**: Detaylı loglar
+- **Zipkin Traces**: Distributed tracing
+- **Network Logs**: Ağ trafiği
 
-## 📄 License
+## 🔧 Geliştirme
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+### **Yeni Test Senaryosu Ekleme**
+1. **Page Object Oluştur**: `pages/` klasörüne yeni sayfa sınıfı ekle
+2. **Test Metodu Yaz**: `AutomationExerciseCompleteTest.java`'ya test metodu ekle
+3. **Zipkin Tracing**: Test adımlarını Zipkin ile izle
+4. **Verification**: Doğrulama metodları ekle
 
-## 🆘 Support
+### **Zipkin Tracing Ekleme**
+```java
+// Test başlangıcında
+zipkinTracer.startSpan("test.operation", "Test operation description");
 
-For issues and questions:
-1. Check the troubleshooting section
-2. Review existing issues
-3. Create a new issue with detailed information
-4. Include logs and trace IDs when applicable
+// Test adımlarında
+zipkinTracer.trackElementInteraction("element", "action", duration);
+zipkinTracer.trackPageNavigation("page", "url", loadTime);
+
+// Test sonunda
+zipkinTracer.trackTestStep("step", "description", success, duration);
+zipkinTracer.endSpan("test.operation", success);
+```
+
+## 🐛 Hata Ayıklama
+
+### **Zipkin UI'da Hata Analizi**
+1. **Trace ID'yi Bul**: Loglardan trace ID'yi al
+2. **Zipkin UI'da Ara**: `http://localhost:9411` adresinde trace ID ile ara
+3. **Span Detaylarını İncele**: Hata olan span'i bul ve detaylarını incele
+4. **Performance Analizi**: Yavaş olan adımları tespit et
+
+### **Log Analizi**
+```bash
+# Test loglarını görüntüle
+tail -f target/test.log
+
+# Zipkin trace ID'lerini filtrele
+grep "Trace ID" target/test.log
+```
+
+## ⚡ Performans
+
+### **Optimizasyon Önerileri**
+- **WebDriverManager**: Otomatik driver yönetimi
+- **Resource Management**: WebDriver kaynaklarını düzgün kapat
+- **Network Monitoring**: Ağ trafiğini optimize et
+- **Zipkin Sampling**: Production'da sampling oranını ayarla
+
+### **Performance Metrics**
+- **Page Load Times**: Sayfa yükleme süreleri
+- **Element Interaction Times**: Element etkileşim süreleri
+- **Test Execution Times**: Test çalıştırma süreleri
+- **Network Latency**: Ağ gecikme süreleri
+
+## 🤝 Katkıda Bulunma
+
+1. **Fork** yapın
+2. **Feature branch** oluşturun (`git checkout -b feature/amazing-feature`)
+3. **Commit** yapın (`git commit -m 'Add amazing feature'`)
+4. **Push** yapın (`git push origin feature/amazing-feature`)
+5. **Pull Request** oluşturun
+
+## 📄 Lisans
+
+Bu proje eğitim ve test otomasyonu amaçlıdır. MIT lisansı altında lisanslanmıştır.
+
+## 📞 İletişim
+
+- **Proje**: [GitHub Repository](https://github.com/your-username/Zipkin-Integrated_UI_Test_Automation)
+- **Zipkin UI**: http://localhost:9411
 
 ---
 
-**Happy Testing! 🧪✨** 
+**Not**: Bu proje eğitim ve test otomasyonu amaçlıdır. Gerçek e-ticaret sitelerinde kullanmadan önce gerekli izinleri alın. 

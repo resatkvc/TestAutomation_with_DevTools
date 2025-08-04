@@ -20,10 +20,12 @@ public class SeleniumTracer {
     private static final Logger logger = LoggerFactory.getLogger(SeleniumTracer.class);
     private final WebDriver driver;
     private final WebDriverWait wait;
+    private final ZipkinTracer zipkinTracer;
     
     public SeleniumTracer(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        this.zipkinTracer = new ZipkinTracer();
     }
     
     /**
@@ -31,21 +33,18 @@ public class SeleniumTracer {
      */
     public void navigateTo(String url) {
         try {
-            ZipkinTracer.startSpan("selenium-navigate");
-            ZipkinTracer.addTag("action", "navigate");
-            ZipkinTracer.addTag("url", url);
-            ZipkinTracer.addTag("current_url", driver.getCurrentUrl());
+            zipkinTracer.startSpan("selenium-navigate", "Navigate to URL: " + url);
             
             logger.info("Navigating to: {}", url);
             driver.get(url);
             
-            ZipkinTracer.addTag("new_url", driver.getCurrentUrl());
-            ZipkinTracer.addTag("page_title", driver.getTitle());
-            ZipkinTracer.finishSpan();
+            zipkinTracer.trackPageNavigation("Navigation", url, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-navigate", true);
             
         } catch (Exception e) {
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
+            logger.error("Navigation failed: {}", e.getMessage());
+            zipkinTracer.trackTestStep("Navigation", "Failed to navigate to: " + url, false, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-navigate", false);
             throw e;
         }
     }
@@ -55,22 +54,18 @@ public class SeleniumTracer {
      */
     public void click(WebElement element, String description) {
         try {
-            ZipkinTracer.startSpan("selenium-click");
-            ZipkinTracer.addTag("action", "click");
-            ZipkinTracer.addTag("description", description);
-            ZipkinTracer.addTag("element_tag", element.getTagName());
-            ZipkinTracer.addTag("element_text", element.getText());
-            ZipkinTracer.addTag("element_location", element.getLocation().toString());
+            zipkinTracer.startSpan("selenium-click", "Click element: " + description);
             
             logger.info("Clicking element: {} - {}", description, element.getText());
             element.click();
             
-            ZipkinTracer.addTag("click_successful", "true");
-            ZipkinTracer.finishSpan();
+            zipkinTracer.trackElementInteraction("Click", description, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-click", true);
             
         } catch (Exception e) {
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
+            logger.error("Click failed: {}", e.getMessage());
+            zipkinTracer.trackTestStep("Click", "Failed to click element: " + description, false, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-click", false);
             throw e;
         }
     }
@@ -80,23 +75,19 @@ public class SeleniumTracer {
      */
     public void sendKeys(WebElement element, String keys, String description) {
         try {
-            ZipkinTracer.startSpan("selenium-sendkeys");
-            ZipkinTracer.addTag("action", "sendkeys");
-            ZipkinTracer.addTag("description", description);
-            ZipkinTracer.addTag("element_tag", element.getTagName());
-            ZipkinTracer.addTag("keys_length", String.valueOf(keys.length()));
-            ZipkinTracer.addTag("keys_masked", keys.replaceAll(".", "*"));
+            zipkinTracer.startSpan("selenium-sendkeys", "Send keys to element: " + description);
             
             logger.info("Sending keys to element: {} - {} characters", description, keys.length());
             element.clear();
             element.sendKeys(keys);
             
-            ZipkinTracer.addTag("sendkeys_successful", "true");
-            ZipkinTracer.finishSpan();
+            zipkinTracer.trackElementInteraction("SendKeys", description, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-sendkeys", true);
             
         } catch (Exception e) {
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
+            logger.error("SendKeys failed: {}", e.getMessage());
+            zipkinTracer.trackTestStep("SendKeys", "Failed to send keys to element: " + description, false, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-sendkeys", false);
             throw e;
         }
     }
@@ -106,24 +97,20 @@ public class SeleniumTracer {
      */
     public WebElement findElement(By locator, String description) {
         try {
-            ZipkinTracer.startSpan("selenium-find-element");
-            ZipkinTracer.addTag("action", "find_element");
-            ZipkinTracer.addTag("description", description);
-            ZipkinTracer.addTag("locator_type", locator.toString());
+            zipkinTracer.startSpan("selenium-find-element", "Find element: " + description);
             
             logger.info("Finding element: {} with locator: {}", description, locator);
             WebElement element = driver.findElement(locator);
             
-            ZipkinTracer.addTag("element_found", "true");
-            ZipkinTracer.addTag("element_tag", element.getTagName());
-            ZipkinTracer.addTag("element_text", element.getText());
-            ZipkinTracer.finishSpan();
+            zipkinTracer.trackElementInteraction("FindElement", description, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-find-element", true);
             
             return element;
             
         } catch (Exception e) {
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
+            logger.error("FindElement failed: {}", e.getMessage());
+            zipkinTracer.trackTestStep("FindElement", "Failed to find element: " + description, false, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-find-element", false);
             throw e;
         }
     }
@@ -133,25 +120,20 @@ public class SeleniumTracer {
      */
     public WebElement waitForElement(By locator, String description) {
         try {
-            ZipkinTracer.startSpan("selenium-wait-for-element");
-            ZipkinTracer.addTag("action", "wait_for_element");
-            ZipkinTracer.addTag("description", description);
-            ZipkinTracer.addTag("locator_type", locator.toString());
-            ZipkinTracer.addTag("timeout_seconds", "15");
+            zipkinTracer.startSpan("selenium-wait-for-element", "Wait for element: " + description);
             
             logger.info("Waiting for element: {} with locator: {}", description, locator);
             WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
             
-            ZipkinTracer.addTag("element_found", "true");
-            ZipkinTracer.addTag("element_tag", element.getTagName());
-            ZipkinTracer.addTag("element_text", element.getText());
-            ZipkinTracer.finishSpan();
+            zipkinTracer.trackElementInteraction("WaitForElement", description, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-wait-for-element", true);
             
             return element;
             
         } catch (Exception e) {
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
+            logger.error("WaitForElement failed: {}", e.getMessage());
+            zipkinTracer.trackTestStep("WaitForElement", "Failed to wait for element: " + description, false, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-wait-for-element", false);
             throw e;
         }
     }
@@ -161,22 +143,18 @@ public class SeleniumTracer {
      */
     public void waitForPageLoad(String pageName) {
         try {
-            ZipkinTracer.startSpan("selenium-wait-for-page-load");
-            ZipkinTracer.addTag("action", "wait_for_page_load");
-            ZipkinTracer.addTag("page_name", pageName);
-            ZipkinTracer.addTag("current_url", driver.getCurrentUrl());
+            zipkinTracer.startSpan("selenium-wait-for-page-load", "Wait for page load: " + pageName);
             
             logger.info("Waiting for page load: {}", pageName);
             wait.until(ExpectedConditions.jsReturnsValue("return document.readyState === 'complete'"));
             
-            ZipkinTracer.addTag("page_loaded", "true");
-            ZipkinTracer.addTag("final_url", driver.getCurrentUrl());
-            ZipkinTracer.addTag("page_title", driver.getTitle());
-            ZipkinTracer.finishSpan();
+            zipkinTracer.trackPageNavigation("PageLoad", pageName, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-wait-for-page-load", true);
             
         } catch (Exception e) {
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
+            logger.error("WaitForPageLoad failed: {}", e.getMessage());
+            zipkinTracer.trackTestStep("WaitForPageLoad", "Failed to wait for page load: " + pageName, false, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-wait-for-page-load", false);
             throw e;
         }
     }
@@ -186,23 +164,20 @@ public class SeleniumTracer {
      */
     public String getElementText(WebElement element, String description) {
         try {
-            ZipkinTracer.startSpan("selenium-get-text");
-            ZipkinTracer.addTag("action", "get_text");
-            ZipkinTracer.addTag("description", description);
-            ZipkinTracer.addTag("element_tag", element.getTagName());
+            zipkinTracer.startSpan("selenium-get-text", "Get text from element: " + description);
             
             logger.info("Getting text from element: {}", description);
             String text = element.getText();
             
-            ZipkinTracer.addTag("text_length", String.valueOf(text.length()));
-            ZipkinTracer.addTag("text_preview", text.length() > 50 ? text.substring(0, 50) + "..." : text);
-            ZipkinTracer.finishSpan();
+            zipkinTracer.trackElementInteraction("GetText", description, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-get-text", true);
             
             return text;
             
         } catch (Exception e) {
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
+            logger.error("GetText failed: {}", e.getMessage());
+            zipkinTracer.trackTestStep("GetText", "Failed to get text from element: " + description, false, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-get-text", false);
             throw e;
         }
     }
@@ -212,22 +187,20 @@ public class SeleniumTracer {
      */
     public boolean isElementDisplayed(WebElement element, String description) {
         try {
-            ZipkinTracer.startSpan("selenium-is-displayed");
-            ZipkinTracer.addTag("action", "is_displayed");
-            ZipkinTracer.addTag("description", description);
-            ZipkinTracer.addTag("element_tag", element.getTagName());
+            zipkinTracer.startSpan("selenium-is-displayed", "Check if element is displayed: " + description);
             
             logger.info("Checking if element is displayed: {}", description);
             boolean isDisplayed = element.isDisplayed();
             
-            ZipkinTracer.addTag("is_displayed", String.valueOf(isDisplayed));
-            ZipkinTracer.finishSpan();
+            zipkinTracer.trackElementInteraction("IsDisplayed", description, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-is-displayed", true);
             
             return isDisplayed;
             
         } catch (Exception e) {
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
+            logger.error("IsDisplayed failed: {}", e.getMessage());
+            zipkinTracer.trackTestStep("IsDisplayed", "Failed to check if element is displayed: " + description, false, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-is-displayed", false);
             throw e;
         }
     }
@@ -237,19 +210,19 @@ public class SeleniumTracer {
      */
     public String getCurrentUrl() {
         try {
-            ZipkinTracer.startSpan("selenium-get-current-url");
-            ZipkinTracer.addTag("action", "get_current_url");
+            zipkinTracer.startSpan("selenium-get-current-url", "Get current URL");
             
             String url = driver.getCurrentUrl();
             
-            ZipkinTracer.addTag("current_url", url);
-            ZipkinTracer.finishSpan();
+            zipkinTracer.trackPageNavigation("GetCurrentUrl", url, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-get-current-url", true);
             
             return url;
             
         } catch (Exception e) {
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
+            logger.error("GetCurrentUrl failed: {}", e.getMessage());
+            zipkinTracer.trackTestStep("GetCurrentUrl", "Failed to get current URL", false, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-get-current-url", false);
             throw e;
         }
     }
@@ -259,19 +232,19 @@ public class SeleniumTracer {
      */
     public String getPageTitle() {
         try {
-            ZipkinTracer.startSpan("selenium-get-page-title");
-            ZipkinTracer.addTag("action", "get_page_title");
+            zipkinTracer.startSpan("selenium-get-page-title", "Get page title");
             
             String title = driver.getTitle();
             
-            ZipkinTracer.addTag("page_title", title);
-            ZipkinTracer.finishSpan();
+            zipkinTracer.trackPageNavigation("GetPageTitle", title, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-get-page-title", true);
             
             return title;
             
         } catch (Exception e) {
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
+            logger.error("GetPageTitle failed: {}", e.getMessage());
+            zipkinTracer.trackTestStep("GetPageTitle", "Failed to get page title", false, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-get-page-title", false);
             throw e;
         }
     }
@@ -281,23 +254,20 @@ public class SeleniumTracer {
      */
     public Object executeScript(String script, String description) {
         try {
-            ZipkinTracer.startSpan("selenium-execute-script");
-            ZipkinTracer.addTag("action", "execute_script");
-            ZipkinTracer.addTag("description", description);
-            ZipkinTracer.addTag("script_length", String.valueOf(script.length()));
+            zipkinTracer.startSpan("selenium-execute-script", "Execute JavaScript: " + description);
             
             logger.info("Executing JavaScript: {}", description);
             Object result = ((JavascriptExecutor) driver).executeScript(script);
             
-            ZipkinTracer.addTag("script_successful", "true");
-            ZipkinTracer.addTag("result_type", result != null ? result.getClass().getSimpleName() : "null");
-            ZipkinTracer.finishSpan();
+            zipkinTracer.trackElementInteraction("ExecuteScript", description, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-execute-script", true);
             
             return result;
             
         } catch (Exception e) {
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
+            logger.error("ExecuteScript failed: {}", e.getMessage());
+            zipkinTracer.trackTestStep("ExecuteScript", "Failed to execute JavaScript: " + description, false, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-execute-script", false);
             throw e;
         }
     }
@@ -307,22 +277,20 @@ public class SeleniumTracer {
      */
     public byte[] takeScreenshot(String description) {
         try {
-            ZipkinTracer.startSpan("selenium-take-screenshot");
-            ZipkinTracer.addTag("action", "take_screenshot");
-            ZipkinTracer.addTag("description", description);
-            ZipkinTracer.addTag("current_url", driver.getCurrentUrl());
+            zipkinTracer.startSpan("selenium-take-screenshot", "Take screenshot: " + description);
             
             logger.info("Taking screenshot: {}", description);
             byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
             
-            ZipkinTracer.addTag("screenshot_size_bytes", String.valueOf(screenshot.length));
-            ZipkinTracer.finishSpan();
+            zipkinTracer.trackTestStep("TakeScreenshot", "Screenshot taken: " + description, true, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-take-screenshot", true);
             
             return screenshot;
             
         } catch (Exception e) {
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
+            logger.error("TakeScreenshot failed: {}", e.getMessage());
+            zipkinTracer.trackTestStep("TakeScreenshot", "Failed to take screenshot: " + description, false, System.currentTimeMillis());
+            zipkinTracer.endSpan("selenium-take-screenshot", false);
             throw e;
         }
     }

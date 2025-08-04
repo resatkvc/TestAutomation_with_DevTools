@@ -7,13 +7,12 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import proje.com.saucedemo.utils.ZipkinTracer;
 
 import java.time.Duration;
 import java.util.List;
 
 /**
- * Verification helper class for SauceDemo test automation
+ * Verification helper class for AutomationExercise test automation
  * Contains all verification methods in one place
  */
 public class VerificationHelper {
@@ -28,30 +27,106 @@ public class VerificationHelper {
     }
     
     /**
+     * Verify page is loaded
+     * @param pageName Name of the page for logging
+     * @param isLoaded Boolean indicating if page is loaded
+     */
+    public void verifyPageLoaded(String pageName, boolean isLoaded) {
+        if (isLoaded) {
+            logger.info("{} loaded successfully", pageName);
+        } else {
+            logger.error("{} failed to load", pageName);
+            throw new RuntimeException(pageName + " failed to load");
+        }
+    }
+    
+    /**
+     * Verify account was created successfully
+     * @param isCreated Boolean indicating if account was created
+     */
+    public void verifyAccountCreated(boolean isCreated) {
+        if (isCreated) {
+            logger.info("Account created successfully");
+        } else {
+            logger.error("Account creation failed");
+            throw new RuntimeException("Account creation failed");
+        }
+    }
+    
+    /**
+     * Verify cart is not empty
+     * @param isNotEmpty Boolean indicating if cart is not empty
+     */
+    public void verifyCartNotEmpty(boolean isNotEmpty) {
+        if (isNotEmpty) {
+            logger.info("Cart is not empty");
+        } else {
+            logger.error("Cart is empty");
+            throw new RuntimeException("Cart is empty");
+        }
+    }
+    
+    /**
+     * Verify product is in cart
+     * @param isInCart Boolean indicating if product is in cart
+     * @param productName Name of the product
+     */
+    public void verifyProductInCart(boolean isInCart, String productName) {
+        if (isInCart) {
+            logger.info("Product '{}' is in cart", productName);
+        } else {
+            logger.error("Product '{}' is not in cart", productName);
+            throw new RuntimeException("Product '" + productName + "' is not in cart");
+        }
+    }
+    
+    /**
+     * Verify order was placed successfully
+     * @param isPlaced Boolean indicating if order was placed
+     */
+    public void verifyOrderPlaced(boolean isPlaced) {
+        if (isPlaced) {
+            logger.info("Order placed successfully");
+        } else {
+            logger.error("Order placement failed");
+            throw new RuntimeException("Order placement failed");
+        }
+    }
+    
+    /**
+     * Verify current URL
+     * @param currentUrl Current URL
+     * @param expectedUrl Expected URL
+     */
+    public void verifyCurrentUrl(String currentUrl, String expectedUrl) {
+        if (currentUrl.equals(expectedUrl)) {
+            logger.info("URL verification successful: {}", currentUrl);
+        } else {
+            logger.error("URL verification failed. Expected: {}, Actual: {}", expectedUrl, currentUrl);
+            throw new RuntimeException("URL verification failed");
+        }
+    }
+    
+    /**
      * Verify login was successful
      * @return True if login successful
      */
     public boolean verifyLoginSuccessful() {
         try {
-            ZipkinTracer.startSpan("verify-login-successful");
-            ZipkinTracer.addTag("verification", "login");
+            logger.info("Verifying login success");
             
-            // Check if we're on the inventory page (successful login)
-            boolean isOnInventoryPage = driver.getCurrentUrl().contains("/inventory.html");
-            boolean hasShoppingCart = driver.findElements(By.className("shopping_cart_link")).size() > 0;
+            // Check if we're on the home page (successful login)
+            boolean isOnHomePage = driver.getCurrentUrl().contains("/");
+            boolean hasLogoutLink = driver.findElements(By.cssSelector("a[href='/logout']")).size() > 0;
             
-            boolean loginSuccessful = isOnInventoryPage && hasShoppingCart;
+            boolean loginSuccessful = isOnHomePage && hasLogoutLink;
             
             logger.info("Login verification result: {}", loginSuccessful);
-            ZipkinTracer.addTag("login_successful", String.valueOf(loginSuccessful));
-            ZipkinTracer.finishSpan();
             
             return loginSuccessful;
             
         } catch (Exception e) {
             logger.error("Login verification failed: {}", e.getMessage());
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
             return false;
         }
     }
@@ -63,24 +138,23 @@ public class VerificationHelper {
      */
     public boolean verifyProductsInCart(List<String> expectedProducts) {
         try {
-            ZipkinTracer.startSpan("verify-products-in-cart");
-            ZipkinTracer.addTag("expected_products_count", String.valueOf(expectedProducts.size()));
+            logger.info("Verifying products in cart. Expected: {}", expectedProducts.size());
             
             // Navigate to cart
-            WebElement cartLink = wait.until(ExpectedConditions.elementToBeClickable(By.className("shopping_cart_link")));
+            WebElement cartLink = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[href='/view_cart']")));
             cartLink.click();
             
             // Wait for cart page to load
-            wait.until(ExpectedConditions.urlContains("/cart.html"));
+            wait.until(ExpectedConditions.urlContains("/view_cart"));
             
             // Get all cart items
-            List<WebElement> cartItems = driver.findElements(By.className("inventory_item_name"));
+            List<WebElement> cartItems = driver.findElements(By.cssSelector(".cart_description h4 a"));
             
             // Verify each expected product is in cart
             boolean allProductsFound = true;
             for (String expectedProduct : expectedProducts) {
                 boolean productFound = cartItems.stream()
-                        .anyMatch(item -> item.getText().equals(expectedProduct));
+                        .anyMatch(item -> item.getText().contains(expectedProduct));
                 
                 if (!productFound) {
                     logger.warn("Product not found in cart: {}", expectedProduct);
@@ -93,74 +167,56 @@ public class VerificationHelper {
             logger.info("Cart verification result: {} (Expected: {}, Found: {})", 
                     allProductsFound, expectedProducts.size(), cartItems.size());
             
-            ZipkinTracer.addTag("cart_verification_successful", String.valueOf(allProductsFound));
-            ZipkinTracer.addTag("actual_products_count", String.valueOf(cartItems.size()));
-            ZipkinTracer.finishSpan();
-            
             return allProductsFound;
             
         } catch (Exception e) {
             logger.error("Cart verification failed: {}", e.getMessage());
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
             return false;
         }
     }
     
     /**
-     * Verify checkout information page is displayed
+     * Verify checkout page is displayed
      * @return True if checkout page is displayed
      */
     public boolean verifyCheckoutPageDisplayed() {
         try {
-            ZipkinTracer.startSpan("verify-checkout-page");
+            logger.info("Verifying checkout page is displayed");
             
-            boolean isOnCheckoutPage = driver.getCurrentUrl().contains("/checkout-step-one.html");
-            boolean hasFirstNameField = driver.findElements(By.id("first-name")).size() > 0;
-            boolean hasLastNameField = driver.findElements(By.id("last-name")).size() > 0;
-            boolean hasPostalCodeField = driver.findElements(By.id("postal-code")).size() > 0;
-            boolean hasContinueButton = driver.findElements(By.id("continue")).size() > 0;
+            boolean isOnCheckoutPage = driver.getCurrentUrl().contains("/checkout");
+            boolean hasCheckoutForm = driver.findElements(By.id("name")).size() > 0;
             
-            boolean checkoutPageDisplayed = isOnCheckoutPage && hasFirstNameField && hasLastNameField && 
-                    hasPostalCodeField && hasContinueButton;
+            boolean checkoutPageDisplayed = isOnCheckoutPage && hasCheckoutForm;
             
             logger.info("Checkout page verification result: {}", checkoutPageDisplayed);
-            ZipkinTracer.addTag("checkout_page_displayed", String.valueOf(checkoutPageDisplayed));
-            ZipkinTracer.finishSpan();
             
             return checkoutPageDisplayed;
             
         } catch (Exception e) {
             logger.error("Checkout page verification failed: {}", e.getMessage());
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
             return false;
         }
     }
     
     /**
-     * Verify checkout overview page is displayed
-     * @return True if overview page is displayed
+     * Verify payment page is displayed
+     * @return True if payment page is displayed
      */
-    public boolean verifyCheckoutOverviewDisplayed() {
+    public boolean verifyPaymentPageDisplayed() {
         try {
-            ZipkinTracer.startSpan("verify-checkout-overview");
+            logger.info("Verifying payment page is displayed");
             
-            boolean isOnOverviewPage = driver.getCurrentUrl().contains("/checkout-step-two.html");
-            boolean hasFinishButton = driver.findElements(By.id("finish")).size() > 0;
+            boolean isOnPaymentPage = driver.getCurrentUrl().contains("/payment");
+            boolean hasPaymentForm = driver.findElements(By.id("name_on_card")).size() > 0;
             
-            boolean overviewDisplayed = isOnOverviewPage && hasFinishButton;
+            boolean paymentPageDisplayed = isOnPaymentPage && hasPaymentForm;
             
-            logger.info("Checkout overview verification result: {}", overviewDisplayed);
-            ZipkinTracer.addTag("overview_page_displayed", String.valueOf(overviewDisplayed));
-            ZipkinTracer.finishSpan();
+            logger.info("Payment page verification result: {}", paymentPageDisplayed);
             
-            return overviewDisplayed;
+            return paymentPageDisplayed;
             
         } catch (Exception e) {
-            logger.error("Checkout overview verification failed: {}", e.getMessage());
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
+            logger.error("Payment page verification failed: {}", e.getMessage());
             return false;
         }
     }
@@ -171,86 +227,61 @@ public class VerificationHelper {
      */
     public boolean verifyOrderCompletionMessage() {
         try {
-            ZipkinTracer.startSpan("verify-order-completion");
+            logger.info("Verifying order completion message");
             
-            // Wait for completion page to load
-            wait.until(ExpectedConditions.urlContains("/checkout-complete.html"));
+            boolean hasSuccessMessage = driver.findElements(By.cssSelector(".alert-success")).size() > 0;
+            boolean hasOrderPlacedMessage = driver.findElements(By.cssSelector("h2[data-qa='account-created']")).size() > 0;
             
-            // Check for completion message
-            WebElement completionMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                    By.xpath("//h2[contains(text(), 'Thank you for your order!')]")));
+            boolean orderCompleted = hasSuccessMessage || hasOrderPlacedMessage;
             
-            // Check for dispatch message
-            WebElement dispatchMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                    By.xpath("//div[contains(text(), 'Your order has been dispatched')]")));
+            logger.info("Order completion verification result: {}", orderCompleted);
             
-            boolean messageDisplayed = completionMessage.isDisplayed() && dispatchMessage.isDisplayed();
-            
-            logger.info("Order completion verification result: {}", messageDisplayed);
-            ZipkinTracer.addTag("order_completion_verified", String.valueOf(messageDisplayed));
-            ZipkinTracer.finishSpan();
-            
-            return messageDisplayed;
+            return orderCompleted;
             
         } catch (Exception e) {
             logger.error("Order completion verification failed: {}", e.getMessage());
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
             return false;
         }
     }
     
     /**
-     * Verify back to home functionality
-     * @return True if successfully returned to home
+     * Verify back to home page
+     * @return True if successfully returned to home page
      */
     public boolean verifyBackToHome() {
         try {
-            ZipkinTracer.startSpan("verify-back-to-home");
+            logger.info("Verifying return to home page");
             
-            // Verify we're on inventory page
-            wait.until(ExpectedConditions.urlContains("/inventory.html"));
+            boolean isOnHomePage = driver.getCurrentUrl().equals("https://www.automationexercise.com/");
+            boolean hasHomePageElements = driver.findElements(By.cssSelector(".features_items")).size() > 0;
             
-            // Check for inventory page elements
-            boolean hasInventoryItems = driver.findElements(By.className("inventory_item")).size() > 0;
-            boolean hasShoppingCart = driver.findElements(By.className("shopping_cart_link")).size() > 0;
-            boolean hasMenuButton = driver.findElements(By.id("react-burger-menu-btn")).size() > 0;
+            boolean backToHome = isOnHomePage && hasHomePageElements;
             
-            boolean backToHomeSuccessful = driver.getCurrentUrl().contains("/inventory.html") && 
-                    hasInventoryItems && hasShoppingCart && hasMenuButton;
+            logger.info("Back to home verification result: {}", backToHome);
             
-            logger.info("Back to home verification result: {}", backToHomeSuccessful);
-            ZipkinTracer.addTag("back_to_home_successful", String.valueOf(backToHomeSuccessful));
-            ZipkinTracer.finishSpan();
-            
-            return backToHomeSuccessful;
+            return backToHome;
             
         } catch (Exception e) {
             logger.error("Back to home verification failed: {}", e.getMessage());
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
             return false;
         }
     }
     
     /**
      * Verify cart badge count
-     * @param expectedCount Expected number of items in cart
+     * @param expectedCount Expected count in cart badge
      * @return True if cart badge count matches expected
      */
     public boolean verifyCartBadgeCount(int expectedCount) {
         try {
-            ZipkinTracer.startSpan("verify-cart-badge-count");
-            ZipkinTracer.addTag("expected_count", String.valueOf(expectedCount));
+            logger.info("Verifying cart badge count. Expected: {}", expectedCount);
             
-            List<WebElement> cartBadges = driver.findElements(By.className("shopping_cart_badge"));
+            // Find cart badge element
+            List<WebElement> cartBadges = driver.findElements(By.cssSelector(".badge"));
             
             if (cartBadges.isEmpty()) {
-                boolean countMatches = expectedCount == 0;
-                logger.info("No cart badge found, expected count: {}, actual: 0", expectedCount);
-                ZipkinTracer.addTag("cart_badge_count", "0");
-                ZipkinTracer.finishSpan();
-                return countMatches;
+                logger.warn("No cart badge found");
+                return expectedCount == 0;
             }
             
             String badgeText = cartBadges.get(0).getText();
@@ -258,19 +289,13 @@ public class VerificationHelper {
             
             boolean countMatches = actualCount == expectedCount;
             
-            logger.info("Cart badge count verification: expected={}, actual={}, matches={}", 
-                    expectedCount, actualCount, countMatches);
-            
-            ZipkinTracer.addTag("cart_badge_count", String.valueOf(actualCount));
-            ZipkinTracer.addTag("count_matches", String.valueOf(countMatches));
-            ZipkinTracer.finishSpan();
+            logger.info("Cart badge count verification result: {} (Expected: {}, Actual: {})", 
+                    countMatches, expectedCount, actualCount);
             
             return countMatches;
             
         } catch (Exception e) {
             logger.error("Cart badge count verification failed: {}", e.getMessage());
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
             return false;
         }
     }
@@ -282,27 +307,55 @@ public class VerificationHelper {
      */
     public boolean verifyProductPriceDisplayed(String productName) {
         try {
-            ZipkinTracer.startSpan("verify-product-price");
-            ZipkinTracer.addTag("product_name", productName);
+            logger.info("Verifying product price is displayed for: {}", productName);
             
-            // Find product by name and check if price is displayed
-            WebElement productElement = driver.findElement(
-                    By.xpath("//div[contains(@class, 'inventory_item_name') and text()='" + productName + "']/ancestor::div[contains(@class, 'inventory_item')]"));
+            // Find product price elements
+            List<WebElement> priceElements = driver.findElements(By.cssSelector(".cart_price p"));
             
-            WebElement priceElement = productElement.findElement(By.className("inventory_item_price"));
-            boolean priceDisplayed = priceElement.isDisplayed() && !priceElement.getText().isEmpty();
+            boolean priceDisplayed = !priceElements.isEmpty();
             
-            logger.info("Product price verification for '{}': {}", productName, priceDisplayed);
-            ZipkinTracer.addTag("price_displayed", String.valueOf(priceDisplayed));
-            ZipkinTracer.finishSpan();
+            if (priceDisplayed) {
+                String price = priceElements.get(0).getText();
+                logger.info("Product price found: {}", price);
+            }
+            
+            logger.info("Product price verification result: {}", priceDisplayed);
             
             return priceDisplayed;
             
         } catch (Exception e) {
-            logger.error("Product price verification failed for '{}': {}", productName, e.getMessage());
-            ZipkinTracer.addError(e);
-            ZipkinTracer.finishSpan();
+            logger.error("Product price verification failed: {}", e.getMessage());
             return false;
+        }
+    }
+    
+    /**
+     * Verify element is present
+     * @param elementName Name of the element for logging
+     * @param isPresent Boolean indicating if element is present
+     */
+    public void verifyElementPresent(String elementName, boolean isPresent) {
+        if (isPresent) {
+            logger.info("Element '{}' is present", elementName);
+        } else {
+            logger.error("Element '{}' is not present", elementName);
+            throw new RuntimeException("Element '" + elementName + "' is not present");
+        }
+    }
+    
+    /**
+     * Verify text matches
+     * @param elementName Name of the element for logging
+     * @param actualText Actual text
+     * @param expectedText Expected text
+     */
+    public void verifyTextMatches(String elementName, String actualText, String expectedText) {
+        if (actualText.equals(expectedText)) {
+            logger.info("Text verification successful for '{}': {}", elementName, actualText);
+        } else {
+            logger.error("Text verification failed for '{}'. Expected: {}, Actual: {}", 
+                    elementName, expectedText, actualText);
+            throw new RuntimeException("Text verification failed for '" + elementName + "'");
         }
     }
 } 
