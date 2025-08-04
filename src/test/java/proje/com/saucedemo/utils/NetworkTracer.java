@@ -71,11 +71,16 @@ public class NetworkTracer {
                             String serviceName = "automation-exercise-" + method.toLowerCase();
                             ZipkinTracer methodTracer = new ZipkinTracer(serviceName);
                             
-                            // Track the HTTP request in Zipkin
+                            // Track the HTTP request in Zipkin with longer duration
                             methodTracer.startSpan("http-request", method + " " + url);
                             methodTracer.trackElementInteraction("HTTP Request", method + " " + url, System.currentTimeMillis());
+                            
+                            // Wait a bit before ending span to ensure it's sent to Zipkin
+                            Thread.sleep(100);
                             methodTracer.endSpan("http-request", true);
-                            methodTracer.cleanup();
+                            
+                            // Don't cleanup immediately, let ZipkinTracer handle it
+                            // methodTracer.cleanup(); // REMOVED THIS LINE
                             
                             logger.info("✅ Sent to Zipkin: {} {} with service: {} (Total: {})", method, url, serviceName, requestCount);
                         } catch (Exception e) {

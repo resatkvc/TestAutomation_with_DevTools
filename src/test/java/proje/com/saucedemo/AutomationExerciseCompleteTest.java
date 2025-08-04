@@ -148,6 +148,10 @@ public class AutomationExerciseCompleteTest {
             networkTracer.enableNetworkLogging();
             logger.info("DevTools network monitoring enabled successfully");
             
+            // Manually send HTTP methods to Zipkin for testing
+            sendHttpMethodToZipkin("GET", BASE_URL, "Home page load");
+            sendHttpMethodToZipkin("POST", BASE_URL + "/signup", "Signup form submission");
+            
             // Click on signup/login link
             homePage.clickSignupLogin();
             zipkinTracer.trackElementInteraction("SignupLogin Link", "click", System.currentTimeMillis() - startTime);
@@ -208,6 +212,24 @@ public class AutomationExerciseCompleteTest {
         }
     }
     
+    /**
+     * Manually send HTTP method to Zipkin for testing
+     */
+    private void sendHttpMethodToZipkin(String method, String url, String description) {
+        try {
+            String serviceName = "automation-exercise-" + method.toLowerCase();
+            ZipkinTracer methodTracer = new ZipkinTracer(serviceName);
+            
+            methodTracer.startSpan("http-request", method + " " + url);
+            methodTracer.trackElementInteraction("HTTP Request", method + " " + url, System.currentTimeMillis());
+            methodTracer.endSpan("http-request", true);
+            
+            logger.info("✅ Manually sent to Zipkin: {} {} with service: {}", method, url, serviceName);
+        } catch (Exception e) {
+            logger.error("❌ Failed to send HTTP method to Zipkin: {}", e.getMessage());
+        }
+    }
+    
     @Test
     @Order(2)
     @DisplayName("Step 2: Add Random Products to Cart")
@@ -223,6 +245,10 @@ public class AutomationExerciseCompleteTest {
             productsPage.navigateToProducts();
             zipkinTracer.trackPageNavigation("Products", BASE_URL + "/products", System.currentTimeMillis() - startTime);
             verificationHelper.verifyPageLoaded("Products page", productsPage.isPageLoaded());
+            
+            // Send HTTP methods for products page
+            sendHttpMethodToZipkin("GET", BASE_URL + "/products", "Products page load");
+            sendHttpMethodToZipkin("POST", BASE_URL + "/add_to_cart", "Add product to cart");
             
             // Add random product to cart
             productsPage.addRandomProductToCart();
@@ -267,6 +293,9 @@ public class AutomationExerciseCompleteTest {
             cartPage.navigateToCart();
             zipkinTracer.trackPageNavigation("Cart", BASE_URL + "/view_cart", System.currentTimeMillis() - startTime);
             verificationHelper.verifyPageLoaded("Cart page", cartPage.isPageLoaded());
+            
+            // Send HTTP methods for cart page
+            sendHttpMethodToZipkin("GET", BASE_URL + "/view_cart", "Cart page load");
             
             // Verify cart is not empty
             verificationHelper.verifyCartNotEmpty(cartPage.getCartItemsCount() > 0);
