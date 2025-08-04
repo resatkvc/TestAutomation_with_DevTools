@@ -990,3 +990,438 @@ Session ID: 2a2362f3e99cc1b93c7798e0c3ed2152
 2025-08-05 00:46:46.172 [main] INFO  p.c.s.AutomationExerciseCompleteTest - WebDriver quit successfully
 2025-08-05 00:46:46.172 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - ZipkinTracer cleanup completed
 2025-08-05 00:46:46.172 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Test suite cleanup completed ===
+2025-08-05 01:04:52.280 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Setting up test suite ===
+2025-08-05 01:04:52.869 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - ZipkinTracer initialized with traceId: 87eba8bf30b84ae6, spanId: af2abd48a71a443d, serviceName: automation-exercise-test
+2025-08-05 01:04:53.050 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:04:53.051 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: test.suite.setup - Initialize test suite
+2025-08-05 01:04:53.979 [main] INFO  i.g.bonigarcia.wdm.WebDriverManager - Using chromedriver 138.0.7204.183 (resolved driver for Chrome 138)
+2025-08-05 01:04:54.011 [main] INFO  i.g.bonigarcia.wdm.WebDriverManager - Exporting webdriver.chrome.driver as C:\Users\kavci\.cache\selenium\chromedriver\win64\138.0.7204.183\chromedriver.exe
+2025-08-05 01:04:55.851 [main] INFO  p.c.saucedemo.config.WebDriverConfig - WebDriver initialized successfully for browser: chrome
+2025-08-05 01:04:55.856 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - ZipkinTracer initialized with traceId: 737562e6eb744ae2, spanId: f710e36309e34268, serviceName: automation-exercise-test
+2025-08-05 01:04:55.858 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - ZipkinTracer initialized with traceId: e7f6372746814109, spanId: dc131c6707ed437e, serviceName: automation-exercise-test
+2025-08-05 01:04:55.874 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:04:55.874 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: enable-network-logging - Enable DevTools network monitoring
+2025-08-05 01:04:55.876 [main] WARN  p.com.saucedemo.utils.NetworkTracer - DevTools failed to initialize: You are using a no-op implementation of the CDP. The most likely reason for this is that Selenium was unable to find an implementation of the CDP protocol that matches your browser. Please be sure to include an implementation on the classpath, possibly by adding a new (maven) dependency of `org.seleniumhq.selenium:selenium-devtools-vNN:4.18.1` where `NN` matches the major version of the browser you're using.
+Build info: version: '4.18.1', revision: 'b1d3319b48'
+System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '21'
+Driver info: DevTools Connection
+2025-08-05 01:04:55.890 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:04:55.891 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Ended span: enable-network-logging - Duration: 19ms, Success: true
+2025-08-05 01:04:56.182 [main] INFO  p.c.s.utils.TestDataGenerator - Generated user info: UserInfo{firstName='Katherin', lastName='Tromp', email='alberta.corkery@hotmail.com', password='KVxHmhRj57x'}
+2025-08-05 01:04:56.193 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:04:56.193 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Ended span: test.suite.setup - Duration: 3319ms, Success: true
+2025-08-05 01:04:56.193 [main] INFO  p.c.s.AutomationExerciseCompleteTest - Test setup completed successfully with Zipkin tracing
+2025-08-05 01:04:56.211 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Step 1: Creating new account ===
+2025-08-05 01:04:56.221 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:04:56.222 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: test.create.account - Create new user account
+2025-08-05 01:04:56.222 [main] INFO  proje.com.saucedemo.pages.HomePage - Navigating to AutomationExercise home page
+2025-08-05 01:05:00.516 [main] INFO  proje.com.saucedemo.pages.HomePage - Successfully navigated to home page
+2025-08-05 01:05:00.526 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:05:00.527 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked page navigation: Home - https://www.automationexercise.com (4305ms)
+2025-08-05 01:05:00.529 [main] INFO  proje.com.saucedemo.pages.HomePage - Clicking on Signup/Login link
+2025-08-05 01:05:01.718 [main] INFO  proje.com.saucedemo.pages.HomePage - Successfully clicked on Signup/Login link
+2025-08-05 01:05:01.725 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:05:01.727 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked element interaction: SignupLogin Link - click (5507ms)
+2025-08-05 01:05:01.729 [main] INFO  p.c.saucedemo.pages.SignupLoginPage - Starting signup process with name: Katherin Tromp and email: alberta.corkery@hotmail.com
+2025-08-05 01:05:02.558 [main] INFO  p.c.saucedemo.pages.SignupLoginPage - Signup form submitted
+2025-08-05 01:05:02.566 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:05:02.566 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked element interaction: Signup Form - submit (6347ms)
+2025-08-05 01:05:13.644 [main] INFO  p.c.s.utils.TestDataGenerator - Generated account info: AccountInfo{title='Mr', firstName='Particia', lastName='Volkman', company='Wisoky-Tromp', address1='Apt. 316 4472 Cummings Prairie, Kulastown, AZ 99892-0676', address2='Apt. 480 9473 Denesik Stream, North Saulchester, CO 39461', country='Ecuador', state='West Virginia', city='East Rossville', zipcode='77474', mobileNumber='056-931-0421 x15246', day='1', month='11', year='2016'}
+2025-08-05 01:05:13.663 [main] INFO  p.c.saucedemo.pages.SignupLoginPage - Filling account information form
+2025-08-05 01:05:16.450 [main] INFO  p.c.saucedemo.pages.SignupLoginPage - Account information form filled successfully
+2025-08-05 01:05:16.455 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:05:16.455 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked element interaction: Account Details - fill (20239ms)
+2025-08-05 01:05:16.455 [main] INFO  p.c.saucedemo.pages.SignupLoginPage - Creating account
+2025-08-05 01:05:18.421 [main] INFO  p.c.saucedemo.pages.SignupLoginPage - Account creation initiated
+2025-08-05 01:05:18.444 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:05:18.444 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked element interaction: Create Account Button - click (22213ms)
+2025-08-05 01:05:18.477 [main] INFO  p.c.saucedemo.pages.SignupLoginPage - Account created successfully
+2025-08-05 01:05:18.477 [main] INFO  p.c.s.v.VerificationHelper - Account created successfully
+2025-08-05 01:05:18.482 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:05:18.482 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked test step: Account Creation Verification - Verify account was created successfully (22266ms, PASS)
+2025-08-05 01:05:18.486 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:05:18.486 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked test step: Create Account - Successfully created user account (22271ms, PASS)
+2025-08-05 01:05:18.496 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:05:18.496 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Ended span: test.create.account - Duration: 25618ms, Success: true
+2025-08-05 01:05:18.497 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Step 1 completed: Account created successfully ===
+2025-08-05 01:05:18.534 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Cleaning up test resources ===
+2025-08-05 01:05:18.545 [main] INFO  p.com.saucedemo.utils.NetworkTracer - DevTools session closed
+2025-08-05 01:05:19.565 [main] INFO  p.c.saucedemo.config.WebDriverConfig - WebDriver quit successfully
+2025-08-05 01:05:19.565 [main] INFO  p.c.s.AutomationExerciseCompleteTest - WebDriver quit successfully
+2025-08-05 01:05:19.565 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - ZipkinTracer cleanup completed
+2025-08-05 01:05:19.565 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Test suite cleanup completed ===
+2025-08-05 01:08:48.519 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Setting up test suite ===
+2025-08-05 01:08:49.044 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - ZipkinTracer initialized with traceId: 39296d00cc714ff2, spanId: 1a8abcbd1fa54acb, serviceName: automation-exercise-test
+2025-08-05 01:08:49.243 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:08:49.243 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: test.suite.setup - Initialize test suite
+2025-08-05 01:08:49.592 [main] INFO  i.g.bonigarcia.wdm.WebDriverManager - Using chromedriver 138.0.7204.183 (resolved driver for Chrome 138)
+2025-08-05 01:08:49.623 [main] INFO  i.g.bonigarcia.wdm.WebDriverManager - Exporting webdriver.chrome.driver as C:\Users\kavci\.cache\selenium\chromedriver\win64\138.0.7204.183\chromedriver.exe
+2025-08-05 01:08:51.409 [main] INFO  p.c.saucedemo.config.WebDriverConfig - WebDriver initialized successfully for browser: chrome
+2025-08-05 01:08:51.413 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - ZipkinTracer initialized with traceId: 6219acfb34004d0b, spanId: 95ec9b5544a24e6a, serviceName: automation-exercise-test
+2025-08-05 01:08:51.431 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - ZipkinTracer initialized with traceId: fc4fe89192504978, spanId: 3776c60879644a48, serviceName: automation-exercise-test
+2025-08-05 01:08:51.457 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:08:51.457 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: enable-network-logging - Enable DevTools network monitoring
+2025-08-05 01:08:51.457 [main] INFO  p.com.saucedemo.utils.NetworkTracer - Chrome driver detected, initializing DevTools...
+2025-08-05 01:08:51.462 [main] ERROR p.com.saucedemo.utils.NetworkTracer - ❌ DevTools failed to initialize: You are using a no-op implementation of the CDP. The most likely reason for this is that Selenium was unable to find an implementation of the CDP protocol that matches your browser. Please be sure to include an implementation on the classpath, possibly by adding a new (maven) dependency of `org.seleniumhq.selenium:selenium-devtools-vNN:4.18.1` where `NN` matches the major version of the browser you're using.
+Build info: version: '4.18.1', revision: 'b1d3319b48'
+System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '21'
+Driver info: DevTools Connection
+2025-08-05 01:08:51.462 [main] ERROR p.com.saucedemo.utils.NetworkTracer - Stack trace:
+org.openqa.selenium.devtools.DevToolsException: You are using a no-op implementation of the CDP. The most likely reason for this is that Selenium was unable to find an implementation of the CDP protocol that matches your browser. Please be sure to include an implementation on the classpath, possibly by adding a new (maven) dependency of `org.seleniumhq.selenium:selenium-devtools-vNN:4.18.1` where `NN` matches the major version of the browser you're using.
+Build info: version: '4.18.1', revision: 'b1d3319b48'
+System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '21'
+Driver info: DevTools Connection
+	at org.openqa.selenium.devtools.noop.NoOpDomains.target(NoOpDomains.java:60)
+	at org.openqa.selenium.devtools.DevTools.findTarget(DevTools.java:171)
+	at org.openqa.selenium.devtools.DevTools.createSession(DevTools.java:131)
+	at org.openqa.selenium.devtools.DevTools.createSession(DevTools.java:117)
+	at proje.com.saucedemo.utils.NetworkTracer.enableNetworkLogging(NetworkTracer.java:44)
+	at proje.com.saucedemo.AutomationExerciseCompleteTest.setUp(AutomationExerciseCompleteTest.java:70)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:728)
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptLifecycleMethod(TimeoutExtension.java:128)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptBeforeAllMethod(TimeoutExtension.java:70)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$invokeBeforeAllMethods$13(ClassBasedTestDescriptor.java:412)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.invokeBeforeAllMethods(ClassBasedTestDescriptor.java:410)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.before(ClassBasedTestDescriptor.java:216)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.before(ClassBasedTestDescriptor.java:85)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:148)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:198)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:169)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:93)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:58)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:141)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:57)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+	at org.junit.platform.launcher.core.SessionPerRequestLauncher.execute(SessionPerRequestLauncher.java:63)
+	at com.intellij.junit5.JUnit5IdeaTestRunner.startRunnerWithArgs(JUnit5IdeaTestRunner.java:57)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater$1.execute(IdeaTestRunner.java:38)
+	at com.intellij.rt.execution.junit.TestsRepeater.repeat(TestsRepeater.java:11)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:35)
+	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:231)
+	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:55)
+2025-08-05 01:08:51.501 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:08:51.503 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Ended span: enable-network-logging - Duration: 42ms, Success: true
+2025-08-05 01:08:51.870 [main] INFO  p.c.s.utils.TestDataGenerator - Generated user info: UserInfo{firstName='Timmy', lastName='Herman', email='modesta.yost@gmail.com', password='^1!3*W7&N#L'}
+2025-08-05 01:08:51.884 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:08:51.885 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Ended span: test.suite.setup - Duration: 2833ms, Success: true
+2025-08-05 01:08:51.885 [main] INFO  p.c.s.AutomationExerciseCompleteTest - Test setup completed successfully with Zipkin tracing
+2025-08-05 01:08:51.908 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Step 1: Creating new account ===
+2025-08-05 01:08:51.917 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:08:51.917 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: test.create.account - Create new user account
+2025-08-05 01:08:51.917 [main] INFO  proje.com.saucedemo.pages.HomePage - Navigating to AutomationExercise home page
+2025-08-05 01:08:55.790 [main] INFO  proje.com.saucedemo.pages.HomePage - Successfully navigated to home page
+2025-08-05 01:08:55.802 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:08:55.803 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked page navigation: Home - https://www.automationexercise.com (3882ms)
+2025-08-05 01:08:55.803 [main] INFO  proje.com.saucedemo.pages.HomePage - Clicking on Signup/Login link
+2025-08-05 01:08:58.128 [main] INFO  proje.com.saucedemo.pages.HomePage - Successfully clicked on Signup/Login link
+2025-08-05 01:08:58.140 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:08:58.141 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked element interaction: SignupLogin Link - click (6221ms)
+2025-08-05 01:08:58.141 [main] INFO  p.c.saucedemo.pages.SignupLoginPage - Starting signup process with name: Timmy Herman and email: modesta.yost@gmail.com
+2025-08-05 01:08:58.958 [main] INFO  p.c.saucedemo.pages.SignupLoginPage - Signup form submitted
+2025-08-05 01:08:58.968 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:08:58.968 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked element interaction: Signup Form - submit (7050ms)
+2025-08-05 01:09:12.094 [main] INFO  p.c.s.utils.TestDataGenerator - Generated account info: AccountInfo{title='Mr', firstName='Octavio', lastName='McKenzie', company='Koepp Inc', address1='81724 Baumbach Forest, Sangbury, KY 03858', address2='Apt. 539 942 Grady Avenue, South Buster, ME 89281', country='Samoa', state='Connecticut', city='Jenchester', zipcode='14508', mobileNumber='(350) 103-9459', day='3', month='6', year='2005'}
+2025-08-05 01:09:12.107 [main] INFO  p.c.saucedemo.pages.SignupLoginPage - Filling account information form
+2025-08-05 01:09:14.290 [main] INFO  p.c.saucedemo.pages.SignupLoginPage - Account information form filled successfully
+2025-08-05 01:09:14.302 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:09:14.302 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked element interaction: Account Details - fill (22382ms)
+2025-08-05 01:09:14.302 [main] INFO  p.c.saucedemo.pages.SignupLoginPage - Creating account
+2025-08-05 01:09:16.220 [main] INFO  p.c.saucedemo.pages.SignupLoginPage - Account creation initiated
+2025-08-05 01:09:16.231 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:09:16.231 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked element interaction: Create Account Button - click (24312ms)
+2025-08-05 01:09:16.262 [main] INFO  p.c.saucedemo.pages.SignupLoginPage - Account created successfully
+2025-08-05 01:09:16.262 [main] INFO  p.c.s.v.VerificationHelper - Account created successfully
+2025-08-05 01:09:16.267 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:09:16.267 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked test step: Account Creation Verification - Verify account was created successfully (24354ms, PASS)
+2025-08-05 01:09:16.272 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:09:16.272 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked test step: Create Account - Successfully created user account (24360ms, PASS)
+2025-08-05 01:09:16.280 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:09:16.280 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Ended span: test.create.account - Duration: 27230ms, Success: true
+2025-08-05 01:09:16.280 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Step 1 completed: Account created successfully ===
+2025-08-05 01:09:16.295 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Cleaning up test resources ===
+2025-08-05 01:09:16.295 [main] INFO  p.c.s.AutomationExerciseCompleteTest - DevTools enabled: false
+2025-08-05 01:09:16.295 [main] INFO  p.c.s.AutomationExerciseCompleteTest - Total HTTP requests captured: 0
+2025-08-05 01:09:16.302 [main] INFO  p.com.saucedemo.utils.NetworkTracer - DevTools session closed
+2025-08-05 01:09:17.767 [main] INFO  p.c.saucedemo.config.WebDriverConfig - WebDriver quit successfully
+2025-08-05 01:09:17.767 [main] INFO  p.c.s.AutomationExerciseCompleteTest - WebDriver quit successfully
+2025-08-05 01:09:17.767 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - ZipkinTracer cleanup completed
+2025-08-05 01:09:17.767 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Test suite cleanup completed ===
+2025-08-05 01:19:16.527 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Setting up test suite ===
+2025-08-05 01:19:17.184 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - ZipkinTracer initialized with traceId: 34d9dcf25d124167, spanId: c7bfc167144e49ad, serviceName: automation-exercise-test
+2025-08-05 01:19:17.377 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:19:17.377 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: test.suite.setup - Initialize test suite
+2025-08-05 01:19:17.702 [main] INFO  i.g.bonigarcia.wdm.WebDriverManager - Using chromedriver 138.0.7204.183 (resolved driver for Chrome 138)
+2025-08-05 01:19:17.730 [main] INFO  i.g.bonigarcia.wdm.WebDriverManager - Exporting webdriver.chrome.driver as C:\Users\kavci\.cache\selenium\chromedriver\win64\138.0.7204.183\chromedriver.exe
+2025-08-05 01:19:19.441 [main] INFO  p.c.saucedemo.config.WebDriverConfig - WebDriver initialized successfully for browser: chrome
+2025-08-05 01:19:19.447 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - ZipkinTracer initialized with traceId: 9c6db2de77d74d68, spanId: c63d0359c9f3469d, serviceName: automation-exercise-test
+2025-08-05 01:19:19.449 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - ZipkinTracer initialized with traceId: 0fb05a4d13704b9c, spanId: ad3a27e6172c41ef, serviceName: automation-exercise-test
+2025-08-05 01:19:19.469 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:19:19.473 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: enable-network-logging - Enable DevTools network monitoring
+2025-08-05 01:19:19.474 [main] INFO  p.com.saucedemo.utils.NetworkTracer - Chrome driver detected, initializing DevTools...
+2025-08-05 01:19:19.477 [main] ERROR p.com.saucedemo.utils.NetworkTracer - ❌ DevTools failed to initialize: You are using a no-op implementation of the CDP. The most likely reason for this is that Selenium was unable to find an implementation of the CDP protocol that matches your browser. Please be sure to include an implementation on the classpath, possibly by adding a new (maven) dependency of `org.seleniumhq.selenium:selenium-devtools-vNN:4.18.1` where `NN` matches the major version of the browser you're using.
+Build info: version: '4.18.1', revision: 'b1d3319b48'
+System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '21'
+Driver info: DevTools Connection
+2025-08-05 01:19:19.477 [main] ERROR p.com.saucedemo.utils.NetworkTracer - Stack trace:
+org.openqa.selenium.devtools.DevToolsException: You are using a no-op implementation of the CDP. The most likely reason for this is that Selenium was unable to find an implementation of the CDP protocol that matches your browser. Please be sure to include an implementation on the classpath, possibly by adding a new (maven) dependency of `org.seleniumhq.selenium:selenium-devtools-vNN:4.18.1` where `NN` matches the major version of the browser you're using.
+Build info: version: '4.18.1', revision: 'b1d3319b48'
+System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '21'
+Driver info: DevTools Connection
+	at org.openqa.selenium.devtools.noop.NoOpDomains.target(NoOpDomains.java:60)
+	at org.openqa.selenium.devtools.DevTools.findTarget(DevTools.java:171)
+	at org.openqa.selenium.devtools.DevTools.createSession(DevTools.java:131)
+	at org.openqa.selenium.devtools.DevTools.createSession(DevTools.java:117)
+	at proje.com.saucedemo.utils.NetworkTracer.enableNetworkLogging(NetworkTracer.java:44)
+	at proje.com.saucedemo.AutomationExerciseCompleteTest.setUp(AutomationExerciseCompleteTest.java:70)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:728)
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptLifecycleMethod(TimeoutExtension.java:128)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptBeforeAllMethod(TimeoutExtension.java:70)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$invokeBeforeAllMethods$13(ClassBasedTestDescriptor.java:412)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.invokeBeforeAllMethods(ClassBasedTestDescriptor.java:410)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.before(ClassBasedTestDescriptor.java:216)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.before(ClassBasedTestDescriptor.java:85)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:148)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:198)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:169)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:93)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:58)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:141)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:57)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+	at org.junit.platform.launcher.core.SessionPerRequestLauncher.execute(SessionPerRequestLauncher.java:63)
+	at com.intellij.junit5.JUnit5IdeaTestRunner.startRunnerWithArgs(JUnit5IdeaTestRunner.java:57)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater$1.execute(IdeaTestRunner.java:38)
+	at com.intellij.rt.execution.junit.TestsRepeater.repeat(TestsRepeater.java:11)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:35)
+	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:231)
+	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:55)
+2025-08-05 01:19:19.499 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:19:19.500 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Ended span: enable-network-logging - Duration: 33ms, Success: true
+2025-08-05 01:19:19.911 [main] INFO  p.c.s.utils.TestDataGenerator - Generated user info: UserInfo{firstName='Brant', lastName='Yundt', email='cori.okon@yahoo.com', password='0Eu@%Rej'}
+2025-08-05 01:19:19.928 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:19:19.928 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Ended span: test.suite.setup - Duration: 2734ms, Success: true
+2025-08-05 01:19:19.929 [main] INFO  p.c.s.AutomationExerciseCompleteTest - Test setup completed successfully with Zipkin tracing
+2025-08-05 01:19:19.952 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Step 1: Creating new account ===
+2025-08-05 01:19:19.961 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:19:19.962 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: test.create.account - Create new user account
+2025-08-05 01:19:19.962 [main] INFO  proje.com.saucedemo.pages.HomePage - Navigating to AutomationExercise home page
+2025-08-05 01:19:22.758 [main] INFO  proje.com.saucedemo.pages.HomePage - Successfully navigated to home page
+2025-08-05 01:19:22.769 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:19:22.770 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked page navigation: Home - https://www.automationexercise.com (2806ms)
+2025-08-05 01:19:22.770 [main] INFO  proje.com.saucedemo.pages.HomePage - Clicking on Signup/Login link
+2025-08-05 01:19:24.373 [main] INFO  proje.com.saucedemo.pages.HomePage - Successfully clicked on Signup/Login link
+2025-08-05 01:19:24.380 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:19:24.381 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked element interaction: SignupLogin Link - click (4422ms)
+2025-08-05 01:19:24.381 [main] INFO  p.c.saucedemo.pages.SignupLoginPage - Starting signup process with name: Brant Yundt and email: cori.okon@yahoo.com
+2025-08-05 01:19:24.845 [main] INFO  p.c.saucedemo.pages.SignupLoginPage - Signup form submitted
+2025-08-05 01:19:24.849 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:19:24.850 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked element interaction: Signup Form - submit (4893ms)
+2025-08-05 01:19:36.778 [main] INFO  p.c.s.utils.TestDataGenerator - Generated account info: AccountInfo{title='Mrs', firstName='Dudley', lastName='Mante', company='Block, Stamm and Balistreri', address1='263 Schamberger Cove, Devonton, NV 49881', address2='Suite 778 8645 Sydney Locks, Mikaelaside, SD 01926', country='Uzbekistan', state='Maine', city='Gleasonmouth', zipcode='18123-1488', mobileNumber='(183) 791-9825', day='6', month='6', year='2016'}
+2025-08-05 01:19:36.797 [main] INFO  p.c.saucedemo.pages.SignupLoginPage - Filling account information form
+2025-08-05 01:19:38.972 [main] INFO  p.c.saucedemo.pages.SignupLoginPage - Account information form filled successfully
+2025-08-05 01:19:38.977 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:19:38.977 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked element interaction: Account Details - fill (19020ms)
+2025-08-05 01:19:38.977 [main] INFO  p.c.saucedemo.pages.SignupLoginPage - Creating account
+2025-08-05 01:19:40.899 [main] INFO  p.c.saucedemo.pages.SignupLoginPage - Account creation initiated
+2025-08-05 01:19:40.908 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:19:40.908 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked element interaction: Create Account Button - click (20947ms)
+2025-08-05 01:19:40.941 [main] INFO  p.c.saucedemo.pages.SignupLoginPage - Account created successfully
+2025-08-05 01:19:40.942 [main] INFO  p.c.s.v.VerificationHelper - Account created successfully
+2025-08-05 01:19:40.948 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:19:40.948 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked test step: Account Creation Verification - Verify account was created successfully (20990ms, PASS)
+2025-08-05 01:19:40.953 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:19:40.953 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked test step: Create Account - Successfully created user account (20997ms, PASS)
+2025-08-05 01:19:40.957 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:19:40.957 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Ended span: test.create.account - Duration: 23771ms, Success: true
+2025-08-05 01:19:40.957 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Step 1 completed: Account created successfully ===
+2025-08-05 01:19:40.972 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Step 2: Adding products to cart ===
+2025-08-05 01:19:40.978 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:19:40.979 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: test.add.products - Add random products to cart
+2025-08-05 01:19:40.979 [main] INFO  p.com.saucedemo.pages.ProductsPage - Navigating to products page
+2025-08-05 01:19:42.641 [main] INFO  p.com.saucedemo.pages.ProductsPage - Successfully navigated to products page
+2025-08-05 01:19:42.648 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:19:42.648 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked page navigation: Products - https://www.automationexercise.com/products (1669ms)
+2025-08-05 01:19:42.669 [main] INFO  p.c.s.v.VerificationHelper - Products page loaded successfully
+2025-08-05 01:19:42.669 [main] INFO  p.com.saucedemo.pages.ProductsPage - Adding random product to cart
+2025-08-05 01:19:42.669 [main] INFO  p.com.saucedemo.pages.ProductsPage - Getting all add to cart buttons
+2025-08-05 01:19:43.576 [main] INFO  p.com.saucedemo.pages.ProductsPage - Product added to cart successfully
+2025-08-05 01:19:43.587 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:19:43.588 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked element interaction: Add to Cart Button - click (150ms)
+2025-08-05 01:19:43.588 [main] INFO  p.com.saucedemo.pages.ProductsPage - Clicking on Continue Shopping button
+2025-08-05 01:19:43.705 [main] INFO  p.com.saucedemo.pages.ProductsPage - Successfully clicked on Continue Shopping button
+2025-08-05 01:19:43.711 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:19:43.712 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked element interaction: Continue Shopping Button - click (100ms)
+2025-08-05 01:19:43.712 [main] INFO  p.com.saucedemo.pages.ProductsPage - Adding random product to cart
+2025-08-05 01:19:43.712 [main] INFO  p.com.saucedemo.pages.ProductsPage - Getting all add to cart buttons
+2025-08-05 01:19:53.787 [main] ERROR p.c.s.AutomationExerciseCompleteTest - Step 2 failed: Expected condition failed: waiting for element to be clickable: [[ChromeDriver: chrome on windows (09fcd1871af358f14fff60090531d9df)] -> css selector: .add-to-cart] (tried for 10 second(s) with 500 milliseconds interval)
+Build info: version: '4.18.1', revision: 'b1d3319b48'
+System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '21'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 138.0.7204.184, chrome: {chromedriverVersion: 138.0.7204.183 (e90faf484dd..., userDataDir: C:\Users\kavci\AppData\Loca...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:64571}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:64571/devtoo..., se:cdpVersion: 138.0.7204.184, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: 09fcd1871af358f14fff60090531d9df
+2025-08-05 01:19:53.793 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:19:53.793 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked test step: Add Products - Failed to add products to cart (12815ms, FAIL)
+2025-08-05 01:19:53.798 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:19:53.798 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Ended span: test.add.products - Duration: 36610ms, Success: false
+2025-08-05 01:19:53.813 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Step 3: Verifying cart products ===
+2025-08-05 01:19:53.819 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:19:53.820 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: test.verify.cart - Verify products in cart
+2025-08-05 01:19:53.820 [main] INFO  proje.com.saucedemo.pages.CartPage - Navigating to cart page
+2025-08-05 01:20:05.274 [main] ERROR p.c.s.AutomationExerciseCompleteTest - Step 3 failed: Expected condition failed: waiting for visibility of element located by By.cssSelector: .breadcrumbs h2 (tried for 10 second(s) with 500 milliseconds interval)
+Build info: version: '4.18.1', revision: 'b1d3319b48'
+System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '21'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 138.0.7204.184, chrome: {chromedriverVersion: 138.0.7204.183 (e90faf484dd..., userDataDir: C:\Users\kavci\AppData\Loca...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:64571}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:64571/devtoo..., se:cdpVersion: 138.0.7204.184, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: 09fcd1871af358f14fff60090531d9df
+2025-08-05 01:20:05.279 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:20:05.280 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked test step: Verify Cart - Failed to verify cart products (11461ms, FAIL)
+2025-08-05 01:20:05.285 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:20:05.286 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Ended span: test.verify.cart - Duration: 48097ms, Success: false
+2025-08-05 01:20:05.293 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Step 4: Proceeding to checkout ===
+2025-08-05 01:20:05.301 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:20:05.302 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: test.proceed.checkout - Proceed to checkout
+2025-08-05 01:20:05.303 [main] INFO  proje.com.saucedemo.pages.CartPage - Clicking on Proceed to Checkout button
+2025-08-05 01:20:07.490 [main] INFO  proje.com.saucedemo.pages.CartPage - Successfully clicked on Proceed to Checkout button
+2025-08-05 01:20:07.498 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:20:07.498 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked element interaction: Proceed to Checkout Button - click (100ms)
+2025-08-05 01:20:07.506 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:20:07.507 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked test step: Proceed Checkout - Successfully proceeded to checkout (2206ms, PASS)
+2025-08-05 01:20:07.512 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:20:07.512 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Ended span: test.proceed.checkout - Duration: 50324ms, Success: true
+2025-08-05 01:20:07.512 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Step 4 completed: Proceeded to checkout ===
+2025-08-05 01:20:07.514 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Step 5: Filling checkout information ===
+2025-08-05 01:20:07.524 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:20:07.524 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: test.fill.checkout - Fill checkout information
+2025-08-05 01:20:07.528 [main] INFO  p.c.s.utils.TestDataGenerator - Generated checkout info: CheckoutInfo{firstName='Florencio', lastName='Stokes', postalCode='57606-2892', address='5786 Spencer Island, Albertinaport, IL 58981', city='Hicklehaven', state='Idaho', phone='1-583-420-6134 x199', country='Azerbaijan'}
+2025-08-05 01:20:07.532 [main] INFO  p.com.saucedemo.pages.CheckoutPage - Filling delivery address information
+2025-08-05 01:20:17.546 [main] ERROR p.c.s.AutomationExerciseCompleteTest - Step 5 failed: Expected condition failed: waiting for visibility of element located by By.id: name (tried for 10 second(s) with 500 milliseconds interval)
+Build info: version: '4.18.1', revision: 'b1d3319b48'
+System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '21'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 138.0.7204.184, chrome: {chromedriverVersion: 138.0.7204.183 (e90faf484dd..., userDataDir: C:\Users\kavci\AppData\Loca...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:64571}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:64571/devtoo..., se:cdpVersion: 138.0.7204.184, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: 09fcd1871af358f14fff60090531d9df
+2025-08-05 01:20:17.553 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:20:17.553 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked test step: Fill Checkout - Failed to fill checkout information (10033ms, FAIL)
+2025-08-05 01:20:17.559 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:20:17.559 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Ended span: test.fill.checkout - Duration: 60370ms, Success: false
+2025-08-05 01:20:17.562 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Step 6: Completing payment ===
+2025-08-05 01:20:17.568 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:20:17.569 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: test.complete.payment - Complete payment process
+2025-08-05 01:20:17.569 [main] INFO  p.com.saucedemo.pages.PaymentPage - Completing payment with random card data
+2025-08-05 01:20:17.569 [main] INFO  p.com.saucedemo.pages.PaymentPage - Filling card information
+2025-08-05 01:20:27.599 [main] ERROR p.c.s.AutomationExerciseCompleteTest - Step 6 failed: Expected condition failed: waiting for visibility of element located by By.id: name_on_card (tried for 10 second(s) with 500 milliseconds interval)
+Build info: version: '4.18.1', revision: 'b1d3319b48'
+System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '21'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 138.0.7204.184, chrome: {chromedriverVersion: 138.0.7204.183 (e90faf484dd..., userDataDir: C:\Users\kavci\AppData\Loca...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:64571}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:64571/devtoo..., se:cdpVersion: 138.0.7204.184, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: 09fcd1871af358f14fff60090531d9df
+2025-08-05 01:20:27.604 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:20:27.604 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked test step: Complete Payment - Failed to complete payment (10037ms, FAIL)
+2025-08-05 01:20:27.609 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:20:27.609 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Ended span: test.complete.payment - Duration: 70422ms, Success: false
+2025-08-05 01:20:27.615 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Step 7: Verifying order completion ===
+2025-08-05 01:20:27.622 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:20:27.623 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: test.verify.completion - Verify order completion
+2025-08-05 01:20:27.623 [main] INFO  proje.com.saucedemo.pages.HomePage - Navigating to AutomationExercise home page
+2025-08-05 01:20:29.831 [main] INFO  proje.com.saucedemo.pages.HomePage - Successfully navigated to home page
+2025-08-05 01:20:29.837 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:20:29.837 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked page navigation: Home - https://www.automationexercise.com (2216ms)
+2025-08-05 01:20:29.858 [main] INFO  p.c.s.v.VerificationHelper - Home page loaded successfully
+2025-08-05 01:20:29.867 [main] INFO  p.c.s.v.VerificationHelper - URL verification successful: https://www.automationexercise.com/
+2025-08-05 01:20:29.872 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:20:29.872 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked test step: Verify Completion - Successfully verified order completion (2252ms, PASS)
+2025-08-05 01:20:29.877 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:20:29.877 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Ended span: test.verify.completion - Duration: 72689ms, Success: true
+2025-08-05 01:20:29.878 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Step 7 completed: Order completion verified ===
+2025-08-05 01:20:29.880 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Complete End-to-End Test Flow ===
+2025-08-05 01:20:29.886 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:20:29.886 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Started span: test.complete.flow - Complete end-to-end test flow
+2025-08-05 01:20:29.890 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:20:29.890 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Tracked test step: Complete Flow - All test steps completed successfully (6ms, PASS)
+2025-08-05 01:20:29.895 [main] DEBUG p.com.saucedemo.utils.ZipkinTracer - Span sent successfully to Zipkin
+2025-08-05 01:20:29.895 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - Ended span: test.complete.flow - Duration: 72707ms, Success: true
+2025-08-05 01:20:29.895 [main] INFO  p.c.s.AutomationExerciseCompleteTest - All test steps completed successfully!
+2025-08-05 01:20:29.895 [main] INFO  p.c.s.AutomationExerciseCompleteTest - User created: cori.okon@yahoo.com
+2025-08-05 01:20:29.895 [main] INFO  p.c.s.AutomationExerciseCompleteTest - Products added to cart and order completed
+2025-08-05 01:20:29.895 [main] INFO  p.c.s.AutomationExerciseCompleteTest - Trace ID: 34d9dcf25d124167
+2025-08-05 01:20:29.895 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Complete End-to-End Test Flow completed ===
+2025-08-05 01:20:29.899 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Cleaning up test resources ===
+2025-08-05 01:20:29.899 [main] INFO  p.c.s.AutomationExerciseCompleteTest - DevTools enabled: false
+2025-08-05 01:20:29.899 [main] INFO  p.c.s.AutomationExerciseCompleteTest - Total HTTP requests captured: 0
+2025-08-05 01:20:29.906 [main] INFO  p.com.saucedemo.utils.NetworkTracer - DevTools session closed
+2025-08-05 01:20:30.898 [main] INFO  p.c.saucedemo.config.WebDriverConfig - WebDriver quit successfully
+2025-08-05 01:20:30.898 [main] INFO  p.c.s.AutomationExerciseCompleteTest - WebDriver quit successfully
+2025-08-05 01:20:30.899 [main] INFO  p.com.saucedemo.utils.ZipkinTracer - ZipkinTracer cleanup completed
+2025-08-05 01:20:30.899 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Test suite cleanup completed ===

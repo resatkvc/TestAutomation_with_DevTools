@@ -13,12 +13,12 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <selenium.version>4.18.1</selenium.version>
+        <webdrivermanager.version>5.8.0</webdrivermanager.version>
         <junit.version>5.10.2</junit.version>
-        <webdrivermanager.version>5.7.0</webdrivermanager.version>
         <slf4j.version>2.0.12</slf4j.version>
         <logback.version>1.4.14</logback.version>
         <faker.version>1.0.2</faker.version>
-        <testng.version>7.8.0</testng.version>
+        <jackson.version>2.17.0</jackson.version>
     </properties>
 
     <dependencies>
@@ -73,12 +73,7 @@
         </dependency>
 
         <!-- TestNG for additional testing features -->
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>${testng.version}</version>
-            <scope>test</scope>
-        </dependency>
+
 
         <!-- Apache Commons Lang for utilities -->
         <dependency>
@@ -91,7 +86,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.16.1</version>
+            <version>${jackson.version}</version>
         </dependency>
     </dependencies>
 

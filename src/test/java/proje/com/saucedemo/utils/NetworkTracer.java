@@ -21,6 +21,7 @@ public class NetworkTracer {
     private final ZipkinTracer zipkinTracer;
     private DevTools devTools;
     private boolean devToolsEnabled = false;
+    private int requestCount = 0;
     
     public NetworkTracer(WebDriver driver) {
         this.driver = driver;
@@ -38,19 +39,23 @@ public class NetworkTracer {
             // Check if DevTools is available (Chrome only)
             if (driver instanceof HasDevTools) {
                 try {
+                    logger.info("Chrome driver detected, initializing DevTools...");
                     devTools = ((HasDevTools) driver).getDevTools();
                     devTools.createSession();
+                    logger.info("DevTools session created successfully");
                     
                     // Enable network monitoring
                     devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
+                    logger.info("Network monitoring enabled");
                     
                     // Listen for network requests
                     devTools.addListener(Network.requestWillBeSent(), request -> {
                         try {
                             String method = request.getRequest().getMethod();
                             String url = request.getRequest().getUrl();
+                            requestCount++;
                             
-                            logger.info("HTTP Request: {} {}", method, url);
+                            logger.info("HTTP Request #{}: {} {}", requestCount, method, url);
                             
                             // Create method-specific service name for Zipkin
                             String serviceName = "automation-exercise-" + method.toLowerCase();
@@ -62,9 +67,9 @@ public class NetworkTracer {
                             methodTracer.endSpan("http-request", true);
                             methodTracer.cleanup();
                             
-                            logger.info("Sent to Zipkin: {} {} with service: {}", method, url, serviceName);
+                            logger.info("✅ Sent to Zipkin: {} {} with service: {} (Total: {})", method, url, serviceName, requestCount);
                         } catch (Exception e) {
-                            logger.error("Failed to process HTTP request: {}", e.getMessage());
+                            logger.error("❌ Failed to process HTTP request: {}", e.getMessage());
                         }
                     });
                     
@@ -84,23 +89,39 @@ public class NetworkTracer {
                     });
                     
                     devToolsEnabled = true;
-                    logger.info("DevTools network monitoring enabled successfully");
+                    logger.info("✅ DevTools network monitoring enabled successfully");
                     
                 } catch (Exception e) {
-                    logger.warn("DevTools failed to initialize: {}", e.getMessage());
+                    logger.error("❌ DevTools failed to initialize: {}", e.getMessage());
+                    logger.error("Stack trace:", e);
                     devToolsEnabled = false;
                 }
             } else {
-                logger.warn("DevTools not available (not Chrome driver)");
+                logger.warn("❌ DevTools not available (not Chrome driver)");
+                logger.info("Driver type: {}", driver.getClass().getSimpleName());
                 devToolsEnabled = false;
             }
             
             zipkinTracer.endSpan("enable-network-logging", true);
             
         } catch (Exception e) {
-            logger.error("Failed to enable network logging: {}", e.getMessage());
+            logger.error("❌ Failed to enable network logging: {}", e.getMessage());
             zipkinTracer.endSpan("enable-network-logging", false);
         }
+    }
+    
+    /**
+     * Get request count for debugging
+     */
+    public int getRequestCount() {
+        return requestCount;
+    }
+    
+    /**
+     * Check if DevTools is enabled
+     */
+    public boolean isDevToolsEnabled() {
+        return devToolsEnabled;
     }
     
     /**

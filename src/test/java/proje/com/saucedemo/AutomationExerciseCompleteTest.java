@@ -100,6 +100,12 @@ public class AutomationExerciseCompleteTest {
         try {
             logger.info("=== Cleaning up test resources ===");
             
+            // Debug: Check DevTools status
+            if (networkTracer != null) {
+                logger.info("DevTools enabled: {}", networkTracer.isDevToolsEnabled());
+                logger.info("Total HTTP requests captured: {}", networkTracer.getRequestCount());
+            }
+            
             // Cleanup NetworkTracer
             if (networkTracer != null) {
                 networkTracer.cleanup();
