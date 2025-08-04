@@ -1,73 +1,49 @@
 # AutomationExercise UI Test Automation with Zipkin Integration
 
-Bu proje, `https://www.automationexercise.com/` sitesi için geliştirilmiş kapsamlı UI test otomasyonu projesidir. Proje, end-to-end test senaryolarını destekler ve **Zipkin distributed tracing** entegrasyonu ile test süreçlerini detaylı olarak izler.
+Bu proje, AutomationExercise web sitesi için kapsamlı UI test otomasyonu sağlar ve Zipkin ile dağıtık izleme (distributed tracing) entegrasyonu içerir.
 
-## 🚀 Proje Özellikleri
+## 🎯 Proje Özellikleri
 
-### ✅ **Test Otomasyonu**
-- **End-to-End Test Senaryoları**: Kullanıcı kaydı, ürün ekleme, sepet işlemleri, ödeme
-- **Page Object Model (POM)**: Sürdürülebilir ve yeniden kullanılabilir kod yapısı
+- **End-to-End Test Flow**: Kullanıcı kaydı, ürün ekleme, sepet işlemleri, ödeme süreci
+- **DevTools Network Monitoring**: Chrome DevTools API ile gerçek zamanlı HTTP istek izleme
+- **Zipkin Integration**: Dağıtık izleme ve performans analizi
+- **Page Object Model**: Temiz ve sürdürülebilir kod yapısı
 - **Random Test Data**: JavaFaker ile gerçekçi test verileri
-- **Cross-Browser Testing**: Chrome, Firefox, Edge desteği
-- **WebDriverManager**: Otomatik driver yönetimi
+- **Comprehensive Logging**: SLF4J ve Logback ile detaylı loglama
 
-### 🔍 **Zipkin Distributed Tracing**
-- **Comprehensive Tracing**: Tüm test adımlarının detaylı izlenmesi
-- **Performance Monitoring**: Sayfa yükleme süreleri, element etkileşimleri
-- **Error Tracking**: Test hatalarının detaylı analizi
-- **Service Categorization**: Test adımlarının kategorize edilmesi
-- **Real-time Monitoring**: Zipkin UI üzerinden canlı izleme
+## 🚀 Gereksinimler
 
-### 📊 **Monitoring & Analytics**
-- **Network Monitoring**: Selenium Network API ile ağ trafiği izleme
-- **Selenium Tracing**: WebDriver işlemlerinin detaylı izlenmesi
-- **Logging**: SLF4J ve Logback ile kapsamlı loglama
-- **Reporting**: Test sonuçlarının detaylı raporlanması
+- Java 11+
+- Maven 3.6+
+- Chrome Browser
+- Docker (Zipkin için)
 
-## 🛠️ Gereksinimler
+## 📦 Kurulum ve Çalıştırma
 
-- **Java 21** veya üzeri
-- **Maven 3.8+**
-- **Docker & Docker Compose** (Zipkin için)
-- **Chrome/Firefox/Edge** browser
-- **Git**
-
-## 🚀 Kurulum ve Çalıştırma
-
-### 1. **Projeyi Klonlayın**
+### 1. Projeyi Klonlayın
 ```bash
 git clone <repository-url>
 cd Zipkin-Integrated_UI_Test_Automation
 ```
 
-### 2. **Zipkin'i Başlatın**
+### 2. Zipkin'i Başlatın
 ```bash
-# Zipkin'i Docker ile başlatın
 docker-compose up -d
-
-# Servislerin durumunu kontrol edin
-docker-compose ps
 ```
 
-### 3. **Projeyi Derleyin**
+### 3. Testleri Çalıştırın
 ```bash
-mvn clean compile
-```
-
-### 4. **Testleri Çalıştırın**
-```bash
-# Tüm testleri çalıştırın
+# Tüm testleri çalıştır
 mvn test
 
-# Belirli test sınıfını çalıştırın
+# Belirli bir test sınıfını çalıştır
 mvn test -Dtest=AutomationExerciseCompleteTest
 
-# Farklı browser ile test
-mvn test -Dbrowser=firefox
-mvn test -Dbrowser=edge
+# Belirli bir test metodunu çalıştır
+mvn test -Dtest=AutomationExerciseCompleteTest#testCreateAccount
 ```
 
-### 5. **Zipkin UI'ya Erişin**
+### 4. Zipkin UI'da Sonuçları Görüntüleyin
 ```
 http://localhost:9411
 ```
@@ -80,161 +56,152 @@ src/test/java/proje/com/saucedemo/
 ├── config/
 │   └── WebDriverConfig.java              # WebDriver konfigürasyonu
 ├── pages/                                # Page Object Model
-│   ├── HomePage.java                     # Ana sayfa
-│   ├── SignupLoginPage.java              # Kayıt/Giriş sayfası
-│   ├── ProductsPage.java                 # Ürünler sayfası
-│   ├── CartPage.java                     # Sepet sayfası
-│   ├── CheckoutPage.java                 # Ödeme sayfası
-│   └── PaymentPage.java                  # Ödeme işlemi
+│   ├── HomePage.java
+│   ├── SignupLoginPage.java
+│   ├── ProductsPage.java
+│   ├── CartPage.java
+│   ├── CheckoutPage.java
+│   └── PaymentPage.java
 ├── utils/                                # Yardımcı sınıflar
-│   ├── TestDataGenerator.java            # Test verisi üretici
-│   ├── ZipkinTracer.java                 # Zipkin entegrasyonu
-│   ├── NetworkTracer.java                # Ağ izleme
-│   └── SeleniumTracer.java              # Selenium izleme
+│   ├── ZipkinTracer.java                # Zipkin entegrasyonu
+│   ├── NetworkTracer.java               # DevTools network monitoring
+│   ├── SeleniumTracer.java              # Selenium izleme
+│   └── TestDataGenerator.java           # Test veri üreteci
 └── verification/
-    └── VerificationHelper.java           # Doğrulama yardımcısı
+    └── VerificationHelper.java           # Doğrulama yardımcıları
 ```
 
 ## 🧪 Test Senaryoları
 
-### **End-to-End Test Flow**
-1. **Kullanıcı Kaydı**: Random kullanıcı oluşturma
-2. **Ürün Ekleme**: Random ürünleri sepete ekleme
-3. **Sepet Doğrulama**: Sepetteki ürünleri kontrol etme
-4. **Ödeme İşlemi**: Checkout ve ödeme tamamlama
-5. **Sipariş Doğrulama**: Sipariş tamamlanmasını kontrol etme
+### 1. Kullanıcı Kaydı
+- Ana sayfaya git
+- Signup/Login linkine tıkla
+- Yeni kullanıcı bilgilerini gir
+- Hesap oluştur
 
-### **Zipkin Tracing Kategorileri**
-- **test.suite.setup**: Test suite başlatma
-- **test.create.account**: Kullanıcı kaydı
-- **test.add.products**: Ürün ekleme
-- **test.verify.cart**: Sepet doğrulama
-- **test.proceed.checkout**: Checkout işlemi
-- **test.fill.checkout**: Ödeme bilgileri
-- **test.complete.payment**: Ödeme tamamlama
-- **test.verify.completion**: Sipariş doğrulama
+### 2. Ürün Ekleme
+- Ürünler sayfasına git
+- Rastgele ürünleri sepete ekle
+- Alışverişe devam et
+
+### 3. Sepet İşlemleri
+- Sepete git
+- Ürünleri doğrula
+- Checkout'a geç
+
+### 4. Ödeme Süreci
+- Teslimat bilgilerini gir
+- Ödeme bilgilerini gir
+- Siparişi tamamla
+
+## 🔍 Zipkin Integration
+
+### DevTools Network Monitoring
+- Chrome DevTools API kullanarak gerçek zamanlı HTTP istek izleme
+- Her HTTP method için ayrı service name:
+  - `automation-exercise-get`
+  - `automation-exercise-post`
+  - `automation-exercise-put`
+  - `automation-exercise-delete`
+
+### Zipkin'de Görünen Bilgiler
+- **Test Adımları**: `automation-exercise-test`
+- **HTTP İstekleri**: Method-specific service name'ler
+- **Performans Metrikleri**: Response time, status codes
+- **Hata Takibi**: Failed requests ve exceptions
+
+### Zipkin UI'da Görüntüleme
+1. Service dropdown'da farklı service name'ler
+2. Her HTTP isteği için ayrı trace
+3. Request/response detayları
+4. Timeline görünümü
 
 ## ⚙️ Konfigürasyon
 
-### **Docker Compose Services**
-```yaml
-services:
-  zipkin:                    # Distributed tracing server
-    image: openzipkin/zipkin:latest
-    ports: ["9411:9411"]
-```
+### WebDriver
+- Chrome browser kullanımı
+- WebDriverManager ile otomatik driver yönetimi
+- DevTools API desteği
 
-### **WebDriverManager Konfigürasyonu**
-```java
-// Otomatik driver yönetimi
-WebDriverManager.chromedriver().setup();
-WebDriverManager.firefoxdriver().setup();
-WebDriverManager.edgedriver().setup();
+### Zipkin
+- Docker container ile çalıştırma
+- HTTP endpoint: `http://localhost:9411`
+- Memory storage (geliştirme için)
 
-// Browser seçimi
-driver = webDriverConfig.initializeDriver("chrome");
-driver = webDriverConfig.initializeDriver("firefox");
-driver = webDriverConfig.initializeDriver("edge");
-```
-
-### **Zipkin Tracing Konfigürasyonu**
-```java
-// Service name for Zipkin categorization
-private static final String SERVICE_NAME = "automation-exercise-test";
-
-// Tracing methods
-zipkinTracer.startSpan("operation.name", "description");
-zipkinTracer.trackPageNavigation("page.name", "url", duration);
-zipkinTracer.trackElementInteraction("element.name", "action", duration);
-zipkinTracer.trackTestStep("step.name", "description", success, duration);
-zipkinTracer.endSpan("operation.name", success);
-```
+### Logging
+- SLF4J + Logback
+- Console ve file output
+- Trace ID correlation
 
 ## 📊 Raporlama
 
-### **Zipkin UI Özellikleri**
-- **Trace Search**: Test adımlarını arama
-- **Service Dependencies**: Servis bağımlılıkları
-- **Performance Metrics**: Süre analizleri
-- **Error Tracking**: Hata izleme
-- **Real-time Monitoring**: Canlı izleme
+### Zipkin UI
+- Service dependencies
+- Request flow visualization
+- Performance metrics
+- Error tracking
 
-### **Test Raporları**
-- **JUnit Reports**: Test sonuçları
-- **Log Files**: Detaylı loglar
-- **Zipkin Traces**: Distributed tracing
-- **Network Logs**: Ağ trafiği
+### Console Logs
+- Test adımları
+- HTTP istekleri
+- Trace ID'ler
+- Hata mesajları
 
-## 🔧 Geliştirme
+## 🛠️ Geliştirme
 
-### **Yeni Test Senaryosu Ekleme**
-1. **Page Object Oluştur**: `pages/` klasörüne yeni sayfa sınıfı ekle
-2. **Test Metodu Yaz**: `AutomationExerciseCompleteTest.java`'ya test metodu ekle
-3. **Zipkin Tracing**: Test adımlarını Zipkin ile izle
-4. **Verification**: Doğrulama metodları ekle
+### Yeni Test Ekleme
+1. Page Object oluştur
+2. Test metodunu ekle
+3. Zipkin tracing ekle
+4. Verification helper kullan
 
-### **Zipkin Tracing Ekleme**
-```java
-// Test başlangıcında
-zipkinTracer.startSpan("test.operation", "Test operation description");
-
-// Test adımlarında
-zipkinTracer.trackElementInteraction("element", "action", duration);
-zipkinTracer.trackPageNavigation("page", "url", loadTime);
-
-// Test sonunda
-zipkinTracer.trackTestStep("step", "description", success, duration);
-zipkinTracer.endSpan("test.operation", success);
-```
+### DevTools Monitoring
+- Sadece Chrome browser destekler
+- Otomatik HTTP method detection
+- Real-time network monitoring
 
 ## 🐛 Hata Ayıklama
 
-### **Zipkin UI'da Hata Analizi**
-1. **Trace ID'yi Bul**: Loglardan trace ID'yi al
-2. **Zipkin UI'da Ara**: `http://localhost:9411` adresinde trace ID ile ara
-3. **Span Detaylarını İncele**: Hata olan span'i bul ve detaylarını incele
-4. **Performance Analizi**: Yavaş olan adımları tespit et
+### Yaygın Sorunlar
+1. **DevTools not available**: Chrome driver kullanıldığından emin olun
+2. **Zipkin connection failed**: Docker container'ın çalıştığından emin olun
+3. **Test failures**: Site erişilebilirliğini kontrol edin
 
-### **Log Analizi**
+### Debug Logs
 ```bash
-# Test loglarını görüntüle
-tail -f target/test.log
-
-# Zipkin trace ID'lerini filtrele
-grep "Trace ID" target/test.log
+# Debug modunda çalıştır
+mvn test -Dtest=AutomationExerciseCompleteTest -Dlogging.level.proje.com.saucedemo=DEBUG
 ```
 
-## ⚡ Performans
+## 📈 Performans
 
-### **Optimizasyon Önerileri**
-- **WebDriverManager**: Otomatik driver yönetimi
-- **Resource Management**: WebDriver kaynaklarını düzgün kapat
-- **Network Monitoring**: Ağ trafiğini optimize et
-- **Zipkin Sampling**: Production'da sampling oranını ayarla
+### Optimizasyonlar
+- DevTools API ile gerçek zamanlı monitoring
+- Minimal overhead ile tracing
+- Efficient memory usage
+- Fast test execution
 
-### **Performance Metrics**
-- **Page Load Times**: Sayfa yükleme süreleri
-- **Element Interaction Times**: Element etkileşim süreleri
-- **Test Execution Times**: Test çalıştırma süreleri
-- **Network Latency**: Ağ gecikme süreleri
+### Monitoring
+- Network request timing
+- Page load performance
+- Element interaction delays
+- Overall test duration
 
 ## 🤝 Katkıda Bulunma
 
-1. **Fork** yapın
-2. **Feature branch** oluşturun (`git checkout -b feature/amazing-feature`)
-3. **Commit** yapın (`git commit -m 'Add amazing feature'`)
-4. **Push** yapın (`git push origin feature/amazing-feature`)
-5. **Pull Request** oluşturun
+1. Fork yapın
+2. Feature branch oluşturun
+3. Değişikliklerinizi commit edin
+4. Pull request gönderin
 
 ## 📄 Lisans
 
-Bu proje eğitim ve test otomasyonu amaçlıdır. MIT lisansı altında lisanslanmıştır.
+Bu proje MIT lisansı altında lisanslanmıştır.
 
 ## 📞 İletişim
 
-- **Proje**: [GitHub Repository](https://github.com/your-username/Zipkin-Integrated_UI_Test_Automation)
-- **Zipkin UI**: http://localhost:9411
+Proje ile ilgili sorularınız için issue açabilirsiniz.
 
 ---
 
-**Not**: Bu proje eğitim ve test otomasyonu amaçlıdır. Gerçek e-ticaret sitelerinde kullanmadan önce gerekli izinleri alın. 
+**Not**: Bu proje sadece eğitim ve geliştirme amaçlıdır. Production ortamında kullanmadan önce güvenlik ve performans testleri yapılmalıdır. 

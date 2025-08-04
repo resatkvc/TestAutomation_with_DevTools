@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Complete AutomationExercise test automation with Zipkin integration
  * Tests the full e-commerce flow from signup/login to order completion
- * Includes comprehensive distributed tracing
+ * Includes comprehensive distributed tracing with DevTools network monitoring
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AutomationExerciseCompleteTest {
@@ -65,10 +65,9 @@ public class AutomationExerciseCompleteTest {
             // Initialize Selenium tracer
             seleniumTracer = new SeleniumTracer(driver);
             
-            // Initialize NetworkTracer
+            // Initialize NetworkTracer with DevTools monitoring
             networkTracer = new NetworkTracer(driver);
             networkTracer.enableNetworkLogging();
-            networkTracer.monitorNetworkActivity("AutomationExercise Network Monitoring");
             
             // Initialize page objects
             homePage = new HomePage(driver);
@@ -139,22 +138,13 @@ public class AutomationExerciseCompleteTest {
             homePage.navigateToHome();
             zipkinTracer.trackPageNavigation("Home", BASE_URL, System.currentTimeMillis() - startTime);
             
-            // Capture network requests for navigation
-            networkTracer.captureNetworkRequests("home-page-navigation");
-            
             // Click on signup/login link
             homePage.clickSignupLogin();
             zipkinTracer.trackElementInteraction("SignupLogin Link", "click", System.currentTimeMillis() - startTime);
             
-            // Capture network requests for signup page
-            networkTracer.captureNetworkRequests("signup-page-load");
-            
             // Start signup process
             signupLoginPage.startSignup(userName, userEmail);
             zipkinTracer.trackElementInteraction("Signup Form", "submit", System.currentTimeMillis() - startTime);
-            
-            // Capture network requests for signup submission
-            networkTracer.captureNetworkRequests("signup-form-submission");
             
             // Check if email already exists
             if (signupLoginPage.isSignupEmailExists()) {
@@ -184,15 +174,9 @@ public class AutomationExerciseCompleteTest {
             );
             zipkinTracer.trackElementInteraction("Account Details", "fill", System.currentTimeMillis() - startTime);
             
-            // Capture network requests for account creation
-            networkTracer.captureNetworkRequests("account-creation");
-            
             // Create account
             signupLoginPage.createAccount();
             zipkinTracer.trackElementInteraction("Create Account Button", "click", System.currentTimeMillis() - startTime);
-            
-            // Wait for network requests to complete
-            networkTracer.waitForNetworkIdle(5);
             
             // Verify account creation
             boolean accountCreated = signupLoginPage.isAccountCreated();
@@ -230,15 +214,9 @@ public class AutomationExerciseCompleteTest {
             zipkinTracer.trackPageNavigation("Products", BASE_URL + "/products", System.currentTimeMillis() - startTime);
             verificationHelper.verifyPageLoaded("Products page", productsPage.isPageLoaded());
             
-            // Capture network requests for products page
-            networkTracer.captureNetworkRequests("products-page-load");
-            
             // Add random product to cart
             productsPage.addRandomProductToCart();
             zipkinTracer.trackElementInteraction("Add to Cart Button", "click", 150);
-            
-            // Capture network requests for adding product
-            networkTracer.captureNetworkRequests("add-product-to-cart");
             
             // Continue shopping
             productsPage.clickContinueShopping();
@@ -247,12 +225,6 @@ public class AutomationExerciseCompleteTest {
             // Add another random product
             productsPage.addRandomProductToCart();
             zipkinTracer.trackElementInteraction("Add to Cart Button 2", "click", 150);
-            
-            // Capture network requests for second product
-            networkTracer.captureNetworkRequests("add-second-product-to-cart");
-            
-            // Wait for network requests to complete
-            networkTracer.waitForNetworkIdle(3);
             
             success = true;
             long duration = System.currentTimeMillis() - startTime;
@@ -285,9 +257,6 @@ public class AutomationExerciseCompleteTest {
             cartPage.navigateToCart();
             zipkinTracer.trackPageNavigation("Cart", BASE_URL + "/view_cart", System.currentTimeMillis() - startTime);
             verificationHelper.verifyPageLoaded("Cart page", cartPage.isPageLoaded());
-            
-            // Capture network requests for cart page
-            networkTracer.captureNetworkRequests("cart-page-load");
             
             // Verify cart is not empty
             verificationHelper.verifyCartNotEmpty(cartPage.getCartItemsCount() > 0);
@@ -513,92 +482,6 @@ public class AutomationExerciseCompleteTest {
             zipkinTracer.trackTestStep("Complete Flow", "Failed to complete end-to-end flow", false, duration);
             zipkinTracer.endSpan("test.complete.flow", false);
             throw new RuntimeException("Complete flow test failed", e);
-        }
-    }
-
-    @Test
-    @Order(0)
-    @DisplayName("Test HTTP Methods in Zipkin")
-    void testHttpMethodsInZipkin() {
-        long startTime = System.currentTimeMillis();
-        boolean success = false;
-        
-        try {
-            logger.info("=== Testing HTTP Methods in Zipkin ===");
-            zipkinTracer.startSpan("test.http.methods", "Test HTTP methods visibility in Zipkin");
-            
-            // Navigate to home page
-            homePage.navigateToHome();
-            zipkinTracer.trackPageNavigation("Home", BASE_URL, System.currentTimeMillis() - startTime);
-            
-            // Manually track GET request for home page
-            trackHttpMethod("GET", BASE_URL, "home-page");
-            
-            // Capture network requests
-            networkTracer.captureNetworkRequests("home-page-navigation");
-            
-            // Wait a bit for requests to complete
-            Thread.sleep(2000);
-            
-            // Navigate to products page
-            driver.get(BASE_URL + "/products");
-            zipkinTracer.trackPageNavigation("Products", BASE_URL + "/products", System.currentTimeMillis() - startTime);
-            
-            // Manually track GET request for products page
-            trackHttpMethod("GET", BASE_URL + "/products", "products-page");
-            
-            // Capture network requests
-            networkTracer.captureNetworkRequests("products-page-navigation");
-            
-            // Wait a bit for requests to complete
-            Thread.sleep(2000);
-            
-            // Navigate to cart page
-            driver.get(BASE_URL + "/view_cart");
-            zipkinTracer.trackPageNavigation("Cart", BASE_URL + "/view_cart", System.currentTimeMillis() - startTime);
-            
-            // Manually track GET request for cart page
-            trackHttpMethod("GET", BASE_URL + "/view_cart", "cart-page");
-            
-            // Capture network requests
-            networkTracer.captureNetworkRequests("cart-page-navigation");
-            
-            success = true;
-            long duration = System.currentTimeMillis() - startTime;
-            zipkinTracer.trackTestStep("HTTP Methods Test", "Successfully tested HTTP methods in Zipkin", success, duration);
-            zipkinTracer.endSpan("test.http.methods", success);
-            
-            logger.info("=== HTTP Methods test completed ===");
-            logger.info("Trace ID: {}", zipkinTracer.getTraceId());
-            
-        } catch (Exception e) {
-            logger.error("HTTP Methods test failed: {}", e.getMessage());
-            long duration = System.currentTimeMillis() - startTime;
-            zipkinTracer.trackTestStep("HTTP Methods Test", "Failed to test HTTP methods in Zipkin", false, duration);
-            zipkinTracer.endSpan("test.http.methods", false);
-            throw new RuntimeException("HTTP Methods test failed", e);
-        }
-    }
-    
-    /**
-     * Manually track HTTP method in Zipkin
-     */
-    private void trackHttpMethod(String method, String url, String description) {
-        try {
-            // Create method-specific service name
-            String serviceName = "automation-exercise-" + method.toLowerCase();
-            
-            // Create new ZipkinTracer with method-specific service name
-            ZipkinTracer methodTracer = new ZipkinTracer(serviceName);
-            methodTracer.startSpan("http-request", method + " " + url);
-            methodTracer.trackElementInteraction("HTTP Request", method + " " + url + " (" + description + ")", System.currentTimeMillis());
-            methodTracer.endSpan("http-request", true);
-            methodTracer.cleanup();
-            
-            logger.info("Manually sent to Zipkin: {} request to {} with service name: {} ({})", method, url, serviceName, description);
-            
-        } catch (Exception e) {
-            logger.error("Failed to track HTTP method: {}", e.getMessage());
         }
     }
 } 
