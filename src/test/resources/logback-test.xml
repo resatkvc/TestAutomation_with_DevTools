@@ -10,9 +10,9 @@
     
     <!-- File Appender for Test Logs -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/saucedemo-test.log</file>
+        <file>logs/automation-exercise-test.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/saucedemo-test.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/automation-exercise-test.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder>
@@ -36,6 +36,8 @@
     <!-- Application Loggers -->
     <logger name="proje.com.saucedemo" level="INFO" />
     <logger name="proje.com.saucedemo.utils.ZipkinTracer" level="DEBUG" />
+    <logger name="proje.com.saucedemo.utils.NetworkTracer" level="DEBUG" />
+    <logger name="proje.com.saucedemo.utils.SeleniumTracer" level="DEBUG" />
     <logger name="proje.com.saucedemo.verification.VerificationHelper" level="INFO" />
     
     <!-- Selenium Loggers -->
