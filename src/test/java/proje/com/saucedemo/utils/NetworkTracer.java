@@ -12,29 +12,27 @@ import java.util.Optional;
 /**
  * Network traffic tracer for Selenium WebDriver
  * Captures and traces all network requests made by the browser using DevTools API
- * Automatically sends HTTP methods to Zipkin with method-specific service names
+ * Provides detailed logging of HTTP requests and responses
  */
 public class NetworkTracer {
     
     private static final Logger logger = LoggerFactory.getLogger(NetworkTracer.class);
     private final WebDriver driver;
-    private final ZipkinTracer zipkinTracer;
     private DevTools devTools;
     private boolean devToolsEnabled = false;
     private int requestCount = 0;
     
     public NetworkTracer(WebDriver driver) {
         this.driver = driver;
-        this.zipkinTracer = new ZipkinTracer();
     }
     
     /**
      * Enable network logging using DevTools API
-     * Automatically captures all HTTP requests and sends them to Zipkin
+     * Captures all HTTP requests and responses for detailed analysis
      */
     public void enableNetworkLogging() {
         try {
-            zipkinTracer.startSpan("enable-network-logging", "Enable DevTools network monitoring");
+            logger.info("Enabling DevTools network monitoring...");
             
             // Check if DevTools is available (Chrome only)
             if (driver instanceof HasDevTools) {
@@ -65,24 +63,13 @@ public class NetworkTracer {
                             String url = request.getRequest().getUrl();
                             requestCount++;
                             
-                            logger.info("HTTP Request #{}: {} {}", requestCount, method, url);
+                            logger.info("🌐 HTTP Request #{}: {} {}", requestCount, method, url);
                             
-                            // Create method-specific service name for Zipkin
-                            String serviceName = "automation-exercise-" + method.toLowerCase();
-                            ZipkinTracer methodTracer = new ZipkinTracer(serviceName);
+                            // Log additional request details if available
+                            if (request.getRequest().getHeaders() != null) {
+                                logger.debug("Request headers: {}", request.getRequest().getHeaders());
+                            }
                             
-                            // Track the HTTP request in Zipkin with longer duration
-                            methodTracer.startSpan("http-request", method + " " + url);
-                            methodTracer.trackElementInteraction("HTTP Request", method + " " + url, System.currentTimeMillis());
-                            
-                            // Wait a bit before ending span to ensure it's sent to Zipkin
-                            Thread.sleep(100);
-                            methodTracer.endSpan("http-request", true);
-                            
-                            // Don't cleanup immediately, let ZipkinTracer handle it
-                            // methodTracer.cleanup(); // REMOVED THIS LINE
-                            
-                            logger.info("✅ Sent to Zipkin: {} {} with service: {} (Total: {})", method, url, serviceName, requestCount);
                         } catch (Exception e) {
                             logger.error("❌ Failed to process HTTP request: {}", e.getMessage());
                         }
@@ -93,13 +80,31 @@ public class NetworkTracer {
                         try {
                             String url = response.getResponse().getUrl();
                             int status = response.getResponse().getStatus();
+                            String statusText = response.getResponse().getStatusText();
                             
-                            logger.info("HTTP Response: {} - Status: {}", url, status);
+                            String statusIcon = (status >= 200 && status < 300) ? "✅" : "❌";
+                            logger.info("{} HTTP Response: {} - Status: {} ({})", statusIcon, url, status, statusText);
                             
-                            // Track response in Zipkin
-                            zipkinTracer.trackTestStep("HTTP Response", "Response received for: " + url + " (Status: " + status + ")", status >= 200 && status < 300, System.currentTimeMillis());
+                            // Log response headers if available
+                            if (response.getResponse().getHeaders() != null) {
+                                logger.debug("Response headers: {}", response.getResponse().getHeaders());
+                            }
+                            
                         } catch (Exception e) {
                             logger.error("Failed to process HTTP response: {}", e.getMessage());
+                        }
+                    });
+                    
+                    // Listen for loading failed events
+                    devTools.addListener(Network.loadingFailed(), failed -> {
+                        try {
+                            String url = failed.getRequestId().toString();
+                            String errorText = failed.getErrorText();
+                            
+                            logger.error("❌ Network request failed: {} - Error: {}", url, errorText);
+                            
+                        } catch (Exception e) {
+                            logger.error("Failed to process loading failed event: {}", e.getMessage());
                         }
                     });
                     
@@ -117,11 +122,8 @@ public class NetworkTracer {
                 devToolsEnabled = false;
             }
             
-            zipkinTracer.endSpan("enable-network-logging", true);
-            
         } catch (Exception e) {
             logger.error("❌ Failed to enable network logging: {}", e.getMessage());
-            zipkinTracer.endSpan("enable-network-logging", false);
         }
     }
     

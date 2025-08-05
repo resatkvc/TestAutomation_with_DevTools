@@ -1,207 +1,113 @@
-# AutomationExercise UI Test Automation with Zipkin Integration
+# UI Test Automation with DevTools Integration
 
-Bu proje, AutomationExercise web sitesi için kapsamlı UI test otomasyonu sağlar ve Zipkin ile dağıtık izleme (distributed tracing) entegrasyonu içerir.
+Bu proje, Selenium WebDriver kullanarak web UI otomasyonu yapan ve DevTools API ile network trafiğini izleyen bir test otomasyonu projesidir.
 
-## 🎯 Proje Özellikleri
+## Özellikler
 
-- **End-to-End Test Flow**: Kullanıcı kaydı, ürün ekleme, sepet işlemleri, ödeme süreci
-- **DevTools Network Monitoring**: Chrome DevTools API ile gerçek zamanlı HTTP istek izleme
-- **Zipkin Integration**: Dağıtık izleme ve performans analizi
-- **Page Object Model**: Temiz ve sürdürülebilir kod yapısı
-- **Random Test Data**: JavaFaker ile gerçekçi test verileri
-- **Comprehensive Logging**: SLF4J ve Logback ile detaylı loglama
+- **Selenium WebDriver**: Modern web otomasyonu için
+- **DevTools Integration**: Network trafiğini gerçek zamanlı izleme
+- **Page Object Model**: Sürdürülebilir test yapısı
+- **Comprehensive Logging**: Detaylı test logları
+- **Random Test Data**: Faker kütüphanesi ile rastgele test verisi
+- **JUnit 5**: Modern test framework
 
-## 🚀 Gereksinimler
+## Proje Yapısı
 
-- Java 11+
+```
+src/test/java/proje/com/saucedemo/
+├── config/
+│   └── WebDriverConfig.java          # WebDriver konfigürasyonu
+├── pages/
+│   ├── HomePage.java                 # Ana sayfa
+│   ├── SignupLoginPage.java          # Kayıt/Giriş sayfası
+│   ├── ProductsPage.java             # Ürünler sayfası
+│   ├── CartPage.java                 # Sepet sayfası
+│   ├── CheckoutPage.java             # Ödeme sayfası
+│   └── PaymentPage.java              # Ödeme işlemi
+├── utils/
+│   ├── NetworkTracer.java            # DevTools network izleme
+│   ├── SeleniumTracer.java           # Selenium işlem izleme
+│   └── TestDataGenerator.java        # Test verisi üretimi
+├── verification/
+│   └── VerificationHelper.java       # Doğrulama yardımcısı
+└── AutomationExerciseCompleteTest.java # Ana test sınıfı
+```
+
+## Kurulum
+
+### Gereksinimler
+
+- Java 21
 - Maven 3.6+
 - Chrome Browser
-- Docker (Zipkin için)
 
-## 📦 Kurulum ve Çalıştırma
+### Çalıştırma
 
-### 1. Projeyi Klonlayın
 ```bash
-git clone <repository-url>
-cd Zipkin-Integrated_UI_Test_Automation
-```
+# Projeyi derle
+mvn clean compile
 
-### 2. Zipkin'i Başlatın
-```bash
-docker-compose up -d
-```
-
-### 3. Testleri Çalıştırın
-```bash
-# Tüm testleri çalıştır
+# Testleri çalıştır
 mvn test
 
 # Belirli bir test sınıfını çalıştır
 mvn test -Dtest=AutomationExerciseCompleteTest
-
-# Belirli bir test metodunu çalıştır
-mvn test -Dtest=AutomationExerciseCompleteTest#testCreateAccount
 ```
 
-### 4. Zipkin UI'da Sonuçları Görüntüleyin
-```
-http://localhost:9411
-```
+## DevTools Network Monitoring
 
-## 📁 Proje Yapısı
+Proje, Chrome DevTools API kullanarak network trafiğini gerçek zamanlı olarak izler:
 
-```
-src/test/java/proje/com/saucedemo/
-├── AutomationExerciseCompleteTest.java    # Ana test sınıfı
-├── config/
-│   └── WebDriverConfig.java              # WebDriver konfigürasyonu
-├── pages/                                # Page Object Model
-│   ├── HomePage.java
-│   ├── SignupLoginPage.java
-│   ├── ProductsPage.java
-│   ├── CartPage.java
-│   ├── CheckoutPage.java
-│   └── PaymentPage.java
-├── utils/                                # Yardımcı sınıflar
-│   ├── ZipkinTracer.java                # Zipkin entegrasyonu
-│   ├── NetworkTracer.java               # DevTools network monitoring
-│   ├── SeleniumTracer.java              # Selenium izleme
-│   └── TestDataGenerator.java           # Test veri üreteci
-└── verification/
-    └── VerificationHelper.java           # Doğrulama yardımcıları
-```
+- HTTP isteklerini ve yanıtlarını yakalar
+- Network hatalarını tespit eder
+- Detaylı logging sağlar
+- Performance analizi yapar
 
-## 🧪 Test Senaryoları
+## Test Senaryoları
 
-### 1. Kullanıcı Kaydı
-- Ana sayfaya git
-- Signup/Login linkine tıkla
-- Yeni kullanıcı bilgilerini gir
-- Hesap oluştur
+1. **Hesap Oluşturma**: Yeni kullanıcı kaydı
+2. **Ürün Ekleme**: Sepete rastgele ürün ekleme
+3. **Sepet Doğrulama**: Sepetteki ürünleri kontrol etme
+4. **Ödeme İşlemi**: Checkout ve ödeme tamamlama
+5. **Sipariş Doğrulama**: Sipariş tamamlanmasını kontrol etme
 
-### 2. Ürün Ekleme
-- Ürünler sayfasına git
-- Rastgele ürünleri sepete ekle
-- Alışverişe devam et
+## Logging
 
-### 3. Sepet İşlemleri
-- Sepete git
-- Ürünleri doğrula
-- Checkout'a geç
+Proje kapsamlı logging sağlar:
 
-### 4. Ödeme Süreci
-- Teslimat bilgilerini gir
-- Ödeme bilgilerini gir
-- Siparişi tamamla
+- Console ve dosya logları
+- Network trafiği logları
+- Selenium işlem logları
+- Test adım logları
 
-## 🔍 Zipkin Integration
+Loglar `logs/` klasöründe saklanır.
 
-### DevTools Network Monitoring
-- Chrome DevTools API kullanarak gerçek zamanlı HTTP istek izleme
-- Her HTTP method için ayrı service name:
-  - `automation-exercise-get`
-  - `automation-exercise-post`
-  - `automation-exercise-put`
-  - `automation-exercise-delete`
+## Konfigürasyon
 
-### Zipkin'de Görünen Bilgiler
-- **Test Adımları**: `automation-exercise-test`
-- **HTTP İstekleri**: Method-specific service name'ler
-- **Performans Metrikleri**: Response time, status codes
-- **Hata Takibi**: Failed requests ve exceptions
+### WebDriver Konfigürasyonu
 
-### Zipkin UI'da Görüntüleme
-1. Service dropdown'da farklı service name'ler
-2. Her HTTP isteği için ayrı trace
-3. Request/response detayları
-4. Timeline görünümü
+`src/test/java/proje/com/saucedemo/config/WebDriverConfig.java` dosyasında:
 
-## ⚙️ Konfigürasyon
+- Browser türü seçimi
+- Timeout ayarları
+- Driver path konfigürasyonu
 
-### WebDriver
-- Chrome browser kullanımı
-- WebDriverManager ile otomatik driver yönetimi
-- DevTools API desteği
+### Logging Konfigürasyonu
 
-### Zipkin
-- Docker container ile çalıştırma
-- HTTP endpoint: `http://localhost:9411`
-- Memory storage (geliştirme için)
+`src/test/resources/logback-test.xml` dosyasında:
 
-### Logging
-- SLF4J + Logback
-- Console ve file output
-- Trace ID correlation
+- Log seviyeleri
+- Appender konfigürasyonu
+- Format ayarları
 
-## 📊 Raporlama
-
-### Zipkin UI
-- Service dependencies
-- Request flow visualization
-- Performance metrics
-- Error tracking
-
-### Console Logs
-- Test adımları
-- HTTP istekleri
-- Trace ID'ler
-- Hata mesajları
-
-## 🛠️ Geliştirme
-
-### Yeni Test Ekleme
-1. Page Object oluştur
-2. Test metodunu ekle
-3. Zipkin tracing ekle
-4. Verification helper kullan
-
-### DevTools Monitoring
-- Sadece Chrome browser destekler
-- Otomatik HTTP method detection
-- Real-time network monitoring
-
-## 🐛 Hata Ayıklama
-
-### Yaygın Sorunlar
-1. **DevTools not available**: Chrome driver kullanıldığından emin olun
-2. **Zipkin connection failed**: Docker container'ın çalıştığından emin olun
-3. **Test failures**: Site erişilebilirliğini kontrol edin
-
-### Debug Logs
-```bash
-# Debug modunda çalıştır
-mvn test -Dtest=AutomationExerciseCompleteTest -Dlogging.level.proje.com.saucedemo=DEBUG
-```
-
-## 📈 Performans
-
-### Optimizasyonlar
-- DevTools API ile gerçek zamanlı monitoring
-- Minimal overhead ile tracing
-- Efficient memory usage
-- Fast test execution
-
-### Monitoring
-- Network request timing
-- Page load performance
-- Element interaction delays
-- Overall test duration
-
-## 🤝 Katkıda Bulunma
+## Katkıda Bulunma
 
 1. Fork yapın
-2. Feature branch oluşturun
-3. Değişikliklerinizi commit edin
-4. Pull request gönderin
+2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
+3. Commit yapın (`git commit -m 'Add amazing feature'`)
+4. Push yapın (`git push origin feature/amazing-feature`)
+5. Pull Request oluşturun
 
-## 📄 Lisans
+## Lisans
 
-Bu proje MIT lisansı altında lisanslanmıştır.
-
-## 📞 İletişim
-
-Proje ile ilgili sorularınız için issue açabilirsiniz.
-
----
-
-**Not**: Bu proje sadece eğitim ve geliştirme amaçlıdır. Production ortamında kullanmadan önce güvenlik ve performans testleri yapılmalıdır. 
+Bu proje MIT lisansı altında lisanslanmıştır. 

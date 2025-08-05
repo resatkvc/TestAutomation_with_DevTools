@@ -15,14 +15,13 @@ import org.slf4j.LoggerFactory;
 import java.time.Duration;
 
 /**
- * WebDriver configuration class for AutomationExercise test automation
+ * WebDriver configuration class for UI test automation
  * Uses WebDriverManager for automatic driver management
- * Includes Zipkin integration setup
+ * Supports Chrome, Firefox, and Edge browsers
  */
 public class WebDriverConfig {
     
     private static final Logger logger = LoggerFactory.getLogger(WebDriverConfig.class);
-    private static final String ZIPKIN_URL = "http://localhost:9411";
     
     private WebDriver driver;
     private WebDriverWait wait;

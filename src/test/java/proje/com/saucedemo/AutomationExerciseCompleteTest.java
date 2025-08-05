@@ -9,15 +9,14 @@ import proje.com.saucedemo.pages.*;
 import proje.com.saucedemo.utils.TestDataGenerator;
 import proje.com.saucedemo.utils.SeleniumTracer;
 import proje.com.saucedemo.utils.NetworkTracer;
-import proje.com.saucedemo.utils.ZipkinTracer;
 import proje.com.saucedemo.verification.VerificationHelper;
 
 import java.util.List;
 
 /**
- * Complete AutomationExercise test automation with Zipkin integration
+ * Complete AutomationExercise test automation with DevTools integration
  * Tests the full e-commerce flow from signup/login to order completion
- * Includes comprehensive distributed tracing with DevTools network monitoring
+ * Includes comprehensive network monitoring using DevTools API
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AutomationExerciseCompleteTest {
@@ -30,7 +29,6 @@ public class AutomationExerciseCompleteTest {
     private static VerificationHelper verificationHelper;
     private static SeleniumTracer seleniumTracer;
     private static NetworkTracer networkTracer;
-    private static ZipkinTracer zipkinTracer;
     
     // Page Objects
     private static HomePage homePage;
@@ -50,10 +48,6 @@ public class AutomationExerciseCompleteTest {
     static void setUp() {
         try {
             logger.info("=== Setting up test suite ===");
-            
-            // Initialize Zipkin tracer
-            zipkinTracer = new ZipkinTracer();
-            zipkinTracer.startSpan("test.suite.setup", "Initialize test suite");
             
             // Initialize WebDriver
             webDriverConfig = new WebDriverConfig();
@@ -82,14 +76,10 @@ public class AutomationExerciseCompleteTest {
             userPassword = userInfo.getPassword();
             userName = userInfo.getFirstName() + " " + userInfo.getLastName();
             
-            zipkinTracer.endSpan("test.suite.setup", true);
-            logger.info("Test setup completed successfully with Zipkin tracing");
+            logger.info("Test setup completed successfully with DevTools monitoring");
             
         } catch (Exception e) {
             logger.error("Test setup failed: {}", e.getMessage());
-            if (zipkinTracer != null) {
-                zipkinTracer.endSpan("test.suite.setup", false);
-            }
             throw new RuntimeException("Test setup failed", e);
         }
     }
@@ -116,11 +106,6 @@ public class AutomationExerciseCompleteTest {
                 logger.info("WebDriver quit successfully");
             }
             
-            // Cleanup Zipkin tracer
-            if (zipkinTracer != null) {
-                zipkinTracer.cleanup();
-            }
-            
             logger.info("=== Test suite cleanup completed ===");
             
         } catch (Exception e) {
@@ -137,28 +122,22 @@ public class AutomationExerciseCompleteTest {
         
         try {
             logger.info("=== Step 1: Creating new account ===");
-            zipkinTracer.startSpan("test.create.account", "Create new user account");
             
             // Navigate to home page
-            homePage.navigateToHome();
-            zipkinTracer.trackPageNavigation("Home", BASE_URL, System.currentTimeMillis() - startTime);
+            seleniumTracer.navigateToUrl(BASE_URL, "Home page");
             
             // Enable DevTools network monitoring AFTER page load
             logger.info("Enabling DevTools network monitoring...");
             networkTracer.enableNetworkLogging();
             logger.info("DevTools network monitoring enabled successfully");
             
-            // Manually send HTTP methods to Zipkin for testing
-            sendHttpMethodToZipkin("GET", BASE_URL, "Home page load");
-            sendHttpMethodToZipkin("POST", BASE_URL + "/signup", "Signup form submission");
-            
             // Click on signup/login link
             homePage.clickSignupLogin();
-            zipkinTracer.trackElementInteraction("SignupLogin Link", "click", System.currentTimeMillis() - startTime);
+            seleniumTracer.trackElementInteraction("SignupLogin Link", "click", System.currentTimeMillis() - startTime);
             
             // Start signup process
             signupLoginPage.startSignup(userName, userEmail);
-            zipkinTracer.trackElementInteraction("Signup Form", "submit", System.currentTimeMillis() - startTime);
+            seleniumTracer.trackElementInteraction("Signup Form", "submit", System.currentTimeMillis() - startTime);
             
             // Check if email already exists
             if (signupLoginPage.isSignupEmailExists()) {
@@ -186,47 +165,27 @@ public class AutomationExerciseCompleteTest {
                 accountInfo.getZipcode(),
                 accountInfo.getMobileNumber()
             );
-            zipkinTracer.trackElementInteraction("Account Details", "fill", System.currentTimeMillis() - startTime);
+            seleniumTracer.trackElementInteraction("Account Details", "fill", System.currentTimeMillis() - startTime);
             
             // Create account
             signupLoginPage.createAccount();
-            zipkinTracer.trackElementInteraction("Create Account Button", "click", System.currentTimeMillis() - startTime);
+            seleniumTracer.trackElementInteraction("Create Account Button", "click", System.currentTimeMillis() - startTime);
             
             // Verify account creation
             boolean accountCreated = signupLoginPage.isAccountCreated();
             verificationHelper.verifyAccountCreated(accountCreated);
-            zipkinTracer.trackTestStep("Account Creation Verification", "Verify account was created successfully", accountCreated, System.currentTimeMillis() - startTime);
+            seleniumTracer.trackTestStep("Account Creation Verification", "Verify account was created successfully", accountCreated, System.currentTimeMillis() - startTime);
             
             success = accountCreated;
             long duration = System.currentTimeMillis() - startTime;
-            zipkinTracer.trackTestStep("Create Account", "Successfully created user account", success, duration);
-            zipkinTracer.endSpan("test.create.account", success);
+            seleniumTracer.trackTestStep("Create Account", "Successfully created user account", success, duration);
             logger.info("=== Step 1 completed: Account created successfully ===");
             
         } catch (Exception e) {
             logger.error("Step 1 failed: {}", e.getMessage());
             long duration = System.currentTimeMillis() - startTime;
-            zipkinTracer.trackTestStep("Create Account", "Failed to create user account", false, duration);
-            zipkinTracer.endSpan("test.create.account", false);
+            seleniumTracer.trackTestStep("Create Account", "Failed to create user account", false, duration);
             throw new RuntimeException("Step 1 failed", e);
-        }
-    }
-    
-    /**
-     * Manually send HTTP method to Zipkin for testing
-     */
-    private void sendHttpMethodToZipkin(String method, String url, String description) {
-        try {
-            String serviceName = "automation-exercise-" + method.toLowerCase();
-            ZipkinTracer methodTracer = new ZipkinTracer(serviceName);
-            
-            methodTracer.startSpan("http-request", method + " " + url);
-            methodTracer.trackElementInteraction("HTTP Request", method + " " + url, System.currentTimeMillis());
-            methodTracer.endSpan("http-request", true);
-            
-            logger.info("✅ Manually sent to Zipkin: {} {} with service: {}", method, url, serviceName);
-        } catch (Exception e) {
-            logger.error("❌ Failed to send HTTP method to Zipkin: {}", e.getMessage());
         }
     }
     
@@ -239,41 +198,34 @@ public class AutomationExerciseCompleteTest {
         
         try {
             logger.info("=== Step 2: Adding products to cart ===");
-            zipkinTracer.startSpan("test.add.products", "Add random products to cart");
             
             // Navigate to products page
             productsPage.navigateToProducts();
-            zipkinTracer.trackPageNavigation("Products", BASE_URL + "/products", System.currentTimeMillis() - startTime);
+            seleniumTracer.trackPageNavigation("Products", BASE_URL + "/products", System.currentTimeMillis() - startTime);
             verificationHelper.verifyPageLoaded("Products page", productsPage.isPageLoaded());
-            
-            // Send HTTP methods for products page
-            sendHttpMethodToZipkin("GET", BASE_URL + "/products", "Products page load");
-            sendHttpMethodToZipkin("POST", BASE_URL + "/add_to_cart", "Add product to cart");
             
             // Add random product to cart
             productsPage.addRandomProductToCart();
-            zipkinTracer.trackElementInteraction("Add to Cart Button", "click", 150);
+            seleniumTracer.trackElementInteraction("Add to Cart Button", "click", 150);
             
             // Continue shopping
             productsPage.clickContinueShopping();
-            zipkinTracer.trackElementInteraction("Continue Shopping Button", "click", 100);
+            seleniumTracer.trackElementInteraction("Continue Shopping Button", "click", 100);
             
             // Add another random product
             productsPage.addRandomProductToCart();
-            zipkinTracer.trackElementInteraction("Add to Cart Button 2", "click", 150);
+            seleniumTracer.trackElementInteraction("Add to Cart Button 2", "click", 150);
             
             success = true;
             long duration = System.currentTimeMillis() - startTime;
-            zipkinTracer.trackTestStep("Add Products", "Successfully added products to cart", success, duration);
-            zipkinTracer.endSpan("test.add.products", success);
+            seleniumTracer.trackTestStep("Add Products", "Successfully added products to cart", success, duration);
             
             logger.info("=== Step 2 completed: Products added to cart ===");
             
         } catch (Exception e) {
             logger.error("Step 2 failed: {}", e.getMessage());
             long duration = System.currentTimeMillis() - startTime;
-            zipkinTracer.trackTestStep("Add Products", "Failed to add products to cart", false, duration);
-            zipkinTracer.endSpan("test.add.products", false);
+            seleniumTracer.trackTestStep("Add Products", "Failed to add products to cart", false, duration);
             throw new RuntimeException("Step 2 failed", e);
         }
     }
@@ -287,15 +239,11 @@ public class AutomationExerciseCompleteTest {
         
         try {
             logger.info("=== Step 3: Verifying cart products ===");
-            zipkinTracer.startSpan("test.verify.cart", "Verify products in cart");
             
             // Navigate to cart
             cartPage.navigateToCart();
-            zipkinTracer.trackPageNavigation("Cart", BASE_URL + "/view_cart", System.currentTimeMillis() - startTime);
+            seleniumTracer.trackPageNavigation("Cart", BASE_URL + "/view_cart", System.currentTimeMillis() - startTime);
             verificationHelper.verifyPageLoaded("Cart page", cartPage.isPageLoaded());
-            
-            // Send HTTP methods for cart page
-            sendHttpMethodToZipkin("GET", BASE_URL + "/view_cart", "Cart page load");
             
             // Verify cart is not empty
             verificationHelper.verifyCartNotEmpty(cartPage.getCartItemsCount() > 0);
@@ -311,16 +259,14 @@ public class AutomationExerciseCompleteTest {
             
             success = true;
             long duration = System.currentTimeMillis() - startTime;
-            zipkinTracer.trackTestStep("Verify Cart", "Successfully verified cart products", success, duration);
-            zipkinTracer.endSpan("test.verify.cart", success);
+            seleniumTracer.trackTestStep("Verify Cart", "Successfully verified cart products", success, duration);
             
             logger.info("=== Step 3 completed: Cart verification successful ===");
             
         } catch (Exception e) {
             logger.error("Step 3 failed: {}", e.getMessage());
             long duration = System.currentTimeMillis() - startTime;
-            zipkinTracer.trackTestStep("Verify Cart", "Failed to verify cart products", false, duration);
-            zipkinTracer.endSpan("test.verify.cart", false);
+            seleniumTracer.trackTestStep("Verify Cart", "Failed to verify cart products", false, duration);
             throw new RuntimeException("Step 3 failed", e);
         }
     }
@@ -334,24 +280,21 @@ public class AutomationExerciseCompleteTest {
         
         try {
             logger.info("=== Step 4: Proceeding to checkout ===");
-            zipkinTracer.startSpan("test.proceed.checkout", "Proceed to checkout");
             
             // Click on Proceed to Checkout
             cartPage.clickProceedToCheckout();
-            zipkinTracer.trackElementInteraction("Proceed to Checkout Button", "click", 100);
+            seleniumTracer.trackElementInteraction("Proceed to Checkout Button", "click", 100);
             
             success = true;
             long duration = System.currentTimeMillis() - startTime;
-            zipkinTracer.trackTestStep("Proceed Checkout", "Successfully proceeded to checkout", success, duration);
-            zipkinTracer.endSpan("test.proceed.checkout", success);
+            seleniumTracer.trackTestStep("Proceed Checkout", "Successfully proceeded to checkout", success, duration);
             
             logger.info("=== Step 4 completed: Proceeded to checkout ===");
             
         } catch (Exception e) {
             logger.error("Step 4 failed: {}", e.getMessage());
             long duration = System.currentTimeMillis() - startTime;
-            zipkinTracer.trackTestStep("Proceed Checkout", "Failed to proceed to checkout", false, duration);
-            zipkinTracer.endSpan("test.proceed.checkout", false);
+            seleniumTracer.trackTestStep("Proceed Checkout", "Failed to proceed to checkout", false, duration);
             throw new RuntimeException("Step 4 failed", e);
         }
     }
@@ -365,7 +308,6 @@ public class AutomationExerciseCompleteTest {
         
         try {
             logger.info("=== Step 5: Filling checkout information ===");
-            zipkinTracer.startSpan("test.fill.checkout", "Fill checkout information");
             
             // Generate random checkout data
             TestDataGenerator.CheckoutInfo checkoutInfo = TestDataGenerator.generateCheckoutInfo();
@@ -381,28 +323,26 @@ public class AutomationExerciseCompleteTest {
                 checkoutInfo.getPhone(),
                 checkoutInfo.getCountry()
             );
-            zipkinTracer.trackElementInteraction("Checkout Form", "fill", 500);
+            seleniumTracer.trackElementInteraction("Checkout Form", "fill", 500);
             
             // Add comment
             checkoutPage.addComment("Test order comment - " + System.currentTimeMillis());
-            zipkinTracer.trackElementInteraction("Comment Field", "fill", 100);
+            seleniumTracer.trackElementInteraction("Comment Field", "fill", 100);
             
             // Click Place Order
             checkoutPage.clickPlaceOrder();
-            zipkinTracer.trackElementInteraction("Place Order Button", "click", 150);
+            seleniumTracer.trackElementInteraction("Place Order Button", "click", 150);
             
             success = true;
             long duration = System.currentTimeMillis() - startTime;
-            zipkinTracer.trackTestStep("Fill Checkout", "Successfully filled checkout information", success, duration);
-            zipkinTracer.endSpan("test.fill.checkout", success);
+            seleniumTracer.trackTestStep("Fill Checkout", "Successfully filled checkout information", success, duration);
             
             logger.info("=== Step 5 completed: Checkout information filled ===");
             
         } catch (Exception e) {
             logger.error("Step 5 failed: {}", e.getMessage());
             long duration = System.currentTimeMillis() - startTime;
-            zipkinTracer.trackTestStep("Fill Checkout", "Failed to fill checkout information", false, duration);
-            zipkinTracer.endSpan("test.fill.checkout", false);
+            seleniumTracer.trackTestStep("Fill Checkout", "Failed to fill checkout information", false, duration);
             throw new RuntimeException("Step 5 failed", e);
         }
     }
@@ -416,12 +356,11 @@ public class AutomationExerciseCompleteTest {
         
         try {
             logger.info("=== Step 6: Completing payment ===");
-            zipkinTracer.startSpan("test.complete.payment", "Complete payment process");
             
             // Complete payment with random card data
             paymentPage.completePaymentWithRandomData();
-            zipkinTracer.trackElementInteraction("Payment Form", "fill", 300);
-            zipkinTracer.trackElementInteraction("Pay Button", "click", 200);
+            seleniumTracer.trackElementInteraction("Payment Form", "fill", 300);
+            seleniumTracer.trackElementInteraction("Pay Button", "click", 200);
             
             // Verify order was placed
             verificationHelper.verifyOrderPlaced(paymentPage.isOrderPlaced());
@@ -432,24 +371,22 @@ public class AutomationExerciseCompleteTest {
             
             // Download invoice
             paymentPage.clickDownloadInvoice();
-            zipkinTracer.trackElementInteraction("Download Invoice Button", "click", 100);
+            seleniumTracer.trackElementInteraction("Download Invoice Button", "click", 100);
             
             // Continue to home page
             paymentPage.clickContinue();
-            zipkinTracer.trackElementInteraction("Continue Button", "click", 100);
+            seleniumTracer.trackElementInteraction("Continue Button", "click", 100);
             
             success = true;
             long duration = System.currentTimeMillis() - startTime;
-            zipkinTracer.trackTestStep("Complete Payment", "Successfully completed payment", success, duration);
-            zipkinTracer.endSpan("test.complete.payment", success);
+            seleniumTracer.trackTestStep("Complete Payment", "Successfully completed payment", success, duration);
             
             logger.info("=== Step 6 completed: Payment completed successfully ===");
             
         } catch (Exception e) {
             logger.error("Step 6 failed: {}", e.getMessage());
             long duration = System.currentTimeMillis() - startTime;
-            zipkinTracer.trackTestStep("Complete Payment", "Failed to complete payment", false, duration);
-            zipkinTracer.endSpan("test.complete.payment", false);
+            seleniumTracer.trackTestStep("Complete Payment", "Failed to complete payment", false, duration);
             throw new RuntimeException("Step 6 failed", e);
         }
     }
@@ -463,11 +400,10 @@ public class AutomationExerciseCompleteTest {
         
         try {
             logger.info("=== Step 7: Verifying order completion ===");
-            zipkinTracer.startSpan("test.verify.completion", "Verify order completion");
             
             // Navigate to home page
             homePage.navigateToHome();
-            zipkinTracer.trackPageNavigation("Home", BASE_URL, System.currentTimeMillis() - startTime);
+            seleniumTracer.trackPageNavigation("Home", BASE_URL, System.currentTimeMillis() - startTime);
             verificationHelper.verifyPageLoaded("Home page", homePage.isPageLoaded());
             
             // Verify we're on home page
@@ -475,16 +411,14 @@ public class AutomationExerciseCompleteTest {
             
             success = true;
             long duration = System.currentTimeMillis() - startTime;
-            zipkinTracer.trackTestStep("Verify Completion", "Successfully verified order completion", success, duration);
-            zipkinTracer.endSpan("test.verify.completion", success);
+            seleniumTracer.trackTestStep("Verify Completion", "Successfully verified order completion", success, duration);
             
             logger.info("=== Step 7 completed: Order completion verified ===");
             
         } catch (Exception e) {
             logger.error("Step 7 failed: {}", e.getMessage());
             long duration = System.currentTimeMillis() - startTime;
-            zipkinTracer.trackTestStep("Verify Completion", "Failed to verify order completion", false, duration);
-            zipkinTracer.endSpan("test.verify.completion", false);
+            seleniumTracer.trackTestStep("Verify Completion", "Failed to verify order completion", false, duration);
             throw new RuntimeException("Step 7 failed", e);
         }
     }
@@ -498,28 +432,25 @@ public class AutomationExerciseCompleteTest {
         
         try {
             logger.info("=== Complete End-to-End Test Flow ===");
-            zipkinTracer.startSpan("test.complete.flow", "Complete end-to-end test flow");
             
             // This test method demonstrates the complete flow
             // All individual steps are tested above, this is for demonstration
             
             success = true;
             long duration = System.currentTimeMillis() - startTime;
-            zipkinTracer.trackTestStep("Complete Flow", "All test steps completed successfully", success, duration);
-            zipkinTracer.endSpan("test.complete.flow", success);
+            seleniumTracer.trackTestStep("Complete Flow", "All test steps completed successfully", success, duration);
             
             logger.info("All test steps completed successfully!");
             logger.info("User created: {}", userEmail);
             logger.info("Products added to cart and order completed");
-            logger.info("Trace ID: {}", zipkinTracer.getTraceId());
+            logger.info("Network requests captured: {}", networkTracer.getRequestCount());
             
             logger.info("=== Complete End-to-End Test Flow completed ===");
             
         } catch (Exception e) {
             logger.error("Complete flow test failed: {}", e.getMessage());
             long duration = System.currentTimeMillis() - startTime;
-            zipkinTracer.trackTestStep("Complete Flow", "Failed to complete end-to-end flow", false, duration);
-            zipkinTracer.endSpan("test.complete.flow", false);
+            seleniumTracer.trackTestStep("Complete Flow", "Failed to complete end-to-end flow", false, duration);
             throw new RuntimeException("Complete flow test failed", e);
         }
     }
