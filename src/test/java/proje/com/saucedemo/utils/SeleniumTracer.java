@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.time.Duration;
 
 /**
- * Selenium WebDriver tracer for automation testing
+ * TestAutomation_with_DevTools - Selenium WebDriver tracer for automation testing
  * Provides detailed logging and timing for Selenium operations
  * Tracks element interactions, page navigation, and test steps
  */

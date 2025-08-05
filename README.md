@@ -1,4 +1,4 @@
-# UI Test Automation with DevTools Integration
+# TestAutomation_with_DevTools
 
 Bu proje, Selenium WebDriver kullanarak web UI otomasyonu yapan ve DevTools API ile network trafiğini izleyen bir test otomasyonu projesidir.
 

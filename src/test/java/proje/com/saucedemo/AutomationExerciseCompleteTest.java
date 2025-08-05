@@ -14,7 +14,7 @@ import proje.com.saucedemo.verification.VerificationHelper;
 import java.util.List;
 
 /**
- * Complete AutomationExercise test automation with DevTools integration
+ * TestAutomation_with_DevTools - Complete AutomationExercise test automation
  * Tests the full e-commerce flow from signup/login to order completion
  * Includes comprehensive network monitoring using DevTools API
  */
@@ -47,7 +47,7 @@ public class AutomationExerciseCompleteTest {
     @BeforeAll
     static void setUp() {
         try {
-            logger.info("=== Setting up test suite ===");
+            logger.info("=== Setting up TestAutomation_with_DevTools test suite ===");
             
             // Initialize WebDriver
             webDriverConfig = new WebDriverConfig();
@@ -76,7 +76,7 @@ public class AutomationExerciseCompleteTest {
             userPassword = userInfo.getPassword();
             userName = userInfo.getFirstName() + " " + userInfo.getLastName();
             
-            logger.info("Test setup completed successfully with DevTools monitoring");
+            logger.info("TestAutomation_with_DevTools setup completed successfully with DevTools monitoring");
             
         } catch (Exception e) {
             logger.error("Test setup failed: {}", e.getMessage());
@@ -87,7 +87,7 @@ public class AutomationExerciseCompleteTest {
     @AfterAll
     static void tearDown() {
         try {
-            logger.info("=== Cleaning up test resources ===");
+            logger.info("=== Cleaning up TestAutomation_with_DevTools test resources ===");
             
             // Debug: Check DevTools status
             if (networkTracer != null) {
@@ -106,7 +106,7 @@ public class AutomationExerciseCompleteTest {
                 logger.info("WebDriver quit successfully");
             }
             
-            logger.info("=== Test suite cleanup completed ===");
+            logger.info("=== TestAutomation_with_DevTools test suite cleanup completed ===");
             
         } catch (Exception e) {
             logger.error("Test cleanup failed: {}", e.getMessage());
@@ -121,7 +121,7 @@ public class AutomationExerciseCompleteTest {
         boolean success = false;
         
         try {
-            logger.info("=== Step 1: Creating new account ===");
+            logger.info("=== Step 1: Creating new account with TestAutomation_with_DevTools ===");
             
             // Navigate to home page
             seleniumTracer.navigateToUrl(BASE_URL, "Home page");
@@ -179,7 +179,7 @@ public class AutomationExerciseCompleteTest {
             success = accountCreated;
             long duration = System.currentTimeMillis() - startTime;
             seleniumTracer.trackTestStep("Create Account", "Successfully created user account", success, duration);
-            logger.info("=== Step 1 completed: Account created successfully ===");
+            logger.info("=== Step 1 completed: Account created successfully with TestAutomation_with_DevTools ===");
             
         } catch (Exception e) {
             logger.error("Step 1 failed: {}", e.getMessage());
@@ -197,7 +197,7 @@ public class AutomationExerciseCompleteTest {
         boolean success = false;
         
         try {
-            logger.info("=== Step 2: Adding products to cart ===");
+            logger.info("=== Step 2: Adding products to cart with TestAutomation_with_DevTools ===");
             
             // Navigate to products page
             productsPage.navigateToProducts();
@@ -220,7 +220,7 @@ public class AutomationExerciseCompleteTest {
             long duration = System.currentTimeMillis() - startTime;
             seleniumTracer.trackTestStep("Add Products", "Successfully added products to cart", success, duration);
             
-            logger.info("=== Step 2 completed: Products added to cart ===");
+            logger.info("=== Step 2 completed: Products added to cart with TestAutomation_with_DevTools ===");
             
         } catch (Exception e) {
             logger.error("Step 2 failed: {}", e.getMessage());
@@ -238,7 +238,7 @@ public class AutomationExerciseCompleteTest {
         boolean success = false;
         
         try {
-            logger.info("=== Step 3: Verifying cart products ===");
+            logger.info("=== Step 3: Verifying cart products with TestAutomation_with_DevTools ===");
             
             // Navigate to cart
             cartPage.navigateToCart();
@@ -261,7 +261,7 @@ public class AutomationExerciseCompleteTest {
             long duration = System.currentTimeMillis() - startTime;
             seleniumTracer.trackTestStep("Verify Cart", "Successfully verified cart products", success, duration);
             
-            logger.info("=== Step 3 completed: Cart verification successful ===");
+            logger.info("=== Step 3 completed: Cart verification successful with TestAutomation_with_DevTools ===");
             
         } catch (Exception e) {
             logger.error("Step 3 failed: {}", e.getMessage());
@@ -279,7 +279,7 @@ public class AutomationExerciseCompleteTest {
         boolean success = false;
         
         try {
-            logger.info("=== Step 4: Proceeding to checkout ===");
+            logger.info("=== Step 4: Proceeding to checkout with TestAutomation_with_DevTools ===");
             
             // Click on Proceed to Checkout
             cartPage.clickProceedToCheckout();
@@ -289,7 +289,7 @@ public class AutomationExerciseCompleteTest {
             long duration = System.currentTimeMillis() - startTime;
             seleniumTracer.trackTestStep("Proceed Checkout", "Successfully proceeded to checkout", success, duration);
             
-            logger.info("=== Step 4 completed: Proceeded to checkout ===");
+            logger.info("=== Step 4 completed: Proceeded to checkout with TestAutomation_with_DevTools ===");
             
         } catch (Exception e) {
             logger.error("Step 4 failed: {}", e.getMessage());
@@ -307,7 +307,7 @@ public class AutomationExerciseCompleteTest {
         boolean success = false;
         
         try {
-            logger.info("=== Step 5: Filling checkout information ===");
+            logger.info("=== Step 5: Filling checkout information with TestAutomation_with_DevTools ===");
             
             // Generate random checkout data
             TestDataGenerator.CheckoutInfo checkoutInfo = TestDataGenerator.generateCheckoutInfo();
@@ -337,7 +337,7 @@ public class AutomationExerciseCompleteTest {
             long duration = System.currentTimeMillis() - startTime;
             seleniumTracer.trackTestStep("Fill Checkout", "Successfully filled checkout information", success, duration);
             
-            logger.info("=== Step 5 completed: Checkout information filled ===");
+            logger.info("=== Step 5 completed: Checkout information filled with TestAutomation_with_DevTools ===");
             
         } catch (Exception e) {
             logger.error("Step 5 failed: {}", e.getMessage());
@@ -355,7 +355,7 @@ public class AutomationExerciseCompleteTest {
         boolean success = false;
         
         try {
-            logger.info("=== Step 6: Completing payment ===");
+            logger.info("=== Step 6: Completing payment with TestAutomation_with_DevTools ===");
             
             // Complete payment with random card data
             paymentPage.completePaymentWithRandomData();
@@ -381,7 +381,7 @@ public class AutomationExerciseCompleteTest {
             long duration = System.currentTimeMillis() - startTime;
             seleniumTracer.trackTestStep("Complete Payment", "Successfully completed payment", success, duration);
             
-            logger.info("=== Step 6 completed: Payment completed successfully ===");
+            logger.info("=== Step 6 completed: Payment completed successfully with TestAutomation_with_DevTools ===");
             
         } catch (Exception e) {
             logger.error("Step 6 failed: {}", e.getMessage());
@@ -399,7 +399,7 @@ public class AutomationExerciseCompleteTest {
         boolean success = false;
         
         try {
-            logger.info("=== Step 7: Verifying order completion ===");
+            logger.info("=== Step 7: Verifying order completion with TestAutomation_with_DevTools ===");
             
             // Navigate to home page
             homePage.navigateToHome();
@@ -413,7 +413,7 @@ public class AutomationExerciseCompleteTest {
             long duration = System.currentTimeMillis() - startTime;
             seleniumTracer.trackTestStep("Verify Completion", "Successfully verified order completion", success, duration);
             
-            logger.info("=== Step 7 completed: Order completion verified ===");
+            logger.info("=== Step 7 completed: Order completion verified with TestAutomation_with_DevTools ===");
             
         } catch (Exception e) {
             logger.error("Step 7 failed: {}", e.getMessage());
@@ -431,7 +431,7 @@ public class AutomationExerciseCompleteTest {
         boolean success = false;
         
         try {
-            logger.info("=== Complete End-to-End Test Flow ===");
+            logger.info("=== Complete End-to-End Test Flow with TestAutomation_with_DevTools ===");
             
             // This test method demonstrates the complete flow
             // All individual steps are tested above, this is for demonstration
@@ -440,12 +440,12 @@ public class AutomationExerciseCompleteTest {
             long duration = System.currentTimeMillis() - startTime;
             seleniumTracer.trackTestStep("Complete Flow", "All test steps completed successfully", success, duration);
             
-            logger.info("All test steps completed successfully!");
+            logger.info("All test steps completed successfully with TestAutomation_with_DevTools!");
             logger.info("User created: {}", userEmail);
             logger.info("Products added to cart and order completed");
             logger.info("Network requests captured: {}", networkTracer.getRequestCount());
             
-            logger.info("=== Complete End-to-End Test Flow completed ===");
+            logger.info("=== Complete End-to-End Test Flow completed with TestAutomation_with_DevTools ===");
             
         } catch (Exception e) {
             logger.error("Complete flow test failed: {}", e.getMessage());

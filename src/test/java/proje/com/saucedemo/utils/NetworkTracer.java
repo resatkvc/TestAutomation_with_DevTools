@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Optional;
 
 /**
- * Network traffic tracer for Selenium WebDriver
+ * TestAutomation_with_DevTools - Network traffic tracer for Selenium WebDriver
  * Captures and traces all network requests made by the browser using DevTools API
  * Provides detailed logging of HTTP requests and responses
  */
@@ -32,7 +32,7 @@ public class NetworkTracer {
      */
     public void enableNetworkLogging() {
         try {
-            logger.info("Enabling DevTools network monitoring...");
+            logger.info("Enabling DevTools network monitoring for TestAutomation_with_DevTools...");
             
             // Check if DevTools is available (Chrome only)
             if (driver instanceof HasDevTools) {
@@ -109,7 +109,7 @@ public class NetworkTracer {
                     });
                     
                     devToolsEnabled = true;
-                    logger.info("✅ DevTools network monitoring enabled successfully");
+                    logger.info("✅ DevTools network monitoring enabled successfully for TestAutomation_with_DevTools");
                     
                 } catch (Exception e) {
                     logger.error("❌ DevTools failed to initialize: {}", e.getMessage());
@@ -148,7 +148,7 @@ public class NetworkTracer {
         if (devTools != null) {
             try {
                 devTools.close();
-                logger.info("DevTools session closed");
+                logger.info("DevTools session closed for TestAutomation_with_DevTools");
             } catch (Exception e) {
                 logger.error("Failed to close DevTools session: {}", e.getMessage());
             }

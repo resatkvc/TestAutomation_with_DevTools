@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.time.Duration;
 
 /**
- * WebDriver configuration class for UI test automation
+ * TestAutomation_with_DevTools - WebDriver configuration class for UI test automation
  * Uses WebDriverManager for automatic driver management
  * Supports Chrome, Firefox, and Edge browsers
  */
@@ -43,7 +43,7 @@ public class WebDriverConfig {
             // Initialize WebDriverWait
             wait = new WebDriverWait(driver, Duration.ofSeconds(15));
             
-            logger.info("WebDriver initialized successfully for browser: {}", browserType);
+            logger.info("TestAutomation_with_DevTools WebDriver initialized successfully for browser: {}", browserType);
             return driver;
             
         } catch (Exception e) {
@@ -109,7 +109,7 @@ public class WebDriverConfig {
         if (driver != null) {
             try {
                 driver.quit();
-                logger.info("WebDriver quit successfully");
+                logger.info("TestAutomation_with_DevTools WebDriver quit successfully");
             } catch (Exception e) {
                 logger.error("Error quitting WebDriver: {}", e.getMessage());
             }

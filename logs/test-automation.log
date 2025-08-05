@@ -1,0 +1,116 @@
+2025-08-06 01:05:00.226 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Setting up test suite ===
+2025-08-06 01:05:01.743 [main] INFO  i.g.bonigarcia.wdm.WebDriverManager - Using chromedriver 138.0.7204.183 (resolved driver for Chrome 138)
+2025-08-06 01:05:01.792 [main] INFO  i.g.bonigarcia.wdm.WebDriverManager - Exporting webdriver.chrome.driver as C:\Users\kavci\.cache\selenium\chromedriver\win64\138.0.7204.183\chromedriver.exe
+2025-08-06 01:05:04.450 [main] INFO  p.c.saucedemo.config.WebDriverConfig - WebDriver initialized successfully for browser: chrome
+2025-08-06 01:05:04.716 [main] INFO  p.c.s.utils.TestDataGenerator - Generated user info: UserInfo{firstName='Jeremiah', lastName='Cassin', email='kindra.heidenreich@yahoo.com', password='AY3v!!wv1'}
+2025-08-06 01:05:04.721 [main] INFO  p.c.s.AutomationExerciseCompleteTest - Test setup completed successfully with DevTools monitoring
+2025-08-06 01:05:04.740 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Step 1: Creating new account ===
+2025-08-06 01:05:04.741 [main] INFO  p.com.saucedemo.utils.SeleniumTracer - 🚀 Navigating to: https://www.automationexercise.com - Home page
+2025-08-06 01:05:07.589 [main] INFO  p.com.saucedemo.utils.SeleniumTracer - ✅ Navigation completed in 2848ms: https://www.automationexercise.com
+2025-08-06 01:05:07.589 [main] INFO  p.c.s.AutomationExerciseCompleteTest - Enabling DevTools network monitoring...
+2025-08-06 01:05:07.590 [main] INFO  p.com.saucedemo.utils.NetworkTracer - Enabling DevTools network monitoring...
+2025-08-06 01:05:07.590 [main] INFO  p.com.saucedemo.utils.NetworkTracer - Chrome driver detected, initializing DevTools...
+2025-08-06 01:05:07.594 [main] ERROR p.com.saucedemo.utils.NetworkTracer - ❌ DevTools failed to initialize: You are using a no-op implementation of the CDP. The most likely reason for this is that Selenium was unable to find an implementation of the CDP protocol that matches your browser. Please be sure to include an implementation on the classpath, possibly by adding a new (maven) dependency of `org.seleniumhq.selenium:selenium-devtools-vNN:4.18.1` where `NN` matches the major version of the browser you're using.
+Build info: version: '4.18.1', revision: 'b1d3319b48'
+System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '21'
+Driver info: DevTools Connection
+2025-08-06 01:05:07.594 [main] ERROR p.com.saucedemo.utils.NetworkTracer - Stack trace:
+org.openqa.selenium.devtools.DevToolsException: You are using a no-op implementation of the CDP. The most likely reason for this is that Selenium was unable to find an implementation of the CDP protocol that matches your browser. Please be sure to include an implementation on the classpath, possibly by adding a new (maven) dependency of `org.seleniumhq.selenium:selenium-devtools-vNN:4.18.1` where `NN` matches the major version of the browser you're using.
+Build info: version: '4.18.1', revision: 'b1d3319b48'
+System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '21'
+Driver info: DevTools Connection
+	at org.openqa.selenium.devtools.noop.NoOpDomains.target(NoOpDomains.java:60)
+	at org.openqa.selenium.devtools.DevTools.findTarget(DevTools.java:171)
+	at org.openqa.selenium.devtools.DevTools.createSession(DevTools.java:131)
+	at org.openqa.selenium.devtools.DevTools.createSession(DevTools.java:117)
+	at proje.com.saucedemo.utils.NetworkTracer.enableNetworkLogging(NetworkTracer.java:46)
+	at proje.com.saucedemo.AutomationExerciseCompleteTest.testCreateAccount(AutomationExerciseCompleteTest.java:131)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:728)
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:147)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:86)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$7(TestMethodTestDescriptor.java:218)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:214)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:139)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:69)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:151)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:198)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:169)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:93)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:58)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:141)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:57)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+	at org.junit.platform.launcher.core.SessionPerRequestLauncher.execute(SessionPerRequestLauncher.java:63)
+	at com.intellij.junit5.JUnit5IdeaTestRunner.startRunnerWithArgs(JUnit5IdeaTestRunner.java:57)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater$1.execute(IdeaTestRunner.java:38)
+	at com.intellij.rt.execution.junit.TestsRepeater.repeat(TestsRepeater.java:11)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:35)
+	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:231)
+	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:55)
+2025-08-06 01:05:07.600 [main] INFO  p.c.s.AutomationExerciseCompleteTest - DevTools network monitoring enabled successfully
+2025-08-06 01:05:07.600 [main] INFO  proje.com.saucedemo.pages.HomePage - Clicking on Signup/Login link
+2025-08-06 01:05:08.464 [main] INFO  proje.com.saucedemo.pages.HomePage - Successfully clicked on Signup/Login link
+2025-08-06 01:05:08.464 [main] INFO  p.com.saucedemo.utils.SeleniumTracer - 🎯 Element Interaction: SignupLogin Link - click (3724ms)
+2025-08-06 01:05:08.464 [main] INFO  p.c.saucedemo.pages.SignupLoginPage - Starting signup process with name: Jeremiah Cassin and email: kindra.heidenreich@yahoo.com
+2025-08-06 01:08:08.951 [main] ERROR p.c.s.AutomationExerciseCompleteTest - Step 1 failed: java.util.concurrent.TimeoutException
+Build info: version: '4.18.1', revision: 'b1d3319b48'
+System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '21'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Command: [55eba25201f3cd381827ade67edfe299, clickElement {id=f.CDC5B96105CFFC3DC6BE62B5FC841481.d.3E20CEE443191DD711204D4C259FABDC.e.113}]
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 138.0.7204.184, chrome: {chromedriverVersion: 138.0.7204.183 (e90faf484dd..., userDataDir: C:\Users\kavci\AppData\Loca...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:55439}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:55439/devtoo..., se:cdpVersion: 138.0.7204.184, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Element: [[ChromeDriver: chrome on windows (55eba25201f3cd381827ade67edfe299)] -> css selector: button[data-qa='signup-button']]
+Session ID: 55eba25201f3cd381827ade67edfe299
+2025-08-06 01:08:08.952 [main] ERROR p.com.saucedemo.utils.SeleniumTracer - ❌ Test Step: Create Account - Failed to create user account (184212ms)
+2025-08-06 01:08:08.981 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Cleaning up test resources ===
+2025-08-06 01:08:08.982 [main] INFO  p.c.s.AutomationExerciseCompleteTest - DevTools enabled: false
+2025-08-06 01:08:08.982 [main] INFO  p.c.s.AutomationExerciseCompleteTest - Total HTTP requests captured: 0
+2025-08-06 01:08:08.989 [main] INFO  p.com.saucedemo.utils.NetworkTracer - DevTools session closed
+2025-08-06 01:08:40.027 [main] INFO  p.c.saucedemo.config.WebDriverConfig - WebDriver quit successfully
+2025-08-06 01:08:40.028 [main] INFO  p.c.s.AutomationExerciseCompleteTest - WebDriver quit successfully
+2025-08-06 01:08:40.028 [main] INFO  p.c.s.AutomationExerciseCompleteTest - === Test suite cleanup completed ===
