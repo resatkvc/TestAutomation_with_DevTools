@@ -11,8 +11,10 @@ scrape_configs:
   # PushGateway - Selenium DevTools Network Metrics
   - job_name: 'pushgateway'
     honor_labels: true
+    scrape_interval: 15s
     static_configs:
       - targets: ['pushgateway:9091']
+    metrics_path: /metrics
 
   # Loki - Log Metrics
   - job_name: 'loki'

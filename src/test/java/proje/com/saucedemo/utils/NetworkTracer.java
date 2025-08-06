@@ -3,7 +3,7 @@ package proje.com.saucedemo.utils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v120.network.Network;
+import org.openqa.selenium.devtools.v122.network.Network;
 import proje.com.saucedemo.utils.MetricsExporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,28 +58,47 @@ public class NetworkTracer {
                     Thread.sleep(500);
                     
                     // Listen for network requests
-                    devTools.addListener(Network.requestWillBeSent(), request -> {
-                        try {
-                            String method = request.getRequest().getMethod();
-                            String url = request.getRequest().getUrl();
-                            String resourceType = getResourceType(url);
-                            requestCount++;
-                            
-                            logger.info("🌐 DevTools HTTP Request #{}: {} {} ({})", requestCount, method, url, resourceType);
-                            
-                            // Record metrics for HTTP request
-                            String urlDomain = extractDomain(url);
-                            MetricsExporter.recordHttpRequest(method, 0, urlDomain, resourceType, 0.0);
-                            
-                            // Log additional request details if available
-                            if (request.getRequest().getHeaders() != null) {
-                                logger.debug("Request headers: {}", request.getRequest().getHeaders());
-                            }
-                            
-                        } catch (Exception e) {
-                            logger.error("❌ Failed to process HTTP request: {}", e.getMessage());
-                        }
-                    });
+                                           devTools.addListener(Network.requestWillBeSent(), request -> {
+                           try {
+                               String method = request.getRequest().getMethod();
+                               String url = request.getRequest().getUrl();
+                               String resourceType = getResourceType(url);
+                               requestCount++;
+                               
+                               logger.info("🌐 DevTools HTTP Request #{}: {} {} ({})", requestCount, method, url, resourceType);
+                               
+                               // Record metrics for HTTP request
+                               String urlDomain = extractDomain(url);
+                               MetricsExporter.recordHttpRequest(method, 0, urlDomain, resourceType, 0.0);
+                               
+                               // Log additional request details if available
+                               if (request.getRequest().getHeaders() != null) {
+                                   logger.debug("Request headers: {}", request.getRequest().getHeaders());
+                               }
+                               
+                           } catch (Exception e) {
+                               logger.error("❌ Failed to process HTTP request: {}", e.getMessage());
+                           }
+                       });
+                       
+                       // Add response listener for status codes and timing
+                       devTools.addListener(Network.responseReceived(), response -> {
+                           try {
+                               String url = response.getResponse().getUrl();
+                               int status = response.getResponse().getStatus();
+                               String resourceType = getResourceType(url);
+                               String urlDomain = extractDomain(url);
+                               
+                               logger.info("🌐 DevTools HTTP Response: {} {} - Status: {} - Domain: {}", 
+                                         response.getResponse().getStatus(), url, status, urlDomain);
+                               
+                               // Record response metrics
+                               MetricsExporter.recordHttpRequest("GET", status, urlDomain, resourceType, 0.0);
+                               
+                           } catch (Exception e) {
+                               logger.error("❌ Failed to process HTTP response: {}", e.getMessage());
+                           }
+                       });
                     
                     // Listen for network responses
                     devTools.addListener(Network.responseReceived(), response -> {

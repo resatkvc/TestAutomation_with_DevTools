@@ -88,12 +88,17 @@
             <version>${jackson.version}</version>
         </dependency>
 
-        <!-- DevTools CDP Dependencies -->
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-devtools-v120</artifactId>
-            <version>${selenium.version}</version>
-        </dependency>
+                       <!-- DevTools CDP Dependencies -->
+               <dependency>
+                   <groupId>org.seleniumhq.selenium</groupId>
+                   <artifactId>selenium-devtools-v120</artifactId>
+                   <version>${selenium.version}</version>
+               </dependency>
+               <dependency>
+                   <groupId>org.seleniumhq.selenium</groupId>
+                   <artifactId>selenium-devtools-v122</artifactId>
+                   <version>${selenium.version}</version>
+               </dependency>
 
         <!-- Prometheus Metrics -->
         <dependency>

@@ -22,8 +22,8 @@ public class MetricsExporter {
     private static final CollectorRegistry registry = new CollectorRegistry();
     
     // PushGateway Configuration
-    private static final String PUSHGATEWAY_URL = "http://localhost:9091";
-    private static final String JOB_NAME = "selenium-devtools";
+    private static final String PUSHGATEWAY_URL = "localhost:9091";
+    private static final String JOB_NAME = "selenium-devtools-metrics";
     
     // Network Metrics
     private static final Counter httpRequestCounter = Counter.build()
