@@ -96,7 +96,7 @@ public class MetricsExporter {
     public static void recordTestExecution(String testName, String browser) {
         try {
             testExecutionCounter.labels(testName, browser, "started").inc();
-            logger.debug("📊 Test Execution: {} ({})", testName, browser);
+            logger.info("📊 Test Execution: {} ({})", testName, browser);
         } catch (Exception e) {
             logger.error("Failed to record test execution: {}", e.getMessage());
         }
@@ -108,7 +108,7 @@ public class MetricsExporter {
     public static void recordTestSuccess(String testName, String browser) {
         try {
             testSuccessCounter.labels(testName, browser).inc();
-            logger.debug("📊 Test Success: {} ({})", testName, browser);
+            logger.info("📊 Test Success: {} ({})", testName, browser);
         } catch (Exception e) {
             logger.error("Failed to record test success: {}", e.getMessage());
         }
@@ -120,7 +120,7 @@ public class MetricsExporter {
     public static void recordTestFailure(String testName, String browser, String errorType) {
         try {
             testFailureCounter.labels(testName, browser, errorType).inc();
-            logger.debug("📊 Test Failure: {} ({}) - Error: {}", testName, browser, errorType);
+            logger.info("📊 Test Failure: {} ({}) - Error: {}", testName, browser, errorType);
         } catch (Exception e) {
             logger.error("Failed to record test failure: {}", e.getMessage());
         }
@@ -132,7 +132,7 @@ public class MetricsExporter {
     public static void recordTestDuration(String testName, String browser, double durationSeconds) {
         try {
             testDurationHistogram.labels(testName, browser).observe(durationSeconds);
-            logger.debug("📊 Test Duration: {} ({}) - {}s", testName, browser, durationSeconds);
+            logger.info("📊 Test Duration: {} ({}) - {}s", testName, browser, durationSeconds);
         } catch (Exception e) {
             logger.error("Failed to record test duration: {}", e.getMessage());
         }

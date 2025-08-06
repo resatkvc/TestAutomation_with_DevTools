@@ -131,8 +131,6 @@ public class AutomationExerciseCompleteTest {
         long startTime = System.currentTimeMillis();
         boolean success = false;
         
-
-        
         try {
             logger.info("=== Step 1: Creating new account with TestAutomation_with_DevTools ===");
             
@@ -196,7 +194,13 @@ public class AutomationExerciseCompleteTest {
             long duration = System.currentTimeMillis() - startTime;
             seleniumTracer.trackTestStep("Create Account", "Successfully created user account", success, duration);
             
-
+            // Record test success and duration
+            if (success) {
+                MetricsExporter.recordTestSuccess("testCreateAccount", "chrome");
+            } else {
+                MetricsExporter.recordTestFailure("testCreateAccount", "chrome", "account_creation_failed");
+            }
+            MetricsExporter.recordTestDuration("testCreateAccount", "chrome", duration / 1000.0);
             
             logger.info("=== Step 1 completed: Account created successfully with TestAutomation_with_DevTools ===");
             
@@ -205,7 +209,9 @@ public class AutomationExerciseCompleteTest {
             long duration = System.currentTimeMillis() - startTime;
             seleniumTracer.trackTestStep("Create Account", "Failed to create user account", false, duration);
             
-
+            // Record test failure
+            MetricsExporter.recordTestFailure("testCreateAccount", "chrome", "exception_error");
+            MetricsExporter.recordTestDuration("testCreateAccount", "chrome", duration / 1000.0);
             
             throw new RuntimeException("Step 1 failed", e);
         }

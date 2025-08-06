@@ -58,47 +58,28 @@ public class NetworkTracer {
                     Thread.sleep(500);
                     
                     // Listen for network requests
-                                           devTools.addListener(Network.requestWillBeSent(), request -> {
-                           try {
-                               String method = request.getRequest().getMethod();
-                               String url = request.getRequest().getUrl();
-                               String resourceType = getResourceType(url);
-                               requestCount++;
-                               
-                               logger.info("🌐 DevTools HTTP Request #{}: {} {} ({})", requestCount, method, url, resourceType);
-                               
-                               // Record metrics for HTTP request
-                               String urlDomain = extractDomain(url);
-                               MetricsExporter.recordHttpRequest(method, 0, urlDomain, resourceType, 0.0);
-                               
-                               // Log additional request details if available
-                               if (request.getRequest().getHeaders() != null) {
-                                   logger.debug("Request headers: {}", request.getRequest().getHeaders());
-                               }
-                               
-                           } catch (Exception e) {
-                               logger.error("❌ Failed to process HTTP request: {}", e.getMessage());
-                           }
-                       });
-                       
-                       // Add response listener for status codes and timing
-                       devTools.addListener(Network.responseReceived(), response -> {
-                           try {
-                               String url = response.getResponse().getUrl();
-                               int status = response.getResponse().getStatus();
-                               String resourceType = getResourceType(url);
-                               String urlDomain = extractDomain(url);
-                               
-                               logger.info("🌐 DevTools HTTP Response: {} {} - Status: {} - Domain: {}", 
-                                         response.getResponse().getStatus(), url, status, urlDomain);
-                               
-                               // Record response metrics
-                               MetricsExporter.recordHttpRequest("GET", status, urlDomain, resourceType, 0.0);
-                               
-                           } catch (Exception e) {
-                               logger.error("❌ Failed to process HTTP response: {}", e.getMessage());
-                           }
-                       });
+                    devTools.addListener(Network.requestWillBeSent(), request -> {
+                        try {
+                            String method = request.getRequest().getMethod();
+                            String url = request.getRequest().getUrl();
+                            String resourceType = getResourceType(url);
+                            requestCount++;
+                            
+                            logger.info("🌐 DevTools HTTP Request #{}: {} {} ({})", requestCount, method, url, resourceType);
+                            
+                            // Record metrics for HTTP request
+                            String urlDomain = extractDomain(url);
+                            MetricsExporter.recordHttpRequest(method, 0, urlDomain, resourceType, 0.0);
+                            
+                            // Log additional request details if available
+                            if (request.getRequest().getHeaders() != null) {
+                                logger.debug("Request headers: {}", request.getRequest().getHeaders());
+                            }
+                            
+                        } catch (Exception e) {
+                            logger.error("❌ Failed to process HTTP request: {}", e.getMessage());
+                        }
+                    });
                     
                     // Listen for network responses
                     devTools.addListener(Network.responseReceived(), response -> {
@@ -112,9 +93,11 @@ public class NetworkTracer {
                             logger.info("{} DevTools HTTP Response: {} - Status: {} ({}) - Type: {}", 
                                       statusIcon, url, status, statusText, resourceType);
                             
-                            // Record response metrics
+                            // Record response metrics with actual HTTP method
                             String urlDomain = extractDomain(url);
-                            MetricsExporter.recordHttpRequest("RESPONSE", status, urlDomain, resourceType, 0.0);
+                            // Don't record response separately - it's already recorded in request
+                            // Just log the response for debugging
+                            logger.debug("📊 DevTools Response: {} - Status: {} - Domain: {}", url, status, urlDomain);
                             
                             // Log response headers if available
                             if (response.getResponse().getHeaders() != null) {
