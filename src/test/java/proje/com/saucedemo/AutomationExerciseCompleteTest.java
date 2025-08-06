@@ -50,6 +50,9 @@ public class AutomationExerciseCompleteTest {
         try {
             logger.info("=== Setting up TestAutomation_with_DevTools test suite ===");
             
+            // Record test execution start
+            MetricsExporter.recordTestExecution("AutomationExerciseCompleteTest", "chrome");
+            
             // Initialize WebDriver
             webDriverConfig = new WebDriverConfig();
             driver = webDriverConfig.initializeDriver("chrome");
@@ -81,6 +84,7 @@ public class AutomationExerciseCompleteTest {
             
         } catch (Exception e) {
             logger.error("Test setup failed: {}", e.getMessage());
+            MetricsExporter.recordTestFailure("AutomationExerciseCompleteTest", "chrome", "setup_error");
             throw new RuntimeException("Test setup failed", e);
         }
     }
@@ -89,6 +93,9 @@ public class AutomationExerciseCompleteTest {
     static void tearDown() {
         try {
             logger.info("=== Cleaning up TestAutomation_with_DevTools test resources ===");
+            
+            // Record test success
+            MetricsExporter.recordTestSuccess("AutomationExerciseCompleteTest", "chrome");
             
             // Debug: Check DevTools status
             if (networkTracer != null) {
@@ -128,6 +135,9 @@ public class AutomationExerciseCompleteTest {
         
         try {
             logger.info("=== Step 1: Creating new account with TestAutomation_with_DevTools ===");
+            
+            // Record test step
+            MetricsExporter.recordTestExecution("testCreateAccount", "chrome");
             
             // Navigate to home page
             seleniumTracer.navigateToUrl(BASE_URL, "Home page");

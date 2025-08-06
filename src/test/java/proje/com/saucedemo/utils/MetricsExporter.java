@@ -25,7 +25,33 @@ public class MetricsExporter {
     private static final String PUSHGATEWAY_URL = "localhost:9091";
     private static final String JOB_NAME = "selenium-devtools-metrics";
     
-    // Network Metrics
+    // Test Metrics (GitHub projesindeki gibi)
+    private static final Counter testExecutionCounter = Counter.build()
+            .name("test_execution_count")
+            .help("Total test executions")
+            .labelNames("test_name", "browser", "status")
+            .register(registry);
+    
+    private static final Counter testSuccessCounter = Counter.build()
+            .name("test_success_count")
+            .help("Successful test executions")
+            .labelNames("test_name", "browser")
+            .register(registry);
+    
+    private static final Counter testFailureCounter = Counter.build()
+            .name("test_failure_count")
+            .help("Failed test executions")
+            .labelNames("test_name", "browser", "error_type")
+            .register(registry);
+    
+    private static final Histogram testDurationHistogram = Histogram.build()
+            .name("test_duration_seconds")
+            .help("Test execution duration")
+            .labelNames("test_name", "browser")
+            .buckets(0.1, 0.5, 1, 2, 5, 10, 30)
+            .register(registry);
+    
+    // Network Metrics (DevTools)
     private static final Counter httpRequestCounter = Counter.build()
             .name("devtools_http_requests_total")
             .help("Total HTTP requests captured by DevTools")
@@ -61,6 +87,54 @@ public class MetricsExporter {
         } catch (Exception e) {
             logger.error("❌ Failed to initialize PushGateway: {}", e.getMessage());
             pushGateway = null;
+        }
+    }
+    
+    /**
+     * Record test execution
+     */
+    public static void recordTestExecution(String testName, String browser) {
+        try {
+            testExecutionCounter.labels(testName, browser, "started").inc();
+            logger.debug("📊 Test Execution: {} ({})", testName, browser);
+        } catch (Exception e) {
+            logger.error("Failed to record test execution: {}", e.getMessage());
+        }
+    }
+    
+    /**
+     * Record test success
+     */
+    public static void recordTestSuccess(String testName, String browser) {
+        try {
+            testSuccessCounter.labels(testName, browser).inc();
+            logger.debug("📊 Test Success: {} ({})", testName, browser);
+        } catch (Exception e) {
+            logger.error("Failed to record test success: {}", e.getMessage());
+        }
+    }
+    
+    /**
+     * Record test failure
+     */
+    public static void recordTestFailure(String testName, String browser, String errorType) {
+        try {
+            testFailureCounter.labels(testName, browser, errorType).inc();
+            logger.debug("📊 Test Failure: {} ({}) - Error: {}", testName, browser, errorType);
+        } catch (Exception e) {
+            logger.error("Failed to record test failure: {}", e.getMessage());
+        }
+    }
+    
+    /**
+     * Record test duration
+     */
+    public static void recordTestDuration(String testName, String browser, double durationSeconds) {
+        try {
+            testDurationHistogram.labels(testName, browser).observe(durationSeconds);
+            logger.debug("📊 Test Duration: {} ({}) - {}s", testName, browser, durationSeconds);
+        } catch (Exception e) {
+            logger.error("Failed to record test duration: {}", e.getMessage());
         }
     }
     
