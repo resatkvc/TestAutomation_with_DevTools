@@ -9,6 +9,7 @@ import proje.com.saucedemo.pages.*;
 import proje.com.saucedemo.utils.TestDataGenerator;
 import proje.com.saucedemo.utils.SeleniumTracer;
 import proje.com.saucedemo.utils.NetworkTracer;
+import proje.com.saucedemo.utils.MetricsExporter;
 import proje.com.saucedemo.verification.VerificationHelper;
 
 import java.util.List;
@@ -95,6 +96,9 @@ public class AutomationExerciseCompleteTest {
                 logger.info("Total HTTP requests captured: {}", networkTracer.getRequestCount());
             }
             
+            // Push final metrics
+            MetricsExporter.pushMetricsWithLabels("AutomationExerciseCompleteTest", "chrome");
+            
             // Cleanup NetworkTracer
             if (networkTracer != null) {
                 networkTracer.cleanup();
@@ -119,6 +123,8 @@ public class AutomationExerciseCompleteTest {
     void testCreateAccount() {
         long startTime = System.currentTimeMillis();
         boolean success = false;
+        
+
         
         try {
             logger.info("=== Step 1: Creating new account with TestAutomation_with_DevTools ===");
@@ -179,12 +185,18 @@ public class AutomationExerciseCompleteTest {
             success = accountCreated;
             long duration = System.currentTimeMillis() - startTime;
             seleniumTracer.trackTestStep("Create Account", "Successfully created user account", success, duration);
+            
+
+            
             logger.info("=== Step 1 completed: Account created successfully with TestAutomation_with_DevTools ===");
             
         } catch (Exception e) {
             logger.error("Step 1 failed: {}", e.getMessage());
             long duration = System.currentTimeMillis() - startTime;
             seleniumTracer.trackTestStep("Create Account", "Failed to create user account", false, duration);
+            
+
+            
             throw new RuntimeException("Step 1 failed", e);
         }
     }

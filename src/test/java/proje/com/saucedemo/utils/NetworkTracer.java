@@ -4,6 +4,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
 import org.openqa.selenium.devtools.v120.network.Network;
+import proje.com.saucedemo.utils.MetricsExporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,9 +62,14 @@ public class NetworkTracer {
                         try {
                             String method = request.getRequest().getMethod();
                             String url = request.getRequest().getUrl();
+                            String resourceType = getResourceType(url);
                             requestCount++;
                             
-                            logger.info("🌐 HTTP Request #{}: {} {}", requestCount, method, url);
+                            logger.info("🌐 DevTools HTTP Request #{}: {} {} ({})", requestCount, method, url, resourceType);
+                            
+                            // Record metrics for HTTP request
+                            String urlDomain = extractDomain(url);
+                            MetricsExporter.recordHttpRequest(method, 0, urlDomain, resourceType, 0.0);
                             
                             // Log additional request details if available
                             if (request.getRequest().getHeaders() != null) {
@@ -81,9 +87,15 @@ public class NetworkTracer {
                             String url = response.getResponse().getUrl();
                             int status = response.getResponse().getStatus();
                             String statusText = response.getResponse().getStatusText();
+                            String resourceType = getResourceType(url);
                             
                             String statusIcon = (status >= 200 && status < 300) ? "✅" : "❌";
-                            logger.info("{} HTTP Response: {} - Status: {} ({})", statusIcon, url, status, statusText);
+                            logger.info("{} DevTools HTTP Response: {} - Status: {} ({}) - Type: {}", 
+                                      statusIcon, url, status, statusText, resourceType);
+                            
+                            // Record response metrics
+                            String urlDomain = extractDomain(url);
+                            MetricsExporter.recordHttpRequest("RESPONSE", status, urlDomain, resourceType, 0.0);
                             
                             // Log response headers if available
                             if (response.getResponse().getHeaders() != null) {
@@ -101,7 +113,11 @@ public class NetworkTracer {
                             String url = failed.getRequestId().toString();
                             String errorText = failed.getErrorText();
                             
-                            logger.error("❌ Network request failed: {} - Error: {}", url, errorText);
+                            logger.error("❌ DevTools Network Error: {} - Error: {}", url, errorText);
+                            
+                            // Record network error metrics
+                            String urlDomain = extractDomain(url);
+                            MetricsExporter.recordNetworkError(errorText, urlDomain);
                             
                         } catch (Exception e) {
                             logger.error("Failed to process loading failed event: {}", e.getMessage());
@@ -139,6 +155,44 @@ public class NetworkTracer {
      */
     public boolean isDevToolsEnabled() {
         return devToolsEnabled;
+    }
+    
+    /**
+     * Extract domain from URL
+     */
+    private String extractDomain(String url) {
+        try {
+            if (url != null && !url.isEmpty()) {
+                if (url.startsWith("http://") || url.startsWith("https://")) {
+                    String domain = url.replaceFirst("^https?://", "");
+                    return domain.split("/")[0];
+                }
+            }
+        } catch (Exception e) {
+            logger.debug("Failed to extract domain from URL: {}", url);
+        }
+        return "unknown";
+    }
+    
+    /**
+     * Get resource type from URL
+     */
+    private String getResourceType(String url) {
+        try {
+            if (url != null && !url.isEmpty()) {
+                String lowerUrl = url.toLowerCase();
+                if (lowerUrl.contains(".js")) return "script";
+                if (lowerUrl.contains(".css")) return "stylesheet";
+                if (lowerUrl.contains(".png") || lowerUrl.contains(".jpg") || lowerUrl.contains(".jpeg") || 
+                    lowerUrl.contains(".gif") || lowerUrl.contains(".svg") || lowerUrl.contains(".ico")) return "image";
+                if (lowerUrl.contains(".woff") || lowerUrl.contains(".ttf") || lowerUrl.contains(".eot")) return "font";
+                if (lowerUrl.contains(".mp4") || lowerUrl.contains(".webm") || lowerUrl.contains(".ogg")) return "media";
+                if (lowerUrl.contains(".xml") || lowerUrl.contains(".json")) return "data";
+            }
+        } catch (Exception e) {
+            logger.debug("Failed to extract resource type from URL: {}", url);
+        }
+        return "document";
     }
     
     /**
