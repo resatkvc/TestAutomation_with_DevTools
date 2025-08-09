@@ -38,16 +38,6 @@
         </dependency>
 
         <!-- DevTools CDP Dependencies -->
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-devtools-v120</artifactId>
-            <version>${selenium.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-devtools-v122</artifactId>
-            <version>${selenium.version}</version>
-        </dependency>
         <!-- Chrome 138 CDP - using v121 for compatibility -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>

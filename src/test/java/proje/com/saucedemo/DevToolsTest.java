@@ -25,9 +25,14 @@ public class DevToolsTest {
             webDriverConfig = new WebDriverConfig();
             driver = webDriverConfig.initializeDriver("chrome");
             cdpManager = new ChromeDevToolsManager(driver);
+            
+            // Log detailed DevTools status
+            logger.info("DevTools Status:\n{}", cdpManager.getDevToolsStatus());
+            
             logger.info("DevTools test setup completed");
         } catch (Exception e) {
             logger.error("Test setup failed: {}", e.getMessage());
+            logger.error("Stack trace: ", e);
             throw new RuntimeException("Test setup failed", e);
         }
     }
@@ -59,6 +64,15 @@ public class DevToolsTest {
         try {
             logger.info("=== Testing DevTools Network Monitoring ===");
             
+            // Check DevTools status before enabling monitoring
+            logger.info("Pre-monitoring DevTools Status:\n{}", cdpManager.getDevToolsStatus());
+            
+            if (!cdpManager.isInitialized()) {
+                logger.error("❌ DevTools not initialized - cannot proceed with test");
+                Assertions.fail("DevTools must be initialized to run this test");
+                return;
+            }
+            
             // Enable comprehensive DevTools monitoring
             cdpManager.enableAllMonitoring();
             logger.info("✅ All CDP domains enabled");
@@ -84,6 +98,9 @@ public class DevToolsTest {
             logger.info("JavaScript Errors: {}", jsErrors);
             logger.info("CDP Manager Initialized: {}", cdpManager.isInitialized());
             
+            // Log final DevTools status
+            logger.info("Final DevTools Status:\n{}", cdpManager.getDevToolsStatus());
+            
             // Verify DevTools is working
             Assertions.assertTrue(cdpManager.isInitialized(), "CDP Manager should be initialized");
             Assertions.assertTrue(networkRequests > 0, "Should capture network requests");
@@ -92,6 +109,7 @@ public class DevToolsTest {
             
         } catch (Exception e) {
             logger.error("DevTools test failed: {}", e.getMessage());
+            logger.error("Stack trace: ", e);
             throw new RuntimeException("DevTools test failed", e);
         }
     }

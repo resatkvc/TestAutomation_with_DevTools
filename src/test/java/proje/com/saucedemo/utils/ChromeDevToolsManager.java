@@ -77,6 +77,11 @@ public class ChromeDevToolsManager {
                 String chromeVersion = getChromeVersion();
                 logger.info("Chrome version detected: {}", chromeVersion);
                 
+                // Check if Chrome version is compatible
+                if (chromeVersion != null && !isChromeVersionCompatible(chromeVersion)) {
+                    logger.warn("⚠️ Chrome version {} might not be fully compatible with DevTools v121", chromeVersion);
+                }
+                
                 devTools = ((HasDevTools) driver).getDevTools();
                 devTools.createSession();
                 
@@ -86,10 +91,12 @@ public class ChromeDevToolsManager {
                 
             } else {
                 logger.warn("❌ DevTools not available - not a Chrome driver");
+                logger.warn("Driver type: {}", driver.getClass().getSimpleName());
                 isInitialized = false;
             }
         } catch (Exception e) {
             logger.error("❌ Failed to initialize DevTools: {}", e.getMessage());
+            logger.error("Stack trace: ", e);
             isInitialized = false;
         }
     }
@@ -99,8 +106,11 @@ public class ChromeDevToolsManager {
      */
     private String getChromeVersion() {
         try {
-            org.openqa.selenium.Capabilities caps = driver.getCapabilities();
-            return (String) caps.getCapability("browserVersion");
+            if (driver instanceof org.openqa.selenium.HasCapabilities) {
+                org.openqa.selenium.Capabilities caps = ((org.openqa.selenium.HasCapabilities) driver).getCapabilities();
+                return (String) caps.getCapability("browserVersion");
+            }
+            return null;
         } catch (Exception e) {
             logger.warn("Could not detect Chrome version: {}", e.getMessage());
             return null;
@@ -108,19 +118,51 @@ public class ChromeDevToolsManager {
     }
     
     /**
+     * Check if Chrome version is compatible with DevTools v121
+     */
+    private boolean isChromeVersionCompatible(String chromeVersion) {
+        try {
+            if (chromeVersion == null || chromeVersion.isEmpty()) {
+                return true; // Assume compatible if version cannot be determined
+            }
+            
+            // Extract major version number
+            String[] versionParts = chromeVersion.split("\\.");
+            if (versionParts.length > 0) {
+                int majorVersion = Integer.parseInt(versionParts[0]);
+                // DevTools v121 is compatible with Chrome 121+
+                return majorVersion >= 121;
+            }
+            return true;
+        } catch (Exception e) {
+            logger.warn("Could not parse Chrome version: {}", chromeVersion);
+            return true; // Assume compatible if parsing fails
+        }
+    }
+    
+    /**
      * Enable comprehensive monitoring for all supported domains
      */
     public void enableAllMonitoring() {
-        enableNetworkMonitoring();
-        enablePerformanceMonitoring();
-        enableConsoleMonitoring();
-        enableRuntimeMonitoring();
-        enableSecurityMonitoring();
-        enablePageMonitoring();
-        enableDOMMonitoring();
+        if (!isInitialized) {
+            logger.warn("⚠️ DevTools not initialized, cannot enable monitoring");
+            return;
+        }
         
-        logger.info("🚀 All CDP monitoring domains enabled");
-                    logger.info("CDP Monitoring: All domains enabled: Network, Performance, Console, Runtime, Security, Page, DOM");
+        try {
+            enableNetworkMonitoring();
+            enablePerformanceMonitoring();
+            enableConsoleMonitoring();
+            enableRuntimeMonitoring();
+            enableSecurityMonitoring();
+            enablePageMonitoring();
+            enableDOMMonitoring();
+            
+            logger.info("🚀 All CDP monitoring domains enabled");
+            logger.info("CDP Monitoring: All domains enabled: Network, Performance, Console, Runtime, Security, Page, DOM");
+        } catch (Exception e) {
+            logger.error("Failed to enable all monitoring: {}", e.getMessage());
+        }
     }
     
     /**
@@ -457,6 +499,31 @@ public class ChromeDevToolsManager {
      */
     public boolean isInitialized() {
         return isInitialized;
+    }
+    
+    /**
+     * Get detailed DevTools status for debugging
+     */
+    public String getDevToolsStatus() {
+        StringBuilder status = new StringBuilder();
+        status.append("=== DevTools Status ===\n");
+        status.append(String.format("Initialized: %s\n", isInitialized));
+        status.append(String.format("Driver Type: %s\n", driver.getClass().getSimpleName()));
+        status.append(String.format("HasDevTools Interface: %s\n", driver instanceof HasDevTools));
+        status.append(String.format("DevTools Instance: %s\n", devTools != null ? "Available" : "Null"));
+        
+        if (isInitialized) {
+            status.append("Monitoring Status:\n");
+            status.append(String.format("  Network: %s\n", networkMonitoringEnabled));
+            status.append(String.format("  Performance: %s\n", performanceMonitoringEnabled));
+            status.append(String.format("  Console: %s\n", consoleMonitoringEnabled));
+            status.append(String.format("  Runtime: %s\n", runtimeMonitoringEnabled));
+            status.append(String.format("  Security: %s\n", securityMonitoringEnabled));
+            status.append(String.format("  Page: %s\n", pageMonitoringEnabled));
+            status.append(String.format("  DOM: %s\n", domMonitoringEnabled));
+        }
+        
+        return status.toString();
     }
     
     /**

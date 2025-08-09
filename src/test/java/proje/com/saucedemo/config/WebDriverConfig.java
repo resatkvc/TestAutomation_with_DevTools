@@ -68,6 +68,12 @@ public class WebDriverConfig {
                 chromeOptions.addArguments("--disable-extensions");
                 chromeOptions.addArguments("--disable-web-security");
                 chromeOptions.addArguments("--allow-running-insecure-content");
+                // DevTools compatibility options
+                chromeOptions.addArguments("--enable-logging");
+                chromeOptions.addArguments("--v=1");
+                chromeOptions.addArguments("--disable-blink-features=AutomationControlled");
+                chromeOptions.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
+                chromeOptions.setExperimentalOption("useAutomationExtension", false);
                 return new ChromeDriver(chromeOptions);
                 
             case "firefox":
