@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>proje.com</groupId>
-    <artifactId>TestAutomation_with_DevTools</artifactId>
+    <artifactId>Selenium_DevTools_Automation</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -15,12 +15,11 @@
         <selenium.version>4.18.1</selenium.version>
         <webdrivermanager.version>5.8.0</webdrivermanager.version>
         <junit.version>5.10.2</junit.version>
+        <allure.version>2.25.0</allure.version>
+        <aspectj.version>1.9.21</aspectj.version>
         <slf4j.version>2.0.12</slf4j.version>
         <logback.version>1.4.14</logback.version>
         <faker.version>1.0.2</faker.version>
-        <jackson.version>2.17.0</jackson.version>
-        <prometheus.version>0.16.0</prometheus.version>
-        <micrometer.version>1.12.4</micrometer.version>
     </properties>
 
     <dependencies>
@@ -38,6 +37,18 @@
             <version>${webdrivermanager.version}</version>
         </dependency>
 
+        <!-- DevTools CDP Dependencies -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-devtools-v120</artifactId>
+            <version>${selenium.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-devtools-v122</artifactId>
+            <version>${selenium.version}</version>
+        </dependency>
+
         <!-- JUnit 5 for testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -46,12 +57,19 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- JUnit 5 Vintage for JUnit 4 compatibility -->
+        <!-- Allure JUnit 5 Integration -->
         <dependency>
-            <groupId>org.junit.vintage</groupId>
-            <artifactId>junit-vintage-engine</artifactId>
-            <version>${junit.version}</version>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-junit5</artifactId>
+            <version>${allure.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- Allure Selenium Integration -->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-selenium</artifactId>
+            <version>${allure.version}</version>
         </dependency>
 
         <!-- Logging -->
@@ -74,76 +92,11 @@
             <version>${faker.version}</version>
         </dependency>
 
-        <!-- Apache Commons Lang for utilities -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.14.0</version>
-        </dependency>
 
-        <!-- Jackson for JSON processing -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-
-                       <!-- DevTools CDP Dependencies -->
-               <dependency>
-                   <groupId>org.seleniumhq.selenium</groupId>
-                   <artifactId>selenium-devtools-v120</artifactId>
-                   <version>${selenium.version}</version>
-               </dependency>
-               <dependency>
-                   <groupId>org.seleniumhq.selenium</groupId>
-                   <artifactId>selenium-devtools-v122</artifactId>
-                   <version>${selenium.version}</version>
-               </dependency>
-
-        <!-- Prometheus Metrics -->
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-prometheus</artifactId>
-            <version>${micrometer.version}</version>
-        </dependency>
-
-        <!-- Prometheus PushGateway Client -->
-        <dependency>
-            <groupId>io.prometheus</groupId>
-            <artifactId>simpleclient_pushgateway</artifactId>
-            <version>${prometheus.version}</version>
-        </dependency>
-
-        <!-- Prometheus Simple Client -->
-        <dependency>
-            <groupId>io.prometheus</groupId>
-            <artifactId>simpleclient</artifactId>
-            <version>${prometheus.version}</version>
-        </dependency>
-
-        <!-- Prometheus PushGateway -->
-        <dependency>
-            <groupId>io.prometheus</groupId>
-            <artifactId>simpleclient_pushgateway</artifactId>
-            <version>${prometheus.version}</version>
-        </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Maven Surefire Plugin for running tests -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.5</version>
-                <configuration>
-                    <includes>
-                        <include>**/*Test.java</include>
-                        <include>**/*Tests.java</include>
-                    </includes>
-                </configuration>
-            </plugin>
-
             <!-- Maven Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -155,19 +108,33 @@
                 </configuration>
             </plugin>
 
-            <!-- Maven Failsafe Plugin for integration tests -->
+            <!-- Maven Surefire Plugin for running tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
+                <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <configuration>
+                    <argLine>
+                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                    </argLine>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjweaver</artifactId>
+                        <version>${aspectj.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <!-- Allure Maven Plugin -->
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>2.12.0</version>
+                <configuration>
+                    <reportVersion>${allure.version}</reportVersion>
+                </configuration>
             </plugin>
         </plugins>
     </build>

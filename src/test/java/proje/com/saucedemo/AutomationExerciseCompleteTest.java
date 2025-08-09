@@ -1,25 +1,29 @@
 package proje.com.saucedemo;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import io.qameta.allure.*;
+import io.qameta.allure.junit5.AllureJunit5;
 import proje.com.saucedemo.config.WebDriverConfig;
 import proje.com.saucedemo.pages.*;
 import proje.com.saucedemo.utils.TestDataGenerator;
-import proje.com.saucedemo.utils.SeleniumTracer;
-import proje.com.saucedemo.utils.NetworkTracer;
-import proje.com.saucedemo.utils.MetricsExporter;
+import proje.com.saucedemo.utils.ChromeDevToolsManager;
 import proje.com.saucedemo.verification.VerificationHelper;
 
 import java.util.List;
 
 /**
- * TestAutomation_with_DevTools - Complete AutomationExercise test automation
+ * Selenium DevTools Automation - Complete AutomationExercise test automation
  * Tests the full e-commerce flow from signup/login to order completion
- * Includes comprehensive network monitoring using DevTools API
+ * Includes comprehensive network monitoring using DevTools API with Allure reporting
  */
+@Epic("E-Commerce Automation")
+@Feature("Full Purchase Flow")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@ExtendWith(AllureJunit5.class)
 public class AutomationExerciseCompleteTest {
     
     private static final Logger logger = LoggerFactory.getLogger(AutomationExerciseCompleteTest.class);
@@ -28,8 +32,7 @@ public class AutomationExerciseCompleteTest {
     private static WebDriver driver;
     private static WebDriverConfig webDriverConfig;
     private static VerificationHelper verificationHelper;
-    private static SeleniumTracer seleniumTracer;
-    private static NetworkTracer networkTracer;
+    private static ChromeDevToolsManager cdpManager;
     
     // Page Objects
     private static HomePage homePage;
@@ -43,15 +46,11 @@ public class AutomationExerciseCompleteTest {
     private static String userEmail;
     private static String userPassword;
     private static String userName;
-    private static List<String> selectedProducts;
     
     @BeforeAll
     static void setUp() {
         try {
-            logger.info("=== Setting up TestAutomation_with_DevTools test suite ===");
-            
-            // Record test execution start
-            MetricsExporter.recordTestExecution("AutomationExerciseCompleteTest", "chrome");
+            logger.info("=== Setting up Selenium DevTools Automation test suite ===");
             
             // Initialize WebDriver
             webDriverConfig = new WebDriverConfig();
@@ -60,11 +59,8 @@ public class AutomationExerciseCompleteTest {
             // Initialize verification helper
             verificationHelper = new VerificationHelper(driver);
             
-            // Initialize Selenium tracer
-            seleniumTracer = new SeleniumTracer(driver);
-            
-            // Initialize NetworkTracer (DevTools will be enabled after first page load)
-            networkTracer = new NetworkTracer(driver);
+            // Initialize comprehensive CDP Manager
+            cdpManager = new ChromeDevToolsManager(driver);
             
             // Initialize page objects
             homePage = new HomePage(driver);
@@ -80,11 +76,10 @@ public class AutomationExerciseCompleteTest {
             userPassword = userInfo.getPassword();
             userName = userInfo.getFirstName() + " " + userInfo.getLastName();
             
-            logger.info("TestAutomation_with_DevTools setup completed successfully with DevTools monitoring");
+            logger.info("Selenium DevTools Automation setup completed successfully with DevTools monitoring");
             
         } catch (Exception e) {
             logger.error("Test setup failed: {}", e.getMessage());
-            MetricsExporter.recordTestFailure("AutomationExerciseCompleteTest", "chrome", "setup_error");
             throw new RuntimeException("Test setup failed", e);
         }
     }
@@ -92,23 +87,20 @@ public class AutomationExerciseCompleteTest {
     @AfterAll
     static void tearDown() {
         try {
-            logger.info("=== Cleaning up TestAutomation_with_DevTools test resources ===");
-            
-            // Record test success
-            MetricsExporter.recordTestSuccess("AutomationExerciseCompleteTest", "chrome");
+            logger.info("=== Cleaning up Selenium DevTools Automation test resources ===");
             
             // Debug: Check DevTools status
-            if (networkTracer != null) {
-                logger.info("DevTools enabled: {}", networkTracer.isDevToolsEnabled());
-                logger.info("Total HTTP requests captured: {}", networkTracer.getRequestCount());
-            }
-            
-            // Push final metrics
-            MetricsExporter.pushMetricsWithLabels("AutomationExerciseCompleteTest", "chrome");
-            
-            // Cleanup NetworkTracer
-            if (networkTracer != null) {
-                networkTracer.cleanup();
+            if (cdpManager != null) {
+                logger.info("CDP Manager initialized: {}", cdpManager.isInitialized());
+                logger.info("Network requests captured: {}", cdpManager.getNetworkRequestCount());
+                logger.info("Console logs captured: {}", cdpManager.getConsoleLogCount());
+                logger.info("JavaScript errors: {}", cdpManager.getJavaScriptErrorCount());
+                
+                // Attach final comprehensive CDP summary
+                cdpManager.attachToAllureReport();
+                
+                // Cleanup CDP Manager
+                cdpManager.cleanup();
             }
             
             // Quit WebDriver
@@ -117,7 +109,7 @@ public class AutomationExerciseCompleteTest {
                 logger.info("WebDriver quit successfully");
             }
             
-            logger.info("=== TestAutomation_with_DevTools test suite cleanup completed ===");
+            logger.info("=== Selenium DevTools Automation test suite cleanup completed ===");
             
         } catch (Exception e) {
             logger.error("Test cleanup failed: {}", e.getMessage());
@@ -126,92 +118,113 @@ public class AutomationExerciseCompleteTest {
     
     @Test
     @Order(1)
+    @Story("User Registration")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("Navigate to AutomationExercise website and create a new user account with DevTools monitoring")
     @DisplayName("Step 1: Navigate to AutomationExercise and Create Account")
     void testCreateAccount() {
         long startTime = System.currentTimeMillis();
-        boolean success = false;
         
         try {
-            logger.info("=== Step 1: Creating new account with TestAutomation_with_DevTools ===");
+            Allure.step("Starting account creation process", () -> {
+                logger.info("=== Step 1: Creating new account with Selenium DevTools ===");
+            });
             
-            // Record test step
-            MetricsExporter.recordTestExecution("testCreateAccount", "chrome");
+            Allure.step("Navigate to home page", () -> {
+                driver.get(BASE_URL);
+                logger.info("Navigated to: {}", BASE_URL);
+            });
             
-            // Navigate to home page
-            seleniumTracer.navigateToUrl(BASE_URL, "Home page");
+            Allure.step("Enable comprehensive DevTools monitoring", () -> {
+                logger.info("Enabling comprehensive Chrome DevTools Protocol monitoring...");
+                
+                // Enable all CDP domains
+                cdpManager.enableAllMonitoring();
+                
+                logger.info("✅ Full CDP monitoring suite enabled successfully");
+                
+                // Attach comprehensive CDP status to report
+                cdpManager.attachToAllureReport();
+            });
             
-            // Enable DevTools network monitoring AFTER page load
-            logger.info("Enabling DevTools network monitoring...");
-            networkTracer.enableNetworkLogging();
-            logger.info("DevTools network monitoring enabled successfully");
+            Allure.step("Click on signup/login link", () -> {
+                homePage.clickSignupLogin();
+                logger.info("Clicked signup/login link");
+            });
             
-            // Click on signup/login link
-            homePage.clickSignupLogin();
-            seleniumTracer.trackElementInteraction("SignupLogin Link", "click", System.currentTimeMillis() - startTime);
-            
-            // Start signup process
-            signupLoginPage.startSignup(userName, userEmail);
-            seleniumTracer.trackElementInteraction("Signup Form", "submit", System.currentTimeMillis() - startTime);
-            
-            // Check if email already exists
-            if (signupLoginPage.isSignupEmailExists()) {
-                logger.info("Email already exists, trying with different email");
-                userEmail = "test" + System.currentTimeMillis() + "@example.com";
+            Allure.step("Start signup process", () -> {
                 signupLoginPage.startSignup(userName, userEmail);
-            }
+                logger.info("Started signup for user: {} with email: {}", userName, userEmail);
+                
+                // Attach user data to report
+                Allure.addAttachment("Test User Data", 
+                    String.format("Name: %s\nEmail: %s", userName, userEmail));
+            });
             
-            // Fill account information
-            TestDataGenerator.AccountInfo accountInfo = TestDataGenerator.generateAccountInfo();
-            signupLoginPage.fillAccountInformation(
-                accountInfo.getTitle(),
-                userPassword,
-                accountInfo.getDay(),
-                accountInfo.getMonth(),
-                accountInfo.getYear(),
-                accountInfo.getFirstName(),
-                accountInfo.getLastName(),
-                accountInfo.getCompany(),
-                accountInfo.getAddress1(),
-                accountInfo.getAddress2(),
-                accountInfo.getCountry(),
-                accountInfo.getState(),
-                accountInfo.getCity(),
-                accountInfo.getZipcode(),
-                accountInfo.getMobileNumber()
-            );
-            seleniumTracer.trackElementInteraction("Account Details", "fill", System.currentTimeMillis() - startTime);
+            Allure.step("Handle email already exists scenario", () -> {
+                if (signupLoginPage.isSignupEmailExists()) {
+                    logger.info("Email already exists, trying with different email");
+                    userEmail = "test" + System.currentTimeMillis() + "@example.com";
+                    signupLoginPage.startSignup(userName, userEmail);
+                    
+                    Allure.addAttachment("Updated Email", userEmail);
+                }
+            });
             
-            // Create account
-            signupLoginPage.createAccount();
-            seleniumTracer.trackElementInteraction("Create Account Button", "click", System.currentTimeMillis() - startTime);
+            Allure.step("Fill account information", () -> {
+                TestDataGenerator.AccountInfo accountInfo = TestDataGenerator.generateAccountInfo();
+                signupLoginPage.fillAccountInformation(
+                    accountInfo.getTitle(),
+                    userPassword,
+                    accountInfo.getDay(),
+                    accountInfo.getMonth(),
+                    accountInfo.getYear(),
+                    accountInfo.getFirstName(),
+                    accountInfo.getLastName(),
+                    accountInfo.getCompany(),
+                    accountInfo.getAddress1(),
+                    accountInfo.getAddress2(),
+                    accountInfo.getCountry(),
+                    accountInfo.getState(),
+                    accountInfo.getCity(),
+                    accountInfo.getZipcode(),
+                    accountInfo.getMobileNumber()
+                );
+                
+                // Attach account details to report
+                Allure.addAttachment("Account Details", 
+                    String.format("Title: %s\nCompany: %s\nCountry: %s\nState: %s\nCity: %s", 
+                        accountInfo.getTitle(), accountInfo.getCompany(), accountInfo.getCountry(), 
+                        accountInfo.getState(), accountInfo.getCity()));
+                
+                logger.info("Filled account information");
+            });
             
-            // Verify account creation
-            boolean accountCreated = signupLoginPage.isAccountCreated();
-            verificationHelper.verifyAccountCreated(accountCreated);
-            seleniumTracer.trackTestStep("Account Creation Verification", "Verify account was created successfully", accountCreated, System.currentTimeMillis() - startTime);
+            Allure.step("Create account", () -> {
+                signupLoginPage.createAccount();
+                logger.info("Clicked create account button");
+            });
             
-            success = accountCreated;
-            long duration = System.currentTimeMillis() - startTime;
-            seleniumTracer.trackTestStep("Create Account", "Successfully created user account", success, duration);
+            Allure.step("Verify account creation", () -> {
+                boolean accountCreated = signupLoginPage.isAccountCreated();
+                verificationHelper.verifyAccountCreated(accountCreated);
+                
+                long duration = System.currentTimeMillis() - startTime;
+                logger.info("Account creation verification completed in {} ms", duration);
+                
+                Allure.addAttachment("Test Results", 
+                    String.format("Account Created: %s\nDuration: %d ms\nNetwork Requests: %d\nConsole Logs: %d", 
+                        accountCreated, duration, cdpManager.getNetworkRequestCount(), cdpManager.getConsoleLogCount()));
+            });
             
-            // Record test success and duration
-            if (success) {
-                MetricsExporter.recordTestSuccess("testCreateAccount", "chrome");
-            } else {
-                MetricsExporter.recordTestFailure("testCreateAccount", "chrome", "account_creation_failed");
-            }
-            MetricsExporter.recordTestDuration("testCreateAccount", "chrome", duration / 1000.0);
-            
-            logger.info("=== Step 1 completed: Account created successfully with TestAutomation_with_DevTools ===");
+            logger.info("=== Step 1 completed: Account created successfully with Selenium DevTools ===");
             
         } catch (Exception e) {
             logger.error("Step 1 failed: {}", e.getMessage());
-            long duration = System.currentTimeMillis() - startTime;
-            seleniumTracer.trackTestStep("Create Account", "Failed to create user account", false, duration);
             
-            // Record test failure
-            MetricsExporter.recordTestFailure("testCreateAccount", "chrome", "exception_error");
-            MetricsExporter.recordTestDuration("testCreateAccount", "chrome", duration / 1000.0);
+            // Attach error details to Allure report
+            Allure.addAttachment("Error Details", e.getMessage());
+            Allure.addAttachment("CDP Status", cdpManager.getDevToolsSummary());
             
             throw new RuntimeException("Step 1 failed", e);
         }
@@ -219,267 +232,151 @@ public class AutomationExerciseCompleteTest {
     
     @Test
     @Order(2)
+    @Story("Product Selection")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Navigate to products page and add random products to cart")
     @DisplayName("Step 2: Add Random Products to Cart")
     void testAddProductsToCart() {
-        long startTime = System.currentTimeMillis();
-        boolean success = false;
-        
         try {
-            logger.info("=== Step 2: Adding products to cart with TestAutomation_with_DevTools ===");
+            Allure.step("Navigate to products page", () -> {
+                productsPage.navigateToProducts();
+                verificationHelper.verifyPageLoaded("Products page", productsPage.isPageLoaded());
+                logger.info("Successfully navigated to products page");
+            });
             
-            // Navigate to products page
-            productsPage.navigateToProducts();
-            seleniumTracer.trackPageNavigation("Products", BASE_URL + "/products", System.currentTimeMillis() - startTime);
-            verificationHelper.verifyPageLoaded("Products page", productsPage.isPageLoaded());
+            Allure.step("Add first random product to cart", () -> {
+                productsPage.addRandomProductToCart();
+                productsPage.clickContinueShopping();
+                logger.info("Added first product to cart");
+            });
             
-            // Add random product to cart
-            productsPage.addRandomProductToCart();
-            seleniumTracer.trackElementInteraction("Add to Cart Button", "click", 150);
+            Allure.step("Add second random product to cart", () -> {
+                productsPage.addRandomProductToCart();
+                logger.info("Added second product to cart");
+                
+                // Attach comprehensive CDP data
+                cdpManager.attachToAllureReport();
+                
+                Allure.addAttachment("Network Summary", 
+                    String.format("HTTP Requests: %d | Console Logs: %d | JS Errors: %d", 
+                        cdpManager.getNetworkRequestCount(),
+                        cdpManager.getConsoleLogCount(),
+                        cdpManager.getJavaScriptErrorCount()));
+            });
             
-            // Continue shopping
-            productsPage.clickContinueShopping();
-            seleniumTracer.trackElementInteraction("Continue Shopping Button", "click", 100);
-            
-            // Add another random product
-            productsPage.addRandomProductToCart();
-            seleniumTracer.trackElementInteraction("Add to Cart Button 2", "click", 150);
-            
-            success = true;
-            long duration = System.currentTimeMillis() - startTime;
-            seleniumTracer.trackTestStep("Add Products", "Successfully added products to cart", success, duration);
-            
-            logger.info("=== Step 2 completed: Products added to cart with TestAutomation_with_DevTools ===");
+            logger.info("=== Step 2 completed: Products added to cart with DevTools ===");
             
         } catch (Exception e) {
             logger.error("Step 2 failed: {}", e.getMessage());
-            long duration = System.currentTimeMillis() - startTime;
-            seleniumTracer.trackTestStep("Add Products", "Failed to add products to cart", false, duration);
+            Allure.addAttachment("Error Details", e.getMessage());
             throw new RuntimeException("Step 2 failed", e);
         }
     }
     
     @Test
     @Order(3)
+    @Story("Shopping Cart")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Navigate to cart and verify products are correctly added")
     @DisplayName("Step 3: Navigate to Cart and Verify Products")
     void testVerifyCartProducts() {
-        long startTime = System.currentTimeMillis();
-        boolean success = false;
-        
         try {
-            logger.info("=== Step 3: Verifying cart products with TestAutomation_with_DevTools ===");
+            Allure.step("Navigate to cart page", () -> {
+                cartPage.navigateToCart();
+                verificationHelper.verifyPageLoaded("Cart page", cartPage.isPageLoaded());
+                logger.info("Successfully navigated to cart page");
+            });
             
-            // Navigate to cart
-            cartPage.navigateToCart();
-            seleniumTracer.trackPageNavigation("Cart", BASE_URL + "/view_cart", System.currentTimeMillis() - startTime);
-            verificationHelper.verifyPageLoaded("Cart page", cartPage.isPageLoaded());
+            Allure.step("Verify cart contents", () -> {
+                verificationHelper.verifyCartNotEmpty(cartPage.getCartItemsCount() > 0);
+                
+                List<String> cartProductNames = cartPage.getProductNames();
+                logger.info("Products in cart: {}", cartProductNames);
+                
+                for (String productName : cartProductNames) {
+                    verificationHelper.verifyProductInCart(cartPage.containsProduct(productName), productName);
+                }
+                
+                Allure.addAttachment("Cart Products", String.join(", ", cartProductNames));
+                
+                // Attach comprehensive CDP monitoring data
+                cdpManager.attachToAllureReport();
+            });
             
-            // Verify cart is not empty
-            verificationHelper.verifyCartNotEmpty(cartPage.getCartItemsCount() > 0);
-            
-            // Get product names in cart
-            List<String> cartProductNames = cartPage.getProductNames();
-            logger.info("Products in cart: {}", cartProductNames);
-            
-            // Verify products are in cart
-            for (String productName : cartProductNames) {
-                verificationHelper.verifyProductInCart(cartPage.containsProduct(productName), productName);
-            }
-            
-            success = true;
-            long duration = System.currentTimeMillis() - startTime;
-            seleniumTracer.trackTestStep("Verify Cart", "Successfully verified cart products", success, duration);
-            
-            logger.info("=== Step 3 completed: Cart verification successful with TestAutomation_with_DevTools ===");
+            logger.info("=== Step 3 completed: Cart verification successful with DevTools ===");
             
         } catch (Exception e) {
             logger.error("Step 3 failed: {}", e.getMessage());
-            long duration = System.currentTimeMillis() - startTime;
-            seleniumTracer.trackTestStep("Verify Cart", "Failed to verify cart products", false, duration);
+            Allure.addAttachment("Error Details", e.getMessage());
             throw new RuntimeException("Step 3 failed", e);
         }
     }
     
     @Test
     @Order(4)
-    @DisplayName("Step 4: Proceed to Checkout")
-    void testProceedToCheckout() {
-        long startTime = System.currentTimeMillis();
-        boolean success = false;
-        
+    @Story("Checkout Process")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("Complete the full checkout and payment process")
+    @DisplayName("Step 4: Complete Checkout and Payment")
+    void testCompleteCheckoutAndPayment() {
         try {
-            logger.info("=== Step 4: Proceeding to checkout with TestAutomation_with_DevTools ===");
+            Allure.step("Proceed to checkout", () -> {
+                cartPage.clickProceedToCheckout();
+                logger.info("Clicked proceed to checkout");
+            });
             
-            // Click on Proceed to Checkout
-            cartPage.clickProceedToCheckout();
-            seleniumTracer.trackElementInteraction("Proceed to Checkout Button", "click", 100);
+            Allure.step("Fill checkout information", () -> {
+                TestDataGenerator.CheckoutInfo checkoutInfo = TestDataGenerator.generateCheckoutInfo();
+                
+                checkoutPage.fillDeliveryAddress(
+                    checkoutInfo.getFirstName() + " " + checkoutInfo.getLastName(),
+                    userEmail,
+                    checkoutInfo.getAddress(),
+                    checkoutInfo.getCity(),
+                    checkoutInfo.getState(),
+                    checkoutInfo.getPostalCode(),
+                    checkoutInfo.getPhone(),
+                    checkoutInfo.getCountry()
+                );
+                
+                checkoutPage.addComment("DevTools test order - " + System.currentTimeMillis());
+                checkoutPage.clickPlaceOrder();
+                
+                Allure.addAttachment("Checkout Details", 
+                    String.format("Name: %s %s\nAddress: %s\nCity: %s\nCountry: %s", 
+                        checkoutInfo.getFirstName(), checkoutInfo.getLastName(),
+                        checkoutInfo.getAddress(), checkoutInfo.getCity(), checkoutInfo.getCountry()));
+                
+                logger.info("Filled checkout information and placed order");
+            });
             
-            success = true;
-            long duration = System.currentTimeMillis() - startTime;
-            seleniumTracer.trackTestStep("Proceed Checkout", "Successfully proceeded to checkout", success, duration);
+            Allure.step("Complete payment", () -> {
+                paymentPage.completePaymentWithRandomData();
+                verificationHelper.verifyOrderPlaced(paymentPage.isOrderPlaced());
+                
+                String confirmationMessage = paymentPage.getOrderConfirmationMessage();
+                logger.info("Order confirmation: {}", confirmationMessage);
+                
+                paymentPage.clickDownloadInvoice();
+                paymentPage.clickContinue();
+                
+                Allure.addAttachment("Order Confirmation", confirmationMessage);
+                
+                // Attach final comprehensive CDP summary
+                cdpManager.attachToAllureReport();
+                
+                Allure.addAttachment("Final CDP Summary", cdpManager.getDevToolsSummary());
+                
+                logger.info("Payment completed successfully");
+            });
             
-            logger.info("=== Step 4 completed: Proceeded to checkout with TestAutomation_with_DevTools ===");
+            logger.info("=== Step 4 completed: Full checkout and payment successful with DevTools monitoring ===");
             
         } catch (Exception e) {
             logger.error("Step 4 failed: {}", e.getMessage());
-            long duration = System.currentTimeMillis() - startTime;
-            seleniumTracer.trackTestStep("Proceed Checkout", "Failed to proceed to checkout", false, duration);
+            Allure.addAttachment("Error Details", e.getMessage());
+            Allure.addAttachment("CDP Status at Failure", cdpManager.getDevToolsSummary());
             throw new RuntimeException("Step 4 failed", e);
-        }
-    }
-    
-    @Test
-    @Order(5)
-    @DisplayName("Step 5: Fill Checkout Information with Random Data")
-    void testFillCheckoutInformation() {
-        long startTime = System.currentTimeMillis();
-        boolean success = false;
-        
-        try {
-            logger.info("=== Step 5: Filling checkout information with TestAutomation_with_DevTools ===");
-            
-            // Generate random checkout data
-            TestDataGenerator.CheckoutInfo checkoutInfo = TestDataGenerator.generateCheckoutInfo();
-            
-            // Fill delivery address
-            checkoutPage.fillDeliveryAddress(
-                checkoutInfo.getFirstName() + " " + checkoutInfo.getLastName(),
-                userEmail,
-                checkoutInfo.getAddress(),
-                checkoutInfo.getCity(),
-                checkoutInfo.getState(),
-                checkoutInfo.getPostalCode(),
-                checkoutInfo.getPhone(),
-                checkoutInfo.getCountry()
-            );
-            seleniumTracer.trackElementInteraction("Checkout Form", "fill", 500);
-            
-            // Add comment
-            checkoutPage.addComment("Test order comment - " + System.currentTimeMillis());
-            seleniumTracer.trackElementInteraction("Comment Field", "fill", 100);
-            
-            // Click Place Order
-            checkoutPage.clickPlaceOrder();
-            seleniumTracer.trackElementInteraction("Place Order Button", "click", 150);
-            
-            success = true;
-            long duration = System.currentTimeMillis() - startTime;
-            seleniumTracer.trackTestStep("Fill Checkout", "Successfully filled checkout information", success, duration);
-            
-            logger.info("=== Step 5 completed: Checkout information filled with TestAutomation_with_DevTools ===");
-            
-        } catch (Exception e) {
-            logger.error("Step 5 failed: {}", e.getMessage());
-            long duration = System.currentTimeMillis() - startTime;
-            seleniumTracer.trackTestStep("Fill Checkout", "Failed to fill checkout information", false, duration);
-            throw new RuntimeException("Step 5 failed", e);
-        }
-    }
-    
-    @Test
-    @Order(6)
-    @DisplayName("Step 6: Complete Payment")
-    void testCompletePayment() {
-        long startTime = System.currentTimeMillis();
-        boolean success = false;
-        
-        try {
-            logger.info("=== Step 6: Completing payment with TestAutomation_with_DevTools ===");
-            
-            // Complete payment with random card data
-            paymentPage.completePaymentWithRandomData();
-            seleniumTracer.trackElementInteraction("Payment Form", "fill", 300);
-            seleniumTracer.trackElementInteraction("Pay Button", "click", 200);
-            
-            // Verify order was placed
-            verificationHelper.verifyOrderPlaced(paymentPage.isOrderPlaced());
-            
-            // Get order confirmation message
-            String confirmationMessage = paymentPage.getOrderConfirmationMessage();
-            logger.info("Order confirmation message: {}", confirmationMessage);
-            
-            // Download invoice
-            paymentPage.clickDownloadInvoice();
-            seleniumTracer.trackElementInteraction("Download Invoice Button", "click", 100);
-            
-            // Continue to home page
-            paymentPage.clickContinue();
-            seleniumTracer.trackElementInteraction("Continue Button", "click", 100);
-            
-            success = true;
-            long duration = System.currentTimeMillis() - startTime;
-            seleniumTracer.trackTestStep("Complete Payment", "Successfully completed payment", success, duration);
-            
-            logger.info("=== Step 6 completed: Payment completed successfully with TestAutomation_with_DevTools ===");
-            
-        } catch (Exception e) {
-            logger.error("Step 6 failed: {}", e.getMessage());
-            long duration = System.currentTimeMillis() - startTime;
-            seleniumTracer.trackTestStep("Complete Payment", "Failed to complete payment", false, duration);
-            throw new RuntimeException("Step 6 failed", e);
-        }
-    }
-    
-    @Test
-    @Order(7)
-    @DisplayName("Step 7: Verify Order Completion and Return Home")
-    void testVerifyOrderCompletionAndReturnHome() {
-        long startTime = System.currentTimeMillis();
-        boolean success = false;
-        
-        try {
-            logger.info("=== Step 7: Verifying order completion with TestAutomation_with_DevTools ===");
-            
-            // Navigate to home page
-            homePage.navigateToHome();
-            seleniumTracer.trackPageNavigation("Home", BASE_URL, System.currentTimeMillis() - startTime);
-            verificationHelper.verifyPageLoaded("Home page", homePage.isPageLoaded());
-            
-            // Verify we're on home page
-            verificationHelper.verifyCurrentUrl(homePage.getCurrentUrl(), BASE_URL + "/");
-            
-            success = true;
-            long duration = System.currentTimeMillis() - startTime;
-            seleniumTracer.trackTestStep("Verify Completion", "Successfully verified order completion", success, duration);
-            
-            logger.info("=== Step 7 completed: Order completion verified with TestAutomation_with_DevTools ===");
-            
-        } catch (Exception e) {
-            logger.error("Step 7 failed: {}", e.getMessage());
-            long duration = System.currentTimeMillis() - startTime;
-            seleniumTracer.trackTestStep("Verify Completion", "Failed to verify order completion", false, duration);
-            throw new RuntimeException("Step 7 failed", e);
-        }
-    }
-    
-    @Test
-    @Order(8)
-    @DisplayName("Complete End-to-End Test Flow")
-    void testCompleteEndToEndFlow() {
-        long startTime = System.currentTimeMillis();
-        boolean success = false;
-        
-        try {
-            logger.info("=== Complete End-to-End Test Flow with TestAutomation_with_DevTools ===");
-            
-            // This test method demonstrates the complete flow
-            // All individual steps are tested above, this is for demonstration
-            
-            success = true;
-            long duration = System.currentTimeMillis() - startTime;
-            seleniumTracer.trackTestStep("Complete Flow", "All test steps completed successfully", success, duration);
-            
-            logger.info("All test steps completed successfully with TestAutomation_with_DevTools!");
-            logger.info("User created: {}", userEmail);
-            logger.info("Products added to cart and order completed");
-            logger.info("Network requests captured: {}", networkTracer.getRequestCount());
-            
-            logger.info("=== Complete End-to-End Test Flow completed with TestAutomation_with_DevTools ===");
-            
-        } catch (Exception e) {
-            logger.error("Complete flow test failed: {}", e.getMessage());
-            long duration = System.currentTimeMillis() - startTime;
-            seleniumTracer.trackTestStep("Complete Flow", "Failed to complete end-to-end flow", false, duration);
-            throw new RuntimeException("Complete flow test failed", e);
         }
     }
 } 
