@@ -58,6 +58,7 @@ public class WebDriverConfig {
     private WebDriver createLocalDriver(String browserType) {
         switch (browserType.toLowerCase()) {
             case "chrome":
+                // Use automatic Chrome version detection
                 WebDriverManager.chromedriver().setup();
                 ChromeOptions chromeOptions = new ChromeOptions();
                 chromeOptions.addArguments("--no-sandbox");

@@ -8,75 +8,87 @@ import proje.com.saucedemo.config.WebDriverConfig;
 import proje.com.saucedemo.utils.ChromeDevToolsManager;
 
 /**
- * Simple test to verify DevTools is working
+ * Simple DevTools test to verify CDP functionality
  */
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class DevToolsTest {
     
     private static final Logger logger = LoggerFactory.getLogger(DevToolsTest.class);
+    private static WebDriver driver;
+    private static WebDriverConfig webDriverConfig;
+    private static ChromeDevToolsManager cdpManager;
     
-    private WebDriver driver;
-    private WebDriverConfig config;
-    private ChromeDevToolsManager cdpManager;
-    
-    @BeforeEach
-    void setUp() {
-        config = new WebDriverConfig();
-        driver = config.initializeDriver("chrome");
-        cdpManager = new ChromeDevToolsManager(driver);
+    @BeforeAll
+    static void setUp() {
+        try {
+            logger.info("=== Setting up DevTools test ===");
+            webDriverConfig = new WebDriverConfig();
+            driver = webDriverConfig.initializeDriver("chrome");
+            cdpManager = new ChromeDevToolsManager(driver);
+            logger.info("DevTools test setup completed");
+        } catch (Exception e) {
+            logger.error("Test setup failed: {}", e.getMessage());
+            throw new RuntimeException("Test setup failed", e);
+        }
     }
     
-    @AfterEach
-    void tearDown() {
-        if (cdpManager != null) {
-            cdpManager.cleanup();
-        }
-        if (driver != null) {
-            config.quitDriver();
+    @AfterAll
+    static void tearDown() {
+        try {
+            logger.info("=== Cleaning up DevTools test ===");
+            if (cdpManager != null) {
+                logger.info("CDP Manager initialized: {}", cdpManager.isInitialized());
+                logger.info("Network requests captured: {}", cdpManager.getNetworkRequestCount());
+                logger.info("Console logs captured: {}", cdpManager.getConsoleLogCount());
+                logger.info("JavaScript errors: {}", cdpManager.getJavaScriptErrorCount());
+                cdpManager.cleanup();
+            }
+            if (driver != null) {
+                webDriverConfig.quitDriver();
+            }
+            logger.info("DevTools test cleanup completed");
+        } catch (Exception e) {
+            logger.error("Test cleanup failed: {}", e.getMessage());
         }
     }
     
     @Test
-    @DisplayName("DevTools Network Monitoring Test")
+    @Order(1)
+    @DisplayName("Test DevTools Network Monitoring")
     void testDevToolsNetworkMonitoring() {
         try {
             logger.info("=== Testing DevTools Network Monitoring ===");
             
-            // Navigate to a simple page
+            // Enable comprehensive DevTools monitoring
+            cdpManager.enableAllMonitoring();
+            logger.info("✅ All CDP domains enabled");
+            
+            // Navigate to test sites
             driver.get("https://www.google.com");
             logger.info("Navigated to Google");
             
-            // Enable comprehensive CDP monitoring
-            cdpManager.enableAllMonitoring();
-            logger.info("✅ CDP monitoring suite enabled");
-            
-            // Navigate to test site to capture network traffic
             driver.get("https://www.automationexercise.com");
             logger.info("Navigated to AutomationExercise");
             
-            // Wait a bit for requests to complete
-            Thread.sleep(5000);
+            // Wait a bit for network activity
+            Thread.sleep(3000);
             
-            // Check comprehensive DevTools status
-            boolean cdpInitialized = cdpManager.isInitialized();
+            // Check DevTools data
             int networkRequests = cdpManager.getNetworkRequestCount();
             int consoleLogs = cdpManager.getConsoleLogCount();
             int jsErrors = cdpManager.getJavaScriptErrorCount();
             
-            logger.info("=== CHROME DEVTOOLS PROTOCOL RESULTS ===");
-            logger.info("CDP Manager Initialized: {}", cdpInitialized);
+            logger.info("=== DEVTOOLS RESULTS ===");
             logger.info("Network Requests: {}", networkRequests);
             logger.info("Console Logs: {}", consoleLogs);
             logger.info("JavaScript Errors: {}", jsErrors);
-            logger.info("CDP Summary: {}", cdpManager.getDevToolsSummary());
+            logger.info("CDP Manager Initialized: {}", cdpManager.isInitialized());
             
-            // Verify comprehensive DevTools is working
-            if (cdpInitialized && networkRequests > 0) {
-                logger.info("✅ Chrome DevTools Protocol monitoring is working perfectly!");
-                logger.info("✅ Captured {} network requests, {} console logs, {} JS errors", 
-                           networkRequests, consoleLogs, jsErrors);
-            } else {
-                logger.warn("❌ CDP monitoring may not be working properly");
-            }
+            // Verify DevTools is working
+            Assertions.assertTrue(cdpManager.isInitialized(), "CDP Manager should be initialized");
+            Assertions.assertTrue(networkRequests > 0, "Should capture network requests");
+            
+            logger.info("✅ Chrome DevTools Protocol monitoring is working perfectly!");
             
         } catch (Exception e) {
             logger.error("DevTools test failed: {}", e.getMessage());

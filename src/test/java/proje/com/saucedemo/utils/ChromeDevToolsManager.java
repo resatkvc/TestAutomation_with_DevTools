@@ -3,16 +3,16 @@ package proje.com.saucedemo.utils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v122.console.Console;
-import org.openqa.selenium.devtools.v122.network.Network;
-import org.openqa.selenium.devtools.v122.performance.Performance;
-import org.openqa.selenium.devtools.v122.runtime.Runtime;
-import org.openqa.selenium.devtools.v122.security.Security;
-import org.openqa.selenium.devtools.v122.page.Page;
-import org.openqa.selenium.devtools.v122.dom.DOM;
+import org.openqa.selenium.devtools.v121.console.Console;
+import org.openqa.selenium.devtools.v121.network.Network;
+import org.openqa.selenium.devtools.v121.performance.Performance;
+import org.openqa.selenium.devtools.v121.runtime.Runtime;
+import org.openqa.selenium.devtools.v121.security.Security;
+import org.openqa.selenium.devtools.v121.page.Page;
+import org.openqa.selenium.devtools.v121.dom.DOM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import io.qameta.allure.Allure;
+// import io.qameta.allure.Allure;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -73,14 +73,16 @@ public class ChromeDevToolsManager {
             if (driver instanceof HasDevTools) {
                 logger.info("🔧 Initializing Chrome DevTools Protocol Manager...");
                 
+                // Get Chrome version for logging
+                String chromeVersion = getChromeVersion();
+                logger.info("Chrome version detected: {}", chromeVersion);
+                
                 devTools = ((HasDevTools) driver).getDevTools();
                 devTools.createSession();
                 
                 isInitialized = true;
                 logger.info("✅ Chrome DevTools Protocol session created successfully");
-                
-                // Add DevTools status to Allure report
-                Allure.addAttachment("CDP Manager Status", "DevTools session initialized successfully");
+                logger.info("CDP Manager Status: DevTools session initialized successfully");
                 
             } else {
                 logger.warn("❌ DevTools not available - not a Chrome driver");
@@ -89,6 +91,19 @@ public class ChromeDevToolsManager {
         } catch (Exception e) {
             logger.error("❌ Failed to initialize DevTools: {}", e.getMessage());
             isInitialized = false;
+        }
+    }
+    
+    /**
+     * Get Chrome version from WebDriver
+     */
+    private String getChromeVersion() {
+        try {
+            org.openqa.selenium.Capabilities caps = driver.getCapabilities();
+            return (String) caps.getCapability("browserVersion");
+        } catch (Exception e) {
+            logger.warn("Could not detect Chrome version: {}", e.getMessage());
+            return null;
         }
     }
     
@@ -105,7 +120,7 @@ public class ChromeDevToolsManager {
         enableDOMMonitoring();
         
         logger.info("🚀 All CDP monitoring domains enabled");
-        Allure.addAttachment("CDP Monitoring", "All domains enabled: Network, Performance, Console, Runtime, Security, Page, DOM");
+                    logger.info("CDP Monitoring: All domains enabled: Network, Performance, Console, Runtime, Security, Page, DOM");
     }
     
     /**
@@ -369,32 +384,32 @@ public class ChromeDevToolsManager {
     }
     
     /**
-     * Attach all DevTools data to Allure report
+     * Log all DevTools data (Allure temporarily disabled)
      */
     public void attachToAllureReport() {
-        Allure.addAttachment("DevTools Summary", getDevToolsSummary());
+        logger.info("DevTools Summary: {}", getDevToolsSummary());
         
         if (!networkRequests.isEmpty()) {
-            Allure.addAttachment("Network Requests", String.join("\n", networkRequests));
+            logger.info("Network Requests: {}", String.join("\n", networkRequests));
         }
         
         if (!consoleLogs.isEmpty()) {
-            Allure.addAttachment("Console Logs", String.join("\n", consoleLogs));
+            logger.info("Console Logs: {}", String.join("\n", consoleLogs));
         }
         
         if (!jsErrors.isEmpty()) {
-            Allure.addAttachment("JavaScript Errors", String.join("\n", jsErrors));
+            logger.info("JavaScript Errors: {}", String.join("\n", jsErrors));
         }
         
         if (!securityEvents.isEmpty()) {
-            Allure.addAttachment("Security Events", String.join("\n", securityEvents));
+            logger.info("Security Events: {}", String.join("\n", securityEvents));
         }
         
         if (!performanceMetrics.isEmpty()) {
             StringBuilder perfData = new StringBuilder();
             performanceMetrics.forEach((key, value) -> 
                 perfData.append(String.format("%s: %s\n", key, value)));
-            Allure.addAttachment("Performance Metrics", perfData.toString());
+            logger.info("Performance Metrics: {}", perfData.toString());
         }
     }
     
