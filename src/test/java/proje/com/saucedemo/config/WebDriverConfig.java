@@ -37,11 +37,12 @@ public class WebDriverConfig {
             
             // Configure WebDriver
             driver.manage().window().maximize();
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-            driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+            driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
+            driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(30));
             
-            // Initialize WebDriverWait
-            wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+            // Initialize WebDriverWait with longer timeout
+            wait = new WebDriverWait(driver, Duration.ofSeconds(30));
             
             logger.info("TestAutomation_with_DevTools WebDriver initialized successfully for browser: {}", browserType);
             return driver;

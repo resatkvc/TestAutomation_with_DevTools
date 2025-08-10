@@ -3,6 +3,7 @@ package proje.com.saucedemo.utils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
+// Chrome DevTools imports - using v122 (latest available for Chrome 138)
 import org.openqa.selenium.devtools.v122.console.Console;
 import org.openqa.selenium.devtools.v122.network.Network;
 import org.openqa.selenium.devtools.v122.performance.Performance;
@@ -12,24 +13,14 @@ import org.openqa.selenium.devtools.v122.page.Page;
 import org.openqa.selenium.devtools.v122.dom.DOM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-// import io.qameta.allure.Allure;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Comprehensive Chrome DevTools Protocol Manager
- * Based on official CDP documentation: https://chromedevtools.github.io/devtools-protocol/
- * 
- * Supported Domains:
- * - Network: HTTP request/response monitoring
- * - Performance: Performance metrics and timing
- * - Console: Console log capture
- * - Runtime: JavaScript runtime monitoring  
- * - Security: SSL/TLS security monitoring
- * - Page: Page lifecycle events
- * - DOM: DOM change monitoring
+ * Chrome DevTools Protocol Manager for Chrome 138
+ * Uses DevTools v122 (latest available) for Chrome 138 compatibility
  */
 public class ChromeDevToolsManager {
     
@@ -66,7 +57,7 @@ public class ChromeDevToolsManager {
     }
     
     /**
-     * Initialize DevTools session
+     * Initialize DevTools session for Chrome 138
      */
     private void initializeDevTools() {
         try {
@@ -77,9 +68,10 @@ public class ChromeDevToolsManager {
                 String chromeVersion = getChromeVersion();
                 logger.info("Chrome version detected: {}", chromeVersion);
                 
-                // Check if Chrome version is compatible
-                if (chromeVersion != null && !isChromeVersionCompatible(chromeVersion)) {
-                    logger.warn("⚠️ Chrome version {} might not be fully compatible with DevTools v122", chromeVersion);
+                // Check Chrome version compatibility
+                if (chromeVersion != null && isChrome138OrHigher(chromeVersion)) {
+                    logger.info("✅ Chrome 138+ detected - using DevTools v122 (latest available)");
+                    logger.info("ℹ️ Note: DevTools v138 not yet available, using v122 for compatibility");
                 }
                 
                 devTools = ((HasDevTools) driver).getDevTools();
@@ -87,7 +79,6 @@ public class ChromeDevToolsManager {
                 
                 isInitialized = true;
                 logger.info("✅ Chrome DevTools Protocol session created successfully");
-                logger.info("CDP Manager Status: DevTools session initialized successfully");
                 
             } else {
                 logger.warn("❌ DevTools not available - not a Chrome driver");
@@ -118,26 +109,23 @@ public class ChromeDevToolsManager {
     }
     
     /**
-     * Check if Chrome version is compatible with DevTools v121
+     * Check if Chrome version is 138 or higher
      */
-    private boolean isChromeVersionCompatible(String chromeVersion) {
+    private boolean isChrome138OrHigher(String chromeVersion) {
         try {
             if (chromeVersion == null || chromeVersion.isEmpty()) {
-                return true; // Assume compatible if version cannot be determined
+                return false;
             }
             
-            // Extract major version number
             String[] versionParts = chromeVersion.split("\\.");
             if (versionParts.length > 0) {
                 int majorVersion = Integer.parseInt(versionParts[0]);
-                // DevTools v122 is compatible with Chrome 122+
-                // For Chrome 138, we'll use v122 as it's the latest available
-                return majorVersion >= 122;
+                return majorVersion >= 138;
             }
-            return true;
+            return false;
         } catch (Exception e) {
             logger.warn("Could not parse Chrome version: {}", chromeVersion);
-            return true; // Assume compatible if parsing fails
+            return false;
         }
     }
     
@@ -160,7 +148,6 @@ public class ChromeDevToolsManager {
             enableDOMMonitoring();
             
             logger.info("🚀 All CDP monitoring domains enabled");
-            logger.info("CDP Monitoring: All domains enabled: Network, Performance, Console, Runtime, Security, Page, DOM");
         } catch (Exception e) {
             logger.error("Failed to enable all monitoring: {}", e.getMessage());
         }
@@ -168,7 +155,6 @@ public class ChromeDevToolsManager {
     
     /**
      * Enable Network domain monitoring
-     * Reference: https://chromedevtools.github.io/devtools-protocol/tot/Network/
      */
     public void enableNetworkMonitoring() {
         if (!isInitialized) return;
@@ -225,15 +211,12 @@ public class ChromeDevToolsManager {
     
     /**
      * Enable Performance domain monitoring
-     * Reference: https://chromedevtools.github.io/devtools-protocol/tot/Performance/
      */
     public void enablePerformanceMonitoring() {
         if (!isInitialized) return;
         
         try {
             devTools.send(Performance.enable(Optional.empty()));
-            
-            // Start performance timeline
             devTools.send(Performance.getMetrics());
             
             performanceMonitoringEnabled = true;
@@ -246,7 +229,6 @@ public class ChromeDevToolsManager {
     
     /**
      * Enable Console domain monitoring
-     * Reference: https://chromedevtools.github.io/devtools-protocol/tot/Console/
      */
     public void enableConsoleMonitoring() {
         if (!isInitialized) return;
@@ -282,7 +264,6 @@ public class ChromeDevToolsManager {
     
     /**
      * Enable Runtime domain monitoring
-     * Reference: https://chromedevtools.github.io/devtools-protocol/tot/Runtime/
      */
     public void enableRuntimeMonitoring() {
         if (!isInitialized) return;
@@ -330,7 +311,6 @@ public class ChromeDevToolsManager {
     
     /**
      * Enable Security domain monitoring
-     * Reference: https://chromedevtools.github.io/devtools-protocol/tot/Security/
      */
     public void enableSecurityMonitoring() {
         if (!isInitialized) return;
@@ -362,7 +342,6 @@ public class ChromeDevToolsManager {
     
     /**
      * Enable Page domain monitoring
-     * Reference: https://chromedevtools.github.io/devtools-protocol/tot/Page/
      */
     public void enablePageMonitoring() {
         if (!isInitialized) return;
@@ -392,7 +371,6 @@ public class ChromeDevToolsManager {
     
     /**
      * Enable DOM domain monitoring
-     * Reference: https://chromedevtools.github.io/devtools-protocol/tot/DOM/
      */
     public void enableDOMMonitoring() {
         if (!isInitialized) return;
@@ -409,7 +387,7 @@ public class ChromeDevToolsManager {
     }
     
     /**
-     * Get comprehensive DevTools summary for Allure reports
+     * Get comprehensive DevTools summary
      */
     public String getDevToolsSummary() {
         StringBuilder summary = new StringBuilder();
@@ -427,7 +405,7 @@ public class ChromeDevToolsManager {
     }
     
     /**
-     * Log all DevTools data (Allure temporarily disabled)
+     * Log all DevTools data
      */
     public void attachToAllureReport() {
         logger.info("DevTools Summary: {}", getDevToolsSummary());

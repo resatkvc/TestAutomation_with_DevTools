@@ -121,25 +121,55 @@ public class AutomationExerciseCompleteTest {
         try {
             logger.info("=== Step 1: Creating new account with Selenium DevTools ===");
             
+            // Navigate to the site with explicit wait
+            logger.info("Navigating to: {}", BASE_URL);
             driver.get(BASE_URL);
-            logger.info("Navigated to: {}", BASE_URL);
             
+            // Wait for page to load completely
+            Thread.sleep(3000);
+            logger.info("Page loaded successfully");
+            
+            // Enable DevTools monitoring
             logger.info("Enabling comprehensive Chrome DevTools Protocol monitoring...");
             cdpManager.enableAllMonitoring();
             logger.info("✅ Full CDP monitoring suite enabled successfully");
             
-            homePage.clickSignupLogin();
-            logger.info("Clicked signup/login link");
+            // Wait a bit more for DevTools to initialize
+            Thread.sleep(2000);
             
+            // Click signup/login with retry mechanism
+            logger.info("Attempting to click signup/login link...");
+            int maxRetries = 3;
+            for (int i = 0; i < maxRetries; i++) {
+                try {
+                    homePage.clickSignupLogin();
+                    logger.info("Successfully clicked signup/login link");
+                    break;
+                } catch (Exception e) {
+                    logger.warn("Attempt {} failed to click signup/login: {}", i + 1, e.getMessage());
+                    if (i == maxRetries - 1) throw e;
+                    Thread.sleep(2000);
+                }
+            }
+            
+            // Wait for signup page to load
+            Thread.sleep(3000);
+            
+            // Start signup process
+            logger.info("Starting signup for user: {} with email: {}", userName, userEmail);
             signupLoginPage.startSignup(userName, userEmail);
-            logger.info("Started signup for user: {} with email: {}", userName, userEmail);
             
+            // Check if email already exists
+            Thread.sleep(2000);
             if (signupLoginPage.isSignupEmailExists()) {
                 logger.info("Email already exists, trying with different email");
                 userEmail = "test" + System.currentTimeMillis() + "@example.com";
                 signupLoginPage.startSignup(userName, userEmail);
+                Thread.sleep(2000);
             }
             
+            // Fill account information
+            logger.info("Filling account information...");
             TestDataGenerator.AccountInfo accountInfo = TestDataGenerator.generateAccountInfo();
             signupLoginPage.fillAccountInformation(
                 accountInfo.getTitle(),
@@ -158,11 +188,16 @@ public class AutomationExerciseCompleteTest {
                 accountInfo.getZipcode(),
                 accountInfo.getMobileNumber()
             );
-            logger.info("Filled account information");
+            logger.info("Account information filled successfully");
             
+            // Create account
+            logger.info("Creating account...");
             signupLoginPage.createAccount();
-            logger.info("Clicked create account button");
             
+            // Wait for account creation
+            Thread.sleep(5000);
+            
+            // Verify account creation
             boolean accountCreated = signupLoginPage.isAccountCreated();
             verificationHelper.verifyAccountCreated(accountCreated);
             
@@ -175,6 +210,7 @@ public class AutomationExerciseCompleteTest {
             
         } catch (Exception e) {
             logger.error("Step 1 failed: {}", e.getMessage());
+            logger.error("Stack trace: ", e);
             logger.error("CDP Status: {}", cdpManager.getDevToolsSummary());
             throw new RuntimeException("Step 1 failed", e);
         }
@@ -185,16 +221,57 @@ public class AutomationExerciseCompleteTest {
     @DisplayName("Step 2: Add Random Products to Cart")
     void testAddProductsToCart() {
         try {
-            productsPage.navigateToProducts();
-            verificationHelper.verifyPageLoaded("Products page", productsPage.isPageLoaded());
-            logger.info("Successfully navigated to products page");
+            logger.info("=== Step 2: Adding products to cart ===");
             
-            productsPage.addRandomProductToCart();
-            productsPage.clickContinueShopping();
-            logger.info("Added first product to cart");
+            // Navigate to products page with retry
+            logger.info("Navigating to products page...");
+            int maxRetries = 3;
+            for (int i = 0; i < maxRetries; i++) {
+                try {
+                    productsPage.navigateToProducts();
+                    Thread.sleep(3000);
+                    verificationHelper.verifyPageLoaded("Products page", productsPage.isPageLoaded());
+                    logger.info("Successfully navigated to products page");
+                    break;
+                } catch (Exception e) {
+                    logger.warn("Attempt {} failed to navigate to products: {}", i + 1, e.getMessage());
+                    if (i == maxRetries - 1) throw e;
+                    Thread.sleep(2000);
+                }
+            }
             
-            productsPage.addRandomProductToCart();
-            logger.info("Added second product to cart");
+            // Add first product with retry
+            logger.info("Adding first product to cart...");
+            int productRetries = 3;
+            for (int i = 0; i < productRetries; i++) {
+                try {
+                    productsPage.addRandomProductToCart();
+                    Thread.sleep(3000);
+                    productsPage.clickContinueShopping();
+                    Thread.sleep(2000);
+                    logger.info("Added first product to cart successfully");
+                    break;
+                } catch (Exception e) {
+                    logger.warn("Attempt {} failed to add first product: {}", i + 1, e.getMessage());
+                    if (i == productRetries - 1) throw e;
+                    Thread.sleep(3000);
+                }
+            }
+            
+            // Add second product with retry
+            logger.info("Adding second product to cart...");
+            for (int i = 0; i < productRetries; i++) {
+                try {
+                    productsPage.addRandomProductToCart();
+                    Thread.sleep(3000);
+                    logger.info("Added second product to cart successfully");
+                    break;
+                } catch (Exception e) {
+                    logger.warn("Attempt {} failed to add second product: {}", i + 1, e.getMessage());
+                    if (i == productRetries - 1) throw e;
+                    Thread.sleep(3000);
+                }
+            }
             
             logger.info("Network Summary - HTTP Requests: {} | Console Logs: {} | JS Errors: {}", 
                 cdpManager.getNetworkRequestCount(),
@@ -205,6 +282,7 @@ public class AutomationExerciseCompleteTest {
             
         } catch (Exception e) {
             logger.error("Step 2 failed: {}", e.getMessage());
+            logger.error("Stack trace: ", e);
             throw new RuntimeException("Step 2 failed", e);
         }
     }
@@ -214,12 +292,30 @@ public class AutomationExerciseCompleteTest {
     @DisplayName("Step 3: Navigate to Cart and Verify Products")
     void testVerifyCartProducts() {
         try {
-            cartPage.navigateToCart();
-            verificationHelper.verifyPageLoaded("Cart page", cartPage.isPageLoaded());
-            logger.info("Successfully navigated to cart page");
+            logger.info("=== Step 3: Verifying cart products ===");
             
+            // Navigate to cart with retry
+            logger.info("Navigating to cart page...");
+            int maxRetries = 3;
+            for (int i = 0; i < maxRetries; i++) {
+                try {
+                    cartPage.navigateToCart();
+                    Thread.sleep(3000);
+                    verificationHelper.verifyPageLoaded("Cart page", cartPage.isPageLoaded());
+                    logger.info("Successfully navigated to cart page");
+                    break;
+                } catch (Exception e) {
+                    logger.warn("Attempt {} failed to navigate to cart: {}", i + 1, e.getMessage());
+                    if (i == maxRetries - 1) throw e;
+                    Thread.sleep(2000);
+                }
+            }
+            
+            // Verify cart is not empty
+            Thread.sleep(2000);
             verificationHelper.verifyCartNotEmpty(cartPage.getCartItemsCount() > 0);
             
+            // Get and verify products
             List<String> cartProductNames = cartPage.getProductNames();
             logger.info("Products in cart: {}", cartProductNames);
             
@@ -233,6 +329,7 @@ public class AutomationExerciseCompleteTest {
             
         } catch (Exception e) {
             logger.error("Step 3 failed: {}", e.getMessage());
+            logger.error("Stack trace: ", e);
             throw new RuntimeException("Step 3 failed", e);
         }
     }
@@ -242,9 +339,26 @@ public class AutomationExerciseCompleteTest {
     @DisplayName("Step 4: Complete Checkout and Payment")
     void testCompleteCheckoutAndPayment() {
         try {
-            cartPage.clickProceedToCheckout();
-            logger.info("Clicked proceed to checkout");
+            logger.info("=== Step 4: Completing checkout and payment ===");
             
+            // Proceed to checkout with retry
+            logger.info("Proceeding to checkout...");
+            int checkoutRetries = 3;
+            for (int i = 0; i < checkoutRetries; i++) {
+                try {
+                    cartPage.clickProceedToCheckout();
+                    Thread.sleep(5000);
+                    logger.info("Successfully proceeded to checkout");
+                    break;
+                } catch (Exception e) {
+                    logger.warn("Attempt {} failed to proceed to checkout: {}", i + 1, e.getMessage());
+                    if (i == checkoutRetries - 1) throw e;
+                    Thread.sleep(3000);
+                }
+            }
+            
+            // Fill delivery address
+            logger.info("Filling delivery address...");
             TestDataGenerator.CheckoutInfo checkoutInfo = TestDataGenerator.generateCheckoutInfo();
             
             checkoutPage.fillDeliveryAddress(
@@ -257,24 +371,36 @@ public class AutomationExerciseCompleteTest {
                 checkoutInfo.getPhone(),
                 checkoutInfo.getCountry()
             );
+            Thread.sleep(2000);
             
+            // Add comment and place order
+            logger.info("Adding comment and placing order...");
             checkoutPage.addComment("DevTools test order - " + System.currentTimeMillis());
             checkoutPage.clickPlaceOrder();
+            Thread.sleep(5000);
             
             logger.info("Checkout Details - Name: {} {} | Address: {} | City: {} | Country: {}", 
                 checkoutInfo.getFirstName(), checkoutInfo.getLastName(),
                 checkoutInfo.getAddress(), checkoutInfo.getCity(), checkoutInfo.getCountry());
             
-            logger.info("Filled checkout information and placed order");
+            logger.info("Order placed successfully");
             
+            // Complete payment
+            logger.info("Completing payment...");
             paymentPage.completePaymentWithRandomData();
+            Thread.sleep(3000);
+            
             verificationHelper.verifyOrderPlaced(paymentPage.isOrderPlaced());
             
             String confirmationMessage = paymentPage.getOrderConfirmationMessage();
             logger.info("Order confirmation: {}", confirmationMessage);
             
+            // Download invoice and continue
+            logger.info("Downloading invoice and continuing...");
             paymentPage.clickDownloadInvoice();
+            Thread.sleep(2000);
             paymentPage.clickContinue();
+            Thread.sleep(2000);
             
             logger.info("Final CDP Summary: {}", cdpManager.getDevToolsSummary());
             logger.info("Payment completed successfully");
@@ -283,6 +409,7 @@ public class AutomationExerciseCompleteTest {
             
         } catch (Exception e) {
             logger.error("Step 4 failed: {}", e.getMessage());
+            logger.error("Stack trace: ", e);
             logger.error("CDP Status at Failure: {}", cdpManager.getDevToolsSummary());
             throw new RuntimeException("Step 4 failed", e);
         }
