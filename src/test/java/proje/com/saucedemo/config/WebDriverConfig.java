@@ -61,19 +61,32 @@ public class WebDriverConfig {
                 // Use automatic Chrome version detection
                 WebDriverManager.chromedriver().setup();
                 ChromeOptions chromeOptions = new ChromeOptions();
+                // Basic Chrome options
                 chromeOptions.addArguments("--no-sandbox");
                 chromeOptions.addArguments("--disable-dev-shm-usage");
                 chromeOptions.addArguments("--disable-gpu");
                 chromeOptions.addArguments("--remote-allow-origins=*");
-                chromeOptions.addArguments("--disable-extensions");
-                chromeOptions.addArguments("--disable-web-security");
-                chromeOptions.addArguments("--allow-running-insecure-content");
-                // DevTools compatibility options
+                
+                // DevTools compatibility options - essential for CDP
                 chromeOptions.addArguments("--enable-logging");
                 chromeOptions.addArguments("--v=1");
                 chromeOptions.addArguments("--disable-blink-features=AutomationControlled");
+                chromeOptions.addArguments("--disable-web-security");
+                chromeOptions.addArguments("--allow-running-insecure-content");
+                chromeOptions.addArguments("--disable-extensions");
+                chromeOptions.addArguments("--disable-plugins");
+                chromeOptions.addArguments("--disable-images");
+                chromeOptions.addArguments("--disable-javascript-harmony-shipping");
+                chromeOptions.addArguments("--disable-background-timer-throttling");
+                chromeOptions.addArguments("--disable-backgrounding-occluded-windows");
+                chromeOptions.addArguments("--disable-renderer-backgrounding");
+                chromeOptions.addArguments("--disable-features=TranslateUI");
+                chromeOptions.addArguments("--disable-ipc-flooding-protection");
+                
+                // DevTools specific options
                 chromeOptions.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
                 chromeOptions.setExperimentalOption("useAutomationExtension", false);
+                chromeOptions.setExperimentalOption("detach", true);
                 return new ChromeDriver(chromeOptions);
                 
             case "firefox":

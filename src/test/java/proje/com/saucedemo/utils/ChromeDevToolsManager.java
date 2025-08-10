@@ -3,13 +3,13 @@ package proje.com.saucedemo.utils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v121.console.Console;
-import org.openqa.selenium.devtools.v121.network.Network;
-import org.openqa.selenium.devtools.v121.performance.Performance;
-import org.openqa.selenium.devtools.v121.runtime.Runtime;
-import org.openqa.selenium.devtools.v121.security.Security;
-import org.openqa.selenium.devtools.v121.page.Page;
-import org.openqa.selenium.devtools.v121.dom.DOM;
+import org.openqa.selenium.devtools.v122.console.Console;
+import org.openqa.selenium.devtools.v122.network.Network;
+import org.openqa.selenium.devtools.v122.performance.Performance;
+import org.openqa.selenium.devtools.v122.runtime.Runtime;
+import org.openqa.selenium.devtools.v122.security.Security;
+import org.openqa.selenium.devtools.v122.page.Page;
+import org.openqa.selenium.devtools.v122.dom.DOM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 // import io.qameta.allure.Allure;
@@ -79,7 +79,7 @@ public class ChromeDevToolsManager {
                 
                 // Check if Chrome version is compatible
                 if (chromeVersion != null && !isChromeVersionCompatible(chromeVersion)) {
-                    logger.warn("⚠️ Chrome version {} might not be fully compatible with DevTools v121", chromeVersion);
+                    logger.warn("⚠️ Chrome version {} might not be fully compatible with DevTools v122", chromeVersion);
                 }
                 
                 devTools = ((HasDevTools) driver).getDevTools();
@@ -130,8 +130,9 @@ public class ChromeDevToolsManager {
             String[] versionParts = chromeVersion.split("\\.");
             if (versionParts.length > 0) {
                 int majorVersion = Integer.parseInt(versionParts[0]);
-                // DevTools v121 is compatible with Chrome 121+
-                return majorVersion >= 121;
+                // DevTools v122 is compatible with Chrome 122+
+                // For Chrome 138, we'll use v122 as it's the latest available
+                return majorVersion >= 122;
             }
             return true;
         } catch (Exception e) {
