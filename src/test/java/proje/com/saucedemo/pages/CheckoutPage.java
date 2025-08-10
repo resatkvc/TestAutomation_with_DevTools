@@ -63,8 +63,17 @@ public class CheckoutPage {
                                    String state, String zipcode, String mobileNumber, String country) {
         logger.info("Filling delivery address information");
         
-        // Fill name
-        WebElement nameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(nameField));
+        // Fill name - try multiple locators
+        WebElement nameElement;
+        try {
+            nameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("name")));
+        } catch (Exception e) {
+            try {
+                nameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[name='name']")));
+            } catch (Exception e2) {
+                nameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("first_name")));
+            }
+        }
         nameElement.clear();
         nameElement.sendKeys(name);
         

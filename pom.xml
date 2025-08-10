@@ -35,12 +35,7 @@
             <version>${webdrivermanager.version}</version>
         </dependency>
 
-        <!-- Chrome DevTools CDP - Using latest available version for Chrome 138 -->
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-devtools-v122</artifactId>
-            <version>${selenium.version}</version>
-        </dependency>
+
 
         <!-- JUnit 5 for testing -->
         <dependency>

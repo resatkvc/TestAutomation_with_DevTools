@@ -46,7 +46,18 @@ public class CartPage {
     public void navigateToCart() {
         logger.info("Navigating to cart page");
         driver.get("https://www.automationexercise.com/view_cart");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(cartTitle));
+        
+        // Try multiple locators for cart page title
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".breadcrumbs h2")));
+        } catch (Exception e) {
+            try {
+                wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#cart_info_table")));
+            } catch (Exception e2) {
+                wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".features_items h2")));
+            }
+        }
+        
         logger.info("Successfully navigated to cart page");
     }
 

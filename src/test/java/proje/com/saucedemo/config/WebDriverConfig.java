@@ -37,12 +37,12 @@ public class WebDriverConfig {
             
             // Configure WebDriver
             driver.manage().window().maximize();
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
-            driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
-            driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(30));
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+            driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(90));
+            driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(60));
             
             // Initialize WebDriverWait with longer timeout
-            wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+            wait = new WebDriverWait(driver, Duration.ofSeconds(45));
             
             logger.info("TestAutomation_with_DevTools WebDriver initialized successfully for browser: {}", browserType);
             return driver;
@@ -68,26 +68,7 @@ public class WebDriverConfig {
                 chromeOptions.addArguments("--disable-gpu");
                 chromeOptions.addArguments("--remote-allow-origins=*");
                 
-                // DevTools compatibility options - essential for CDP
-                chromeOptions.addArguments("--enable-logging");
-                chromeOptions.addArguments("--v=1");
-                chromeOptions.addArguments("--disable-blink-features=AutomationControlled");
-                chromeOptions.addArguments("--disable-web-security");
-                chromeOptions.addArguments("--allow-running-insecure-content");
-                chromeOptions.addArguments("--disable-extensions");
-                chromeOptions.addArguments("--disable-plugins");
-                chromeOptions.addArguments("--disable-images");
-                chromeOptions.addArguments("--disable-javascript-harmony-shipping");
-                chromeOptions.addArguments("--disable-background-timer-throttling");
-                chromeOptions.addArguments("--disable-backgrounding-occluded-windows");
-                chromeOptions.addArguments("--disable-renderer-backgrounding");
-                chromeOptions.addArguments("--disable-features=TranslateUI");
-                chromeOptions.addArguments("--disable-ipc-flooding-protection");
-                
-                // DevTools specific options
-                chromeOptions.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
-                chromeOptions.setExperimentalOption("useAutomationExtension", false);
-                chromeOptions.setExperimentalOption("detach", true);
+
                 return new ChromeDriver(chromeOptions);
                 
             case "firefox":

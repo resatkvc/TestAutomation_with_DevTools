@@ -1,22 +1,21 @@
-# TestAutomation_with_DevTools
+# TestAutomation
 
-Chrome DevTools Protocol kullanarak gelişmiş test otomasyonu projesi.
+Selenium WebDriver kullanarak test otomasyonu projesi.
 
 ## 🚀 Özellikler
 
-- **Chrome DevTools Protocol (CDP)** desteği
-- **Network Monitoring** - HTTP isteklerini ve yanıtlarını izleme
-- **Console Monitoring** - JavaScript console loglarını yakalama
-- **Performance Monitoring** - Performans metriklerini toplama
-- **Runtime Monitoring** - JavaScript hatalarını yakalama
-- **Security Monitoring** - Güvenlik olaylarını izleme
-- **Page & DOM Monitoring** - Sayfa yaşam döngüsü olaylarını izleme
+- **Selenium WebDriver** desteği
+- **Page Object Model** tasarım deseni
+- **Test Data Generation** - Otomatik test verisi üretimi
+- **Comprehensive Testing** - Kapsamlı test senaryoları
+- **Retry Mechanism** - Hata durumunda yeniden deneme
+- **Detailed Logging** - Detaylı log kayıtları
 
 ## 📋 Gereksinimler
 
 - Java 21+
 - Maven 3.6+
-- Chrome Browser 138+
+- Chrome Browser
 - Selenium WebDriver 4.18.1+
 
 ## 🛠️ Kurulum
@@ -51,10 +50,7 @@ mvn test -Dtest=NetworkMonitoringTest
 mvn test -Dtest=AutomationExerciseCompleteTest
 ```
 
-### DevTools testini çalıştırma:
-```bash
-mvn test -Dtest=DevToolsTest#testDevToolsNetworkMonitoring
-```
+
 
 ## 📁 Proje Yapısı
 
@@ -63,7 +59,6 @@ src/test/java/proje/com/saucedemo/
 ├── config/
 │   └── WebDriverConfig.java          # WebDriver konfigürasyonu
 ├── utils/
-│   ├── ChromeDevToolsManager.java    # DevTools yönetimi
 │   └── TestDataGenerator.java        # Test verisi üretici
 ├── pages/                            # Page Object Model
 │   ├── HomePage.java

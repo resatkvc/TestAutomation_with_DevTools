@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import proje.com.saucedemo.config.WebDriverConfig;
 import proje.com.saucedemo.pages.*;
 import proje.com.saucedemo.utils.TestDataGenerator;
-import proje.com.saucedemo.utils.ChromeDevToolsManager;
+
 import proje.com.saucedemo.verification.VerificationHelper;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class AutomationExerciseCompleteTest {
     private static WebDriver driver;
     private static WebDriverConfig webDriverConfig;
     private static VerificationHelper verificationHelper;
-    private static ChromeDevToolsManager cdpManager;
+
     
     // Page Objects
     private static HomePage homePage;
@@ -46,7 +46,7 @@ public class AutomationExerciseCompleteTest {
     @BeforeAll
     static void setUp() {
         try {
-            logger.info("=== Setting up Selenium DevTools Automation test suite ===");
+            logger.info("=== Setting up Selenium Automation test suite ===");
             
             // Initialize WebDriver
             webDriverConfig = new WebDriverConfig();
@@ -55,8 +55,7 @@ public class AutomationExerciseCompleteTest {
             // Initialize verification helper
             verificationHelper = new VerificationHelper(driver);
             
-            // Initialize comprehensive CDP Manager
-            cdpManager = new ChromeDevToolsManager(driver);
+
             
             // Initialize page objects
             homePage = new HomePage(driver);
@@ -72,7 +71,7 @@ public class AutomationExerciseCompleteTest {
             userPassword = userInfo.getPassword();
             userName = userInfo.getFirstName() + " " + userInfo.getLastName();
             
-            logger.info("Selenium DevTools Automation setup completed successfully with DevTools monitoring");
+            logger.info("Selenium Automation setup completed successfully");
             
         } catch (Exception e) {
             logger.error("Test setup failed: {}", e.getMessage());
@@ -83,21 +82,9 @@ public class AutomationExerciseCompleteTest {
     @AfterAll
     static void tearDown() {
         try {
-            logger.info("=== Cleaning up Selenium DevTools Automation test resources ===");
+            logger.info("=== Cleaning up Selenium Automation test resources ===");
             
-            // Debug: Check DevTools status
-            if (cdpManager != null) {
-                logger.info("CDP Manager initialized: {}", cdpManager.isInitialized());
-                logger.info("Network requests captured: {}", cdpManager.getNetworkRequestCount());
-                logger.info("Console logs captured: {}", cdpManager.getConsoleLogCount());
-                logger.info("JavaScript errors: {}", cdpManager.getJavaScriptErrorCount());
-                
-                // Attach final comprehensive CDP summary
-                cdpManager.attachToAllureReport();
-                
-                // Cleanup CDP Manager
-                cdpManager.cleanup();
-            }
+
             
             // Quit WebDriver
             if (driver != null) {
@@ -105,7 +92,7 @@ public class AutomationExerciseCompleteTest {
                 logger.info("WebDriver quit successfully");
             }
             
-            logger.info("=== Selenium DevTools Automation test suite cleanup completed ===");
+            logger.info("=== Selenium Automation test suite cleanup completed ===");
             
         } catch (Exception e) {
             logger.error("Test cleanup failed: {}", e.getMessage());
@@ -119,7 +106,7 @@ public class AutomationExerciseCompleteTest {
         long startTime = System.currentTimeMillis();
         
         try {
-            logger.info("=== Step 1: Creating new account with Selenium DevTools ===");
+            logger.info("=== Step 1: Creating new account ===");
             
             // Navigate to the site with explicit wait
             logger.info("Navigating to: {}", BASE_URL);
@@ -129,13 +116,7 @@ public class AutomationExerciseCompleteTest {
             Thread.sleep(3000);
             logger.info("Page loaded successfully");
             
-            // Enable DevTools monitoring
-            logger.info("Enabling comprehensive Chrome DevTools Protocol monitoring...");
-            cdpManager.enableAllMonitoring();
-            logger.info("✅ Full CDP monitoring suite enabled successfully");
-            
-            // Wait a bit more for DevTools to initialize
-            Thread.sleep(2000);
+
             
             // Click signup/login with retry mechanism
             logger.info("Attempting to click signup/login link...");
@@ -203,15 +184,14 @@ public class AutomationExerciseCompleteTest {
             
             long duration = System.currentTimeMillis() - startTime;
             logger.info("Account creation verification completed in {} ms", duration);
-            logger.info("Network Requests: {} | Console Logs: {}", 
-                cdpManager.getNetworkRequestCount(), cdpManager.getConsoleLogCount());
+
             
-            logger.info("=== Step 1 completed: Account created successfully with Selenium DevTools ===");
+            logger.info("=== Step 1 completed: Account created successfully ===");
             
         } catch (Exception e) {
             logger.error("Step 1 failed: {}", e.getMessage());
             logger.error("Stack trace: ", e);
-            logger.error("CDP Status: {}", cdpManager.getDevToolsSummary());
+
             throw new RuntimeException("Step 1 failed", e);
         }
     }
@@ -273,12 +253,9 @@ public class AutomationExerciseCompleteTest {
                 }
             }
             
-            logger.info("Network Summary - HTTP Requests: {} | Console Logs: {} | JS Errors: {}", 
-                cdpManager.getNetworkRequestCount(),
-                cdpManager.getConsoleLogCount(),
-                cdpManager.getJavaScriptErrorCount());
+
             
-            logger.info("=== Step 2 completed: Products added to cart with DevTools ===");
+            logger.info("=== Step 2 completed: Products added to cart ===");
             
         } catch (Exception e) {
             logger.error("Step 2 failed: {}", e.getMessage());
@@ -325,7 +302,7 @@ public class AutomationExerciseCompleteTest {
             
             logger.info("Cart Products: {}", String.join(", ", cartProductNames));
             
-            logger.info("=== Step 3 completed: Cart verification successful with DevTools ===");
+            logger.info("=== Step 3 completed: Cart verification successful ===");
             
         } catch (Exception e) {
             logger.error("Step 3 failed: {}", e.getMessage());
@@ -402,15 +379,15 @@ public class AutomationExerciseCompleteTest {
             paymentPage.clickContinue();
             Thread.sleep(2000);
             
-            logger.info("Final CDP Summary: {}", cdpManager.getDevToolsSummary());
+
             logger.info("Payment completed successfully");
             
-            logger.info("=== Step 4 completed: Full checkout and payment successful with DevTools monitoring ===");
+            logger.info("=== Step 4 completed: Full checkout and payment successful ===");
             
         } catch (Exception e) {
             logger.error("Step 4 failed: {}", e.getMessage());
             logger.error("Stack trace: ", e);
-            logger.error("CDP Status at Failure: {}", cdpManager.getDevToolsSummary());
+
             throw new RuntimeException("Step 4 failed", e);
         }
     }
