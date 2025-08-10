@@ -43,7 +43,7 @@ public class HomePage {
      */
     public void navigateToHome() {
         logger.info("Navigating to AutomationExercise home page");
-        driver.get("https://www.automationexercise.com/");
+        driver.get("https://automationexercise.com/");
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.tagName("body")));
         logger.info("Successfully navigated to home page");
     }

@@ -53,7 +53,7 @@ public class ProductsPage {
      */
     public void navigateToProducts() {
         logger.info("Navigating to products page");
-        driver.get("https://www.automationexercise.com/products");
+        driver.get("https://automationexercise.com/products");
         wait.until(ExpectedConditions.visibilityOfElementLocated(productsTitle));
         logger.info("Successfully navigated to products page");
     }

@@ -42,7 +42,7 @@ public class PaymentPage {
      */
     public void navigateToPayment() {
         logger.info("Navigating to payment page");
-        driver.get("https://www.automationexercise.com/payment");
+        driver.get("https://automationexercise.com/payment");
         wait.until(ExpectedConditions.visibilityOfElementLocated(paymentTitle));
         logger.info("Successfully navigated to payment page");
     }

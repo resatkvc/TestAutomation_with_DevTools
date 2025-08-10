@@ -19,8 +19,8 @@ public class CartPage {
     private final WebDriver driver;
     private final WebDriverWait wait;
 
-    // Locators
-    private final By cartTitle = By.cssSelector(".breadcrumbs h2");
+    // Locators - Updated based on GitHub project
+    private final By cartTitle = By.cssSelector("#cart_info_table");
     private final By cartItems = By.cssSelector("#cart_info_table tbody tr");
     private final By productNames = By.cssSelector(".cart_description h4 a");
     private final By productPrices = By.cssSelector(".cart_price p");
@@ -34,6 +34,7 @@ public class CartPage {
     private final By quantityInputs = By.cssSelector(".cart_quantity input");
     private final By updateCartButton = By.cssSelector(".btn.btn-default.btn-xs");
     private final By cartTotal = By.cssSelector(".cart_total_price p");
+    private final By cartPageTitle = By.cssSelector(".breadcrumbs h2");
 
     public CartPage(WebDriver driver) {
         this.driver = driver;
@@ -45,16 +46,16 @@ public class CartPage {
      */
     public void navigateToCart() {
         logger.info("Navigating to cart page");
-        driver.get("https://www.automationexercise.com/view_cart");
+        driver.get("https://automationexercise.com/view_cart");
         
-        // Try multiple locators for cart page title
+        // Wait for cart page to load - try multiple locators based on GitHub project
         try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".breadcrumbs h2")));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(cartPageTitle));
         } catch (Exception e) {
             try {
-                wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#cart_info_table")));
+                wait.until(ExpectedConditions.visibilityOfElementLocated(cartTitle));
             } catch (Exception e2) {
-                wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".features_items h2")));
+                wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".breadcrumbs")));
             }
         }
         

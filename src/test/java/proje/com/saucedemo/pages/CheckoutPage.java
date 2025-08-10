@@ -43,7 +43,7 @@ public class CheckoutPage {
 
     public CheckoutPage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     }
 
     /**
@@ -51,8 +51,26 @@ public class CheckoutPage {
      */
     public void navigateToCheckout() {
         logger.info("Navigating to checkout page");
-        driver.get("https://www.automationexercise.com/checkout");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(checkoutTitle));
+        driver.get("https://automationexercise.com/checkout");
+        
+        // Wait for checkout page to load - try multiple locators
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".breadcrumbs")));
+        } catch (Exception e) {
+            try {
+                wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#address_delivery")));
+            } catch (Exception e2) {
+                wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".address_details")));
+            }
+        }
+        
+        // Additional wait for page to be fully loaded
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        
         logger.info("Successfully navigated to checkout page");
     }
 
@@ -63,15 +81,28 @@ public class CheckoutPage {
                                    String state, String zipcode, String mobileNumber, String country) {
         logger.info("Filling delivery address information");
         
-        // Fill name - try multiple locators
+        // Fill name - try multiple locators based on GitHub project
         WebElement nameElement;
         try {
-            nameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("name")));
+            // First try the most common locator
+            nameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[name='name']")));
         } catch (Exception e) {
             try {
-                nameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[name='name']")));
+                // Try by ID
+                nameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("name")));
             } catch (Exception e2) {
-                nameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("first_name")));
+                try {
+                    // Try by placeholder
+                    nameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[placeholder*='Name']")));
+                } catch (Exception e3) {
+                    try {
+                        // Try by type and name attribute
+                        nameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[type='text'][name*='name']")));
+                    } catch (Exception e4) {
+                        // Try by any input with name containing 'name'
+                        nameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[name*='name']")));
+                    }
+                }
             }
         }
         nameElement.clear();
