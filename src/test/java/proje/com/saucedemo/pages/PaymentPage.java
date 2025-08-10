@@ -34,7 +34,7 @@ public class PaymentPage {
 
     public PaymentPage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
 
     /**
@@ -42,7 +42,7 @@ public class PaymentPage {
      */
     public void navigateToPayment() {
         logger.info("Navigating to payment page");
-        driver.get("https://automationexercise.com/payment");
+        driver.get("https://www.automationexercise.com/payment");
         wait.until(ExpectedConditions.visibilityOfElementLocated(paymentTitle));
         logger.info("Successfully navigated to payment page");
     }

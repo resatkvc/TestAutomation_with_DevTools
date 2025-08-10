@@ -35,7 +35,7 @@ public class HomePage {
 
     public HomePage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
 
     /**
@@ -43,7 +43,7 @@ public class HomePage {
      */
     public void navigateToHome() {
         logger.info("Navigating to AutomationExercise home page");
-        driver.get("https://automationexercise.com/");
+        driver.get("https://www.automationexercise.com/");
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.tagName("body")));
         logger.info("Successfully navigated to home page");
     }

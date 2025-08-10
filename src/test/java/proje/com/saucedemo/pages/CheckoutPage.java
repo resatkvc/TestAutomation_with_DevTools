@@ -51,7 +51,7 @@ public class CheckoutPage {
      */
     public void navigateToCheckout() {
         logger.info("Navigating to checkout page");
-        driver.get("https://automationexercise.com/checkout");
+        driver.get("https://www.automationexercise.com/checkout");
         
         // Wait for checkout page to load - try multiple locators
         try {
@@ -99,8 +99,13 @@ public class CheckoutPage {
                         // Try by type and name attribute
                         nameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[type='text'][name*='name']")));
                     } catch (Exception e4) {
-                        // Try by any input with name containing 'name'
-                        nameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[name*='name']")));
+                        try {
+                            // Try by any input with name containing 'name'
+                            nameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[name*='name']")));
+                        } catch (Exception e5) {
+                            // Try by first name field
+                            nameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[name='first_name']")));
+                        }
                     }
                 }
             }

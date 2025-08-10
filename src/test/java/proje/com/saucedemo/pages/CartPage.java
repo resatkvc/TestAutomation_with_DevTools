@@ -38,7 +38,7 @@ public class CartPage {
 
     public CartPage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
 
     /**
@@ -46,7 +46,7 @@ public class CartPage {
      */
     public void navigateToCart() {
         logger.info("Navigating to cart page");
-        driver.get("https://automationexercise.com/view_cart");
+        driver.get("https://www.automationexercise.com/view_cart");
         
         // Wait for cart page to load - try multiple locators based on GitHub project
         try {

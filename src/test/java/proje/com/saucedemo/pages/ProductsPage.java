@@ -45,7 +45,7 @@ public class ProductsPage {
 
     public ProductsPage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
 
     /**
@@ -53,7 +53,7 @@ public class ProductsPage {
      */
     public void navigateToProducts() {
         logger.info("Navigating to products page");
-        driver.get("https://automationexercise.com/products");
+        driver.get("https://www.automationexercise.com/products");
         wait.until(ExpectedConditions.visibilityOfElementLocated(productsTitle));
         logger.info("Successfully navigated to products page");
     }
