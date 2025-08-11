@@ -21,6 +21,12 @@
 
     <!-- DevTools Network Logger -->
     <logger name="proje.com.saucedemo.utils.NetworkTracer" level="DEBUG" />
+    
+    <!-- DevTools Helper Logger -->
+    <logger name="proje.com.saucedemo.utils.DevToolsHelper" level="INFO" />
+    
+    <!-- WebDriver Config Logger -->
+    <logger name="proje.com.saucedemo.config.WebDriverConfig" level="INFO" />
 
     <!-- Test Logger -->
     <logger name="proje.com.saucedemo" level="INFO" />

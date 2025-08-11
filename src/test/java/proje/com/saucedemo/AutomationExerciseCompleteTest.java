@@ -52,6 +52,14 @@ public class AutomationExerciseCompleteTest {
             webDriverConfig = new WebDriverConfig();
             driver = webDriverConfig.initializeDriver("chrome");
             
+            // Enable DevTools monitoring for network tracking
+            if (webDriverConfig.isDevToolsAvailable()) {
+                webDriverConfig.enableDevToolsMonitoring();
+                logger.info("DevTools monitoring enabled for network tracking");
+            } else {
+                logger.warn("DevTools not available - network monitoring disabled");
+            }
+            
             // Initialize verification helper
             verificationHelper = new VerificationHelper(driver);
             
@@ -186,6 +194,12 @@ public class AutomationExerciseCompleteTest {
             logger.info("Account creation verification completed in {} ms", duration);
 
             
+            // Log network statistics for this test step
+            if (webDriverConfig.isDevToolsAvailable()) {
+                var networkStats = webDriverConfig.getNetworkStats();
+                logger.info("Step 1 Network Statistics: {}", networkStats);
+            }
+            
             logger.info("=== Step 1 completed: Account created successfully ===");
             
         } catch (Exception e) {
@@ -255,6 +269,12 @@ public class AutomationExerciseCompleteTest {
             
 
             
+            // Log network statistics for this test step
+            if (webDriverConfig.isDevToolsAvailable()) {
+                var networkStats = webDriverConfig.getNetworkStats();
+                logger.info("Step 2 Network Statistics: {}", networkStats);
+            }
+            
             logger.info("=== Step 2 completed: Products added to cart ===");
             
         } catch (Exception e) {
@@ -301,6 +321,12 @@ public class AutomationExerciseCompleteTest {
             }
             
             logger.info("Cart Products: {}", String.join(", ", cartProductNames));
+            
+            // Log network statistics for this test step
+            if (webDriverConfig.isDevToolsAvailable()) {
+                var networkStats = webDriverConfig.getNetworkStats();
+                logger.info("Step 3 Network Statistics: {}", networkStats);
+            }
             
             logger.info("=== Step 3 completed: Cart verification successful ===");
             
@@ -380,6 +406,12 @@ public class AutomationExerciseCompleteTest {
             Thread.sleep(2000);
             
 
+            // Log network statistics for this test step
+            if (webDriverConfig.isDevToolsAvailable()) {
+                var networkStats = webDriverConfig.getNetworkStats();
+                logger.info("Step 4 Network Statistics: {}", networkStats);
+            }
+            
             logger.info("Payment completed successfully");
             
             logger.info("=== Step 4 completed: Full checkout and payment successful ===");
