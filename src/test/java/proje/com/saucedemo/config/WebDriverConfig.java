@@ -167,6 +167,18 @@ public class WebDriverConfig {
     }
     
     /**
+     * Enable test step monitoring (only user interactions and form submissions)
+     */
+    public void enableTestStepMonitoring() {
+        if (devToolsHelper != null && devToolsHelper.isEnabled()) {
+            devToolsHelper.enableTestStepMonitoring();
+            logger.info("Test step monitoring enabled - only user interactions will be logged");
+        } else {
+            logger.warn("DevTools not available for test step monitoring");
+        }
+    }
+    
+    /**
      * Enable only console logging
      */
     public void enableConsoleLogging() {

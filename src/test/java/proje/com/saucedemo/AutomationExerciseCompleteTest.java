@@ -13,7 +13,6 @@ import proje.com.saucedemo.utils.TestDataGenerator;
 import proje.com.saucedemo.verification.VerificationHelper;
 
 import java.util.List;
-import java.util.Arrays;
 
 /**
  * Selenium DevTools Automation - Complete AutomationExercise test automation
@@ -53,23 +52,12 @@ public class AutomationExerciseCompleteTest {
             webDriverConfig = new WebDriverConfig();
             driver = webDriverConfig.initializeDriver("chrome");
             
-            // Enable selective DevTools monitoring for test-specific network tracking
+            // Enable test step monitoring - sadece kullanıcı etkileşimlerini izle
             if (webDriverConfig.isDevToolsAvailable()) {
-                // Sadece test adımlarınızla ilgili URL'leri izle
-                List<String> targetUrls = Arrays.asList(
-                    "automationexercise.com",  // Ana site
-                    "signup",                  // Kayıt işlemleri
-                    "login",                   // Giriş işlemleri
-                    "products",                // Ürün sayfaları
-                    "cart",                    // Sepet işlemleri
-                    "checkout",                // Ödeme işlemleri
-                    "payment"                  // Ödeme sayfaları
-                );
-                
-                webDriverConfig.enableSelectiveNetworkMonitoring(targetUrls);
-                logger.info("Selective DevTools monitoring enabled for test-specific network tracking");
+                webDriverConfig.enableTestStepMonitoring();
+                logger.info("Test step monitoring enabled - only user interactions and form submissions will be logged");
             } else {
-                logger.warn("DevTools not available - network monitoring disabled");
+                logger.warn("DevTools not available - test step monitoring disabled");
             }
             
             // Initialize verification helper
