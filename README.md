@@ -1,22 +1,22 @@
-# TestAutomation
+# TestAutomation_with_DevTools
 
-Selenium WebDriver kullanarak test otomasyonu projesi.
+Modern web test otomasyonu projesi - Selenium WebDriver ve Chrome DevTools Protocol (CDP) entegrasyonu ile güçlendirilmiş.
 
 ## 🚀 Özellikler
 
-- **Selenium WebDriver** desteği
-- **Page Object Model** tasarım deseni
-- **Test Data Generation** - Otomatik test verisi üretimi
-- **Comprehensive Testing** - Kapsamlı test senaryoları
-- **Retry Mechanism** - Hata durumunda yeniden deneme
-- **Detailed Logging** - Detaylı log kayıtları
+- **Selenium WebDriver 4.34.0** - En güncel Selenium sürümü
+- **Chrome DevTools Protocol (CDP)** - Network monitoring, console logging, performance tracking
+- **WebDriverManager** - Otomatik driver yönetimi
+- **JUnit 5** - Modern test framework
+- **Logback** - Gelişmiş logging
+- **Faker** - Test verisi üretimi
 
 ## 📋 Gereksinimler
 
 - Java 21+
 - Maven 3.6+
-- Chrome Browser
-- Selenium WebDriver 4.18.1+
+- Chrome 139+ (DevTools için)
+- Windows 10/11
 
 ## 🛠️ Kurulum
 
@@ -31,96 +31,204 @@ cd TestAutomation_with_DevTools
 mvn clean install
 ```
 
-3. **Chrome versiyonunu kontrol edin:**
+3. **Chrome versiyonunuzu kontrol edin:**
 ```bash
 chrome --version
 ```
 
-## 🧪 Testleri Çalıştırma
+## 🔧 DevTools Entegrasyonu
 
-### Tüm testleri çalıştırma:
+### Chrome DevTools Protocol (CDP) Özellikleri
+
+Bu proje, Chrome 139 versiyonunuz için `selenium-devtools-v138` paketini kullanır. DevTools şu özellikleri sağlar:
+
+#### 🌐 Network Monitoring
+- HTTP isteklerini ve yanıtlarını gerçek zamanlı izleme
+- Request/response timing analizi
+- Network hatalarını yakalama
+- İstatistik toplama
+
+#### 📝 Console Logging
+- JavaScript console mesajlarını yakalama
+- Error, warning, info seviyelerini ayrıştırma
+- Kaynak bilgisi ile birlikte loglama
+
+#### ⚡ Performance Monitoring
+- Sayfa yükleme performansını izleme
+- Performance metrics toplama
+
+#### 🚫 URL Blocking
+- Belirli URL pattern'lerini bloklama
+- CSS, resim, script dosyalarını engelleme
+- Test senaryoları için kaynak kontrolü
+
+#### 📄 Page Monitoring
+- Sayfa yükleme olaylarını dinleme
+- DOM content loaded event'lerini yakalama
+
+## 🧪 Test Çalıştırma
+
+### Tüm Testleri Çalıştırma
 ```bash
 mvn test
 ```
 
-### Belirli test sınıfını çalıştırma:
+### DevTools Entegrasyon Testlerini Çalıştırma
 ```bash
-mvn test -Dtest=DevToolsTest
-mvn test -Dtest=NetworkMonitoringTest
-mvn test -Dtest=AutomationExerciseCompleteTest
+mvn test -Dtest=DevToolsIntegrationTest
 ```
 
+### Belirli Bir Test Metodunu Çalıştırma
+```bash
+mvn test -Dtest=DevToolsIntegrationTest#testNetworkMonitoring
+```
 
+## 📊 Kullanım Örnekleri
+
+### Temel DevTools Kullanımı
+
+```java
+// WebDriver'ı başlat
+WebDriverConfig config = new WebDriverConfig();
+WebDriver driver = config.initializeDriver("chrome");
+
+// DevTools monitoring'i etkinleştir
+config.enableDevToolsMonitoring();
+
+// Test senaryosu
+config.navigateTo("https://www.example.com");
+
+// Network istatistiklerini al
+DevToolsHelper.NetworkStats stats = config.getNetworkStats();
+System.out.println("Network Stats: " + stats);
+
+// Temizlik
+config.quitDriver();
+```
+
+### Network Monitoring
+
+```java
+// Sadece network monitoring'i etkinleştir
+config.enableNetworkMonitoring();
+
+// URL'leri blokla
+List<String> urlsToBlock = Arrays.asList("*.css", "*.png");
+config.blockUrls(urlsToBlock);
+```
+
+### Console Logging
+
+```java
+// Console logging'i etkinleştir
+config.enableConsoleLogging();
+
+// JavaScript console mesajları otomatik olarak yakalanır
+driver.executeScript("console.log('Test message');");
+```
 
 ## 📁 Proje Yapısı
 
 ```
-src/test/java/proje/com/saucedemo/
-├── config/
-│   └── WebDriverConfig.java          # WebDriver konfigürasyonu
-├── utils/
-│   └── TestDataGenerator.java        # Test verisi üretici
-├── pages/                            # Page Object Model
-│   ├── HomePage.java
-│   ├── ProductsPage.java
-│   ├── CartPage.java
-│   ├── CheckoutPage.java
-│   ├── PaymentPage.java
-│   └── SignupLoginPage.java
-├── verification/
-│   └── VerificationHelper.java       # Doğrulama yardımcıları
-├── DevToolsTest.java                 # DevTools test sınıfı
-├── NetworkMonitoringTest.java        # Network izleme testi
-└── AutomationExerciseCompleteTest.java # Tam otomasyon testi
+TestAutomation_with_DevTools/
+├── pom.xml                          # Maven konfigürasyonu
+├── README.md                        # Proje dokümantasyonu
+└── src/
+    └── test/
+        ├── java/
+        │   └── proje/
+        │       └── com/
+        │           └── saucedemo/
+        │               ├── config/
+        │               │   └── WebDriverConfig.java      # WebDriver + DevTools konfigürasyonu
+        │               ├── utils/
+        │               │   ├── DevToolsHelper.java       # DevTools yardımcı sınıfı
+        │               │   ├── TestDataGenerator.java    # Test verisi üretici
+        │               │   └── VerificationHelper.java   # Doğrulama yardımcısı
+        │               ├── pages/                        # Page Object Model
+        │               │   ├── HomePage.java
+        │               │   ├── ProductsPage.java
+        │               │   └── ...
+        │               ├── verification/
+        │               │   └── VerificationHelper.java
+        │               ├── AutomationExerciseCompleteTest.java
+        │               └── DevToolsIntegrationTest.java  # DevTools test sınıfı
+        └── resources/
+            ├── allure.properties
+            └── logback-test.xml
 ```
 
-## 🔧 DevTools Özellikleri
+## 🔍 DevTools API Referansı
 
-### Network Monitoring
-- HTTP isteklerini ve yanıtlarını izleme
-- Başarısız istekleri yakalama
-- İstek türlerini belirleme (script, stylesheet, image, vb.)
+### DevToolsHelper Sınıfı
 
-### Console Monitoring
-- JavaScript console loglarını yakalama
-- Log seviyelerini (info, warning, error) izleme
-- Kaynak bilgilerini toplama
+#### Ana Metodlar:
+- `enableNetworkMonitoring()` - Network izleme
+- `enableConsoleLogging()` - Console log yakalama
+- `enablePerformanceMonitoring()` - Performans izleme
+- `enablePageMonitoring()` - Sayfa olaylarını dinleme
+- `blockUrls(List<String>)` - URL bloklama
+- `getNetworkStats()` - Network istatistikleri
+- `close()` - DevTools oturumunu kapat
 
-### Performance Monitoring
-- Sayfa yükleme performansını izleme
-- DOM Content Loaded olaylarını yakalama
-- Performans metriklerini toplama
+#### NetworkStats Sınıfı:
+- `getTotalRequests()` - Toplam istek sayısı
+- `getTotalResponses()` - Toplam yanıt sayısı
+- `getPendingRequests()` - Bekleyen istek sayısı
 
-### Runtime Monitoring
-- JavaScript hatalarını yakalama
-- Console API çağrılarını izleme
-- Stack trace bilgilerini toplama
+### WebDriverConfig Sınıfı
 
-## 📊 Test Sonuçları
-
-Testler çalıştırıldığında aşağıdaki bilgiler loglanır:
-
-- **Network Requests**: Yakalanan HTTP istek sayısı
-- **Console Logs**: JavaScript console log sayısı
-- **JavaScript Errors**: JavaScript hata sayısı
-- **Security Events**: Güvenlik olay sayısı
-- **Performance Metrics**: Performans metrikleri
+#### DevTools Metodları:
+- `enableDevToolsMonitoring()` - Tüm monitoring özelliklerini etkinleştir
+- `enableNetworkMonitoring()` - Sadece network monitoring
+- `enableConsoleLogging()` - Sadece console logging
+- `blockUrls(List<String>)` - URL bloklama
+- `getNetworkStats()` - Network istatistikleri
+- `isDevToolsAvailable()` - DevTools kullanılabilir mi?
 
 ## 🐛 Sorun Giderme
 
-### DevTools Başlatılamıyorsa:
-1. Chrome versiyonunun 138+ olduğundan emin olun
-2. ChromeDriver'ın güncel olduğunu kontrol edin
-3. Chrome'u yeniden başlatın
+### DevTools Bağlantı Sorunları
 
-### Network İstekleri Yakalanmıyorsa:
-1. DevTools'un başarıyla başlatıldığını kontrol edin
-2. Sayfa yükleme süresini artırın
-3. Network monitoring'in etkin olduğunu doğrulayın
+1. **Chrome versiyonu uyumsuzluğu:**
+   - Chrome versiyonunuzu kontrol edin: `chrome --version`
+   - POM.xml'de doğru `selenium-devtools-vXXX` paketini kullandığınızdan emin olun
 
-## 📝 Loglar
+2. **DevTools session hatası:**
+   - WebDriver'ı yeniden başlatın
+   - Chrome'u tamamen kapatıp yeniden açın
 
-Proje SLF4J ve Logback kullanarak detaylı loglama yapar. Loglar `target/test-classes/logback-test.xml` dosyasında yapılandırılır.
+3. **Network monitoring çalışmıyor:**
+   - Chrome options'da `--remote-allow-origins=*` olduğundan emin olun
+   - DevTools session'ının başarıyla oluşturulduğunu kontrol edin
+
+### Log Seviyeleri
+
+Logback konfigürasyonu `src/test/resources/logback-test.xml` dosyasında bulunur:
+
+```xml
+<!-- DevTools loglarını görmek için -->
+<logger name="proje.com.saucedemo.utils.DevToolsHelper" level="INFO"/>
+<logger name="proje.com.saucedemo.config.WebDriverConfig" level="INFO"/>
+```
+
+## 📈 Performans İpuçları
+
+1. **Network monitoring'i sadece gerektiğinde etkinleştirin**
+2. **Büyük test suite'lerde DevTools session'larını düzgün kapatın**
+3. **URL blocking'i test senaryolarına göre optimize edin**
+4. **Memory leak'leri önlemek için listener'ları temizleyin**
+
+## 🔗 Faydalı Linkler
+
+- [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/)
+- [Selenium DevTools Documentation](https://www.selenium.dev/documentation/webdriver/bidirectional/chrome_devtools/)
+- [WebDriverManager](https://github.com/bonigarcia/webdrivermanager)
+- [JUnit 5](https://junit.org/junit5/)
+
+## 📝 Lisans
+
+Bu proje MIT lisansı altında lisanslanmıştır.
 
 ## 🤝 Katkıda Bulunma
 
@@ -130,6 +238,6 @@ Proje SLF4J ve Logback kullanarak detaylı loglama yapar. Loglar `target/test-cl
 4. Push yapın (`git push origin feature/amazing-feature`)
 5. Pull Request oluşturun
 
-## 📄 Lisans
+---
 
-Bu proje MIT lisansı altında lisanslanmıştır.
+**TestAutomation_with_DevTools** - Modern web test otomasyonu için güçlü DevTools entegrasyonu ile geliştirilmiştir.
