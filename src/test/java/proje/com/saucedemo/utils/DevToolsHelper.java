@@ -66,9 +66,17 @@ public class DevToolsHelper {
     }
     
     /**
-     * Network monitoring'i etkinleştir
+     * Network monitoring'i etkinleştir (tüm istekler)
      */
     public void enableNetworkMonitoring() {
+        enableSelectiveNetworkMonitoring(null);
+    }
+    
+    /**
+     * Seçici network monitoring'i etkinleştir (sadece belirli URL'ler)
+     * @param targetUrls İzlenecek URL'ler (null ise tümü izlenir)
+     */
+    public void enableSelectiveNetworkMonitoring(List<String> targetUrls) {
         if (!isEnabled || devTools == null) {
             logger.warn("DevTools not available for network monitoring");
             return;
@@ -83,10 +91,16 @@ public class DevToolsHelper {
                 String url = request.getRequest().getUrl();
                 String method = request.getRequest().getMethod();
                 
+                // Sadece hedef URL'leri logla
+                boolean shouldLog = targetUrls == null || targetUrls.isEmpty() || 
+                                  targetUrls.stream().anyMatch(url::contains);
+                
                 requestTimings.put(requestId, System.currentTimeMillis());
                 requestCount.incrementAndGet();
                 
-                logger.info("[CDP][Network] {} {} -> {}", method, requestId, url);
+                if (shouldLog) {
+                    logger.info("[CDP][Network] {} {} -> {}", method, requestId, url);
+                }
             });
             
             // Response'ları dinle
@@ -96,29 +110,45 @@ public class DevToolsHelper {
                 int status = response.getResponse().getStatus();
                 Long startTime = requestTimings.get(requestId);
                 
+                // Sadece hedef URL'leri logla
+                boolean shouldLog = targetUrls == null || targetUrls.isEmpty() || 
+                                  targetUrls.stream().anyMatch(url::contains);
+                
                 responseCount.incrementAndGet();
                 
-                if (startTime != null) {
-                    long duration = System.currentTimeMillis() - startTime;
-                    logger.info("[CDP][Network] Response {} {} -> {} ({}ms)", 
-                              status, requestId, url, duration);
-                    requestTimings.remove(requestId);
-                } else {
-                    logger.info("[CDP][Network] Response {} {} -> {}", 
-                              status, requestId, url);
+                if (shouldLog) {
+                    if (startTime != null) {
+                        long duration = System.currentTimeMillis() - startTime;
+                        logger.info("[CDP][Network] Response {} {} -> {} ({}ms)", 
+                                  status, requestId, url, duration);
+                        requestTimings.remove(requestId);
+                    } else {
+                        logger.info("[CDP][Network] Response {} {} -> {}", 
+                                  status, requestId, url);
+                    }
                 }
             });
             
             // Network hatalarını dinle
             devTools.addListener(Network.loadingFailed(), failure -> {
                 String requestId = failure.getRequestId().toString();
-                String url = failure.getRequestId().toString(); // getRequest() yerine getRequestId() kullanıyoruz
+                String url = failure.getRequestId().toString();
                 String errorText = failure.getErrorText();
                 
-                logger.error("[CDP][Network] Failed {} -> {}: {}", requestId, url, errorText);
+                // Sadece hedef URL'leri logla
+                boolean shouldLog = targetUrls == null || targetUrls.isEmpty() || 
+                                  targetUrls.stream().anyMatch(url::contains);
+                
+                if (shouldLog) {
+                    logger.error("[CDP][Network] Failed {} -> {}: {}", requestId, url, errorText);
+                }
             });
             
-            logger.info("Network monitoring enabled successfully");
+            if (targetUrls != null && !targetUrls.isEmpty()) {
+                logger.info("Selective network monitoring enabled for: {}", targetUrls);
+            } else {
+                logger.info("Network monitoring enabled successfully (all requests)");
+            }
             
         } catch (Exception e) {
             logger.error("Failed to enable network monitoring: {}", e.getMessage(), e);

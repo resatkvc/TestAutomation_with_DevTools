@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
+import java.util.List;
 
 /**
  * TestAutomation_with_DevTools - WebDriver configuration class with DevTools integration
@@ -150,6 +151,18 @@ public class WebDriverConfig {
             logger.info("Network monitoring enabled");
         } else {
             logger.warn("DevTools not available for network monitoring");
+        }
+    }
+    
+    /**
+     * Enable selective network monitoring (only specific URLs)
+     */
+    public void enableSelectiveNetworkMonitoring(List<String> targetUrls) {
+        if (devToolsHelper != null && devToolsHelper.isEnabled()) {
+            devToolsHelper.enableSelectiveNetworkMonitoring(targetUrls);
+            logger.info("Selective network monitoring enabled for: {}", targetUrls);
+        } else {
+            logger.warn("DevTools not available for selective network monitoring");
         }
     }
     
