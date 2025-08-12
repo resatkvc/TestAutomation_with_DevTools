@@ -318,13 +318,13 @@
         
         <div class="log-container" id="logContainer">
             <#list logEntries as entry>
-                <div class="log-entry ${entry.levelClass}" data-level="${entry.level?lower_case}">
-                    <div class="timestamp">${entry.timestamp}</div>
-                    <div class="level level-${entry.level?lower_case}">${entry.level}</div>
-                    <div class="method method-${getMethod(entry.message)?lower_case}">${getMethod(entry.message)}</div>
-                    <div class="url">${getUrl(entry.message)}</div>
-                    <div class="message">${entry.formattedMessage}</div>
-                </div>
+                                 <div class="log-entry ${entry.levelClass}" data-level="${entry.level?lower_case}">
+                     <div class="timestamp">${entry.timestamp}</div>
+                     <div class="level level-${entry.level?lower_case}">${entry.level}</div>
+                     <div class="method method-${extractMethod(entry.message)?lower_case}">${extractMethod(entry.message)}</div>
+                     <div class="url">${extractUrl(entry.message)}</div>
+                     <div class="message">${entry.formattedMessage}</div>
+                 </div>
             </#list>
         </div>
         

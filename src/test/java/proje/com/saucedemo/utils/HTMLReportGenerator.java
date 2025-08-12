@@ -156,8 +156,8 @@ public class HTMLReportGenerator {
     private List<LogEntry> parseLogFile(String logFile) throws IOException {
         List<LogEntry> entries = new ArrayList<>();
         
-        // Log pattern: 2024-01-15T10:30:15.123 [main] INFO logger - message
-        Pattern pattern = Pattern.compile("(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}) \\[(.*?)\\] (\\w+) (.*?) - (.+)");
+        // Log pattern: 2025-08-13T01:27:41.928Z [CDP Connection] INFO p.c.s.utils.DevToolsHelper.Network - message
+        Pattern pattern = Pattern.compile("(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z?) \\[(.*?)\\] (\\w+) (.*?) - (.+)");
         
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(logFile))) {
             String line;
@@ -170,6 +170,15 @@ public class HTMLReportGenerator {
                     entry.setLevel(matcher.group(3));
                     entry.setLogger(matcher.group(4));
                     entry.setMessage(matcher.group(5));
+                    entries.add(entry);
+                } else {
+                    // Eğer pattern eşleşmezse, basit bir log entry oluştur
+                    LogEntry entry = new LogEntry();
+                    entry.setTimestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")));
+                    entry.setThread("Unknown");
+                    entry.setLevel("INFO");
+                    entry.setLogger("Unknown");
+                    entry.setMessage(line);
                     entries.add(entry);
                 }
             }
@@ -189,6 +198,10 @@ public class HTMLReportGenerator {
         cfg.setClassLoaderForTemplateLoading(this.getClass().getClassLoader(), "templates");
         cfg.setDefaultEncoding("UTF-8");
         
+        // Helper fonksiyonları ekle
+        cfg.setSharedVariable("extractMethod", new MethodExtractor());
+        cfg.setSharedVariable("extractUrl", new UrlExtractor());
+        
         // Template yükle
         Template template = cfg.getTemplate(templateName);
         
@@ -199,6 +212,43 @@ public class HTMLReportGenerator {
         }
         
         logger.info("HTML report generated: {}", outputPath);
+    }
+    
+    /**
+     * HTTP metodunu çıkaran helper sınıf
+     */
+    public static class MethodExtractor implements freemarker.template.TemplateMethodModelEx {
+        @Override
+        public Object exec(List arguments) {
+            if (arguments.size() > 0 && arguments.get(0) != null) {
+                String message = arguments.get(0).toString();
+                if (message.contains("GET")) return "GET";
+                if (message.contains("POST")) return "POST";
+                if (message.contains("PUT")) return "PUT";
+                if (message.contains("DELETE")) return "DELETE";
+                if (message.contains("PATCH")) return "PATCH";
+            }
+            return "UNKNOWN";
+        }
+    }
+    
+    /**
+     * URL'yi çıkaran helper sınıf
+     */
+    public static class UrlExtractor implements freemarker.template.TemplateMethodModelEx {
+        @Override
+        public Object exec(List arguments) {
+            if (arguments.size() > 0 && arguments.get(0) != null) {
+                String message = arguments.get(0).toString();
+                // URL pattern'ini ara
+                java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("https?://[^\\s]+");
+                java.util.regex.Matcher matcher = pattern.matcher(message);
+                if (matcher.find()) {
+                    return matcher.group();
+                }
+            }
+            return "No URL";
+        }
     }
     
     /**
