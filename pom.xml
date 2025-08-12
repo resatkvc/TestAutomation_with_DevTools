@@ -70,6 +70,13 @@
             <version>${faker.version}</version>
         </dependency>
 
+        <!-- HTML Report Generator -->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.32</version>
+        </dependency>
+
     </dependencies>
 
     <build>

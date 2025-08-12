@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import proje.com.saucedemo.config.WebDriverConfig;
 import proje.com.saucedemo.pages.*;
 import proje.com.saucedemo.utils.TestDataGenerator;
+import proje.com.saucedemo.utils.HTMLReportGenerator;
 
 import proje.com.saucedemo.verification.VerificationHelper;
 
@@ -93,6 +94,12 @@ public class AutomationExerciseCompleteTest {
             logger.info("=== Cleaning up Selenium Automation test resources ===");
             
 
+            
+            // Generate HTML Reports
+            logger.info("=== Generating HTML Reports ===");
+            HTMLReportGenerator reportGenerator = new HTMLReportGenerator();
+            reportGenerator.generateAllReports();
+            logger.info("HTML reports generated successfully");
             
             // Quit WebDriver
             if (driver != null) {

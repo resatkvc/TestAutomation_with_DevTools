@@ -7,8 +7,8 @@
         </encoder>
     </appender>
 
-    <!-- File Appender -->
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!-- Main Test Automation File Appender -->
+    <appender name="MAIN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>target/logs/test-automation.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>target/logs/test-automation.%d{yyyy-MM-dd}.log</fileNamePattern>
@@ -19,21 +19,87 @@
         </encoder>
     </appender>
 
-    <!-- DevTools Network Logger -->
-    <logger name="proje.com.saucedemo.utils.NetworkTracer" level="DEBUG" />
-    
-    <!-- DevTools Helper Logger -->
-    <logger name="proje.com.saucedemo.utils.DevToolsHelper" level="INFO" />
-    
-    <!-- WebDriver Config Logger -->
-    <logger name="proje.com.saucedemo.config.WebDriverConfig" level="INFO" />
+    <!-- DevTools Network Monitoring File Appender -->
+    <appender name="DEVTOOLS_NETWORK_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>target/logs/devtools-network.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>target/logs/devtools-network.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS'Z'} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
 
-    <!-- Test Logger -->
-    <logger name="proje.com.saucedemo" level="INFO" />
+    <!-- DevTools Console Logging File Appender -->
+    <appender name="DEVTOOLS_CONSOLE_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>target/logs/devtools-console.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>target/logs/devtools-console.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS'Z'} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
 
-    <!-- Root Logger -->
-    <root level="INFO">
+    <!-- DevTools Performance File Appender -->
+    <appender name="DEVTOOLS_PERFORMANCE_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>target/logs/devtools-performance.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>target/logs/devtools-performance.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS'Z'} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- DevTools Network Logger - Ayrı dosyaya -->
+    <logger name="proje.com.saucedemo.utils.NetworkTracer" level="DEBUG" additivity="false">
+        <appender-ref ref="DEVTOOLS_NETWORK_FILE" />
         <appender-ref ref="CONSOLE" />
-        <appender-ref ref="FILE" />
+    </logger>
+    
+    <!-- DevTools Helper Network Logger - Network bilgileri ayrı dosyaya -->
+    <logger name="proje.com.saucedemo.utils.DevToolsHelper.Network" level="INFO" additivity="false">
+        <appender-ref ref="DEVTOOLS_NETWORK_FILE" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    
+    <!-- DevTools Helper Console Logger - Console bilgileri ayrı dosyaya -->
+    <logger name="proje.com.saucedemo.utils.DevToolsHelper.Console" level="INFO" additivity="false">
+        <appender-ref ref="DEVTOOLS_CONSOLE_FILE" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    
+    <!-- DevTools Helper Performance Logger - Performance bilgileri ayrı dosyaya -->
+    <logger name="proje.com.saucedemo.utils.DevToolsHelper.Performance" level="INFO" additivity="false">
+        <appender-ref ref="DEVTOOLS_PERFORMANCE_FILE" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    
+    <!-- DevTools Helper Ana Logger - Genel bilgiler ana dosyaya -->
+    <logger name="proje.com.saucedemo.utils.DevToolsHelper" level="INFO" additivity="false">
+        <appender-ref ref="MAIN_FILE" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    
+    <!-- WebDriver Config Logger - Ana dosyaya -->
+    <logger name="proje.com.saucedemo.config.WebDriverConfig" level="INFO" additivity="false">
+        <appender-ref ref="MAIN_FILE" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <!-- Test Logger - Ana dosyaya -->
+    <logger name="proje.com.saucedemo" level="INFO" additivity="false">
+        <appender-ref ref="MAIN_FILE" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <!-- Root Logger - Ana dosyaya -->
+    <root level="INFO">
+        <appender-ref ref="MAIN_FILE" />
+        <appender-ref ref="CONSOLE" />
     </root>
 </configuration> 

@@ -25,7 +25,17 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class DevToolsHelper {
     
+    // Ana logger - genel DevTools bilgileri için
     private static final Logger logger = LoggerFactory.getLogger(DevToolsHelper.class);
+    
+    // Network monitoring için ayrı logger
+    private static final Logger networkLogger = LoggerFactory.getLogger("proje.com.saucedemo.utils.DevToolsHelper.Network");
+    
+    // Console logging için ayrı logger
+    private static final Logger consoleLogger = LoggerFactory.getLogger("proje.com.saucedemo.utils.DevToolsHelper.Console");
+    
+    // Performance monitoring için ayrı logger
+    private static final Logger performanceLogger = LoggerFactory.getLogger("proje.com.saucedemo.utils.DevToolsHelper.Performance");
     
     private DevTools devTools;
     private WebDriver driver;
@@ -98,7 +108,7 @@ public class DevToolsHelper {
                 requestCount.incrementAndGet();
                 
                 if (shouldLog) {
-                    logger.info("[CDP][Network] {} {} -> {}", method, requestId, url);
+                    networkLogger.info("[CDP][Network] {} {} -> {}", method, requestId, url);
                 }
             });
             
@@ -117,11 +127,11 @@ public class DevToolsHelper {
                 if (shouldLog) {
                     if (startTime != null) {
                         long duration = System.currentTimeMillis() - startTime;
-                        logger.info("[CDP][Network] Response {} {} -> {} ({}ms)", 
+                        networkLogger.info("[CDP][Network] Response {} {} -> {} ({}ms)", 
                                   status, requestId, url, duration);
                         requestTimings.remove(requestId);
                     } else {
-                        logger.info("[CDP][Network] Response {} {} -> {}", 
+                        networkLogger.info("[CDP][Network] Response {} {} -> {}", 
                                   status, requestId, url);
                     }
                 }
@@ -137,7 +147,7 @@ public class DevToolsHelper {
                 boolean shouldLog = isRelevantRequest(url, "GET", targetUrls);
                 
                 if (shouldLog) {
-                    logger.error("[CDP][Network] Failed {} -> {}: {}", requestId, url, errorText);
+                    networkLogger.error("[CDP][Network] Failed {} -> {}: {}", requestId, url, errorText);
                 }
             });
             
@@ -276,16 +286,16 @@ public class DevToolsHelper {
                 
                 switch (level) {
                     case "ERROR":
-                        logger.error("[CDP][Console][{}] {}", source, text);
+                        consoleLogger.error("[CDP][Console][{}] {}", source, text);
                         break;
                     case "WARNING":
-                        logger.warn("[CDP][Console][{}] {}", source, text);
+                        consoleLogger.warn("[CDP][Console][{}] {}", source, text);
                         break;
                     case "INFO":
-                        logger.info("[CDP][Console][{}] {}", source, text);
+                        consoleLogger.info("[CDP][Console][{}] {}", source, text);
                         break;
                     default:
-                        logger.debug("[CDP][Console][{}] {}: {}", level, source, text);
+                        consoleLogger.debug("[CDP][Console][{}] {}: {}", level, source, text);
                 }
             });
             
@@ -466,7 +476,7 @@ public class DevToolsHelper {
                     
                     // Test adımı türünü belirle
                     String testStepType = getTestStepType(url, method);
-                    logger.info("[TEST-STEP][Network] {} {} -> {} | {}", method, requestId, url, testStepType);
+                    networkLogger.info("[TEST-STEP][Network] {} {} -> {} | {}", method, requestId, url, testStepType);
                 }
             });
             
@@ -485,12 +495,12 @@ public class DevToolsHelper {
                     if (startTime != null) {
                         long duration = System.currentTimeMillis() - startTime;
                         String statusIcon = status >= 200 && status < 300 ? "✅" : status >= 400 ? "❌" : "⚠️";
-                        logger.info("[TEST-STEP][Network] Response {} {} {} -> {} ({}ms) | {}", 
+                        networkLogger.info("[TEST-STEP][Network] Response {} {} {} -> {} ({}ms) | {}", 
                                   statusIcon, status, requestId, url, duration, testStepType);
                         requestTimings.remove(requestId);
                     } else {
                         String statusIcon = status >= 200 && status < 300 ? "✅" : status >= 400 ? "❌" : "⚠️";
-                        logger.info("[TEST-STEP][Network] Response {} {} {} -> {} | {}", 
+                        networkLogger.info("[TEST-STEP][Network] Response {} {} {} -> {} | {}", 
                                   statusIcon, status, requestId, url, testStepType);
                     }
                 }
@@ -504,7 +514,7 @@ public class DevToolsHelper {
                 
                 // Sadece test adımlarıyla ilgili hataları logla
                 if (isTestStepRequest(url, "GET")) {
-                    logger.error("[TEST-STEP][Network] Failed {} -> {}: {}", requestId, url, errorText);
+                    networkLogger.error("[TEST-STEP][Network] Failed {} -> {}: {}", requestId, url, errorText);
                 }
             });
             
