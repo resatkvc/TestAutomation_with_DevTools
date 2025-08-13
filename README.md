@@ -19,9 +19,7 @@ Bu proje, Selenium WebDriver ve Chrome DevTools Protocol (CDP) kullanarak geliş
 - [📈 DevTools Entegrasyonu](#-devtools-entegrasyonu)
 - [🔍 Loglama Sistemi](#-loglama-sistemi)
 - [📝 Örnekler](#-örnekler)
-- [❓ SSS](#-sss)
 - [🤝 Katkıda Bulunma](#-katkıda-bulunma)
-- [📄 Lisans](#-lisans)
 
 ## 🎯 Proje Amacı
 
@@ -424,33 +422,6 @@ String password = userInfo.getPassword();
 // Hesap bilgileri oluştur
 TestDataGenerator.AccountInfo accountInfo = TestDataGenerator.generateAccountInfo();
 ```
-
-## ❓ SSS
-
-### **Q: Chrome versiyonu uyumsuzluğu nasıl çözülür?**
-**A:** Chrome 139 veya üzeri versiyonunu yükleyin. WebDriverManager otomatik olarak uygun driver'ı indirir.
-
-### **Q: DevTools çalışmıyor, ne yapmalıyım?**
-**A:** 
-1. Chrome versiyonunu kontrol edin
-2. Selenium versiyonunun 4.34.0 olduğundan emin olun
-3. `selenium-devtools-v138` dependency'sinin eklendiğini kontrol edin
-
-### **Q: HTML raporları boş geliyor, neden?**
-**A:** 
-1. Test çalıştırıldığından emin olun
-2. Log dosyalarının oluştuğunu kontrol edin
-3. FreeMarker template'lerinin doğru konumda olduğunu kontrol edin
-
-### **Q: Network monitoring çok fazla log üretiyor, nasıl azaltabilirim?**
-**A:** `DevToolsHelper.enableTestStepMonitoring()` kullanın. Bu sadece test adımlarıyla ilgili istekleri loglar.
-
-### **Q: Test başarısız oluyor, nasıl debug edebilirim?**
-**A:** 
-1. HTML raporlarını inceleyin
-2. Console loglarını kontrol edin
-3. Network isteklerini analiz edin
-4. Retry mechanism'ini kullanın
 
 ## 🤝 Katkıda Bulunma
 
