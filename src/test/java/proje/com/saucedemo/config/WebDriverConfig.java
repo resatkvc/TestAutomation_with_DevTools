@@ -17,12 +17,9 @@ import java.time.Duration;
 import java.util.List;
 
 /**
- * TestAutomation_with_DevTools - WebDriver configuration class with DevTools integration
- * Uses WebDriverManager for automatic driver management
- * Supports Chrome, Firefox, and Edge browsers with Chrome DevTools Protocol (CDP)
- * 
- * @author TestAutomation_with_DevTools
- * @version 2.0
+ * TestAutomation_with_DevTools - DevTools entegrasyonlu WebDriver konfigürasyon sınıfı
+ * Otomatik driver yönetimi için WebDriverManager kullanır
+ * Chrome DevTools Protocol (CDP) ile Chrome, Firefox ve Edge tarayıcılarını destekler
  */
 public class WebDriverConfig {
     
@@ -33,30 +30,30 @@ public class WebDriverConfig {
     private DevToolsHelper devToolsHelper;
     
     /**
-     * Initialize WebDriver using WebDriverManager with DevTools integration
-     * @param browserType Type of browser to use (chrome, firefox, edge)
-     * @return Configured WebDriver instance
+     * DevTools entegrasyonu ile WebDriverManager kullanarak WebDriver'ı başlatır
+     * @param browserType Kullanılacak tarayıcı türü (chrome, firefox, edge)
+     * @return Konfigüre edilmiş WebDriver örneği
      */
     public WebDriver initializeDriver(String browserType) {
         try {
             driver = createLocalDriver(browserType);
             
-            // Configure WebDriver
+            // WebDriver'ı konfigüre et
             driver.manage().window().maximize();
             driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
             driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(90));
             driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(60));
             
-            // Initialize WebDriverWait with longer timeout
+            // Daha uzun timeout ile WebDriverWait'i başlat
             wait = new WebDriverWait(driver, Duration.ofSeconds(45));
             
-            // Initialize DevTools Helper for supported browsers
+            // Desteklenen tarayıcılar için DevTools Helper'ı başlat
             if (driver instanceof org.openqa.selenium.chrome.ChromeDriver || 
                 driver instanceof org.openqa.selenium.edge.EdgeDriver) {
                 devToolsHelper = new DevToolsHelper(driver);
-                logger.info("DevTools Helper initialized for browser: {}", browserType);
+                logger.info("DevTools Helper tarayıcı için başlatıldı: {}", browserType);
             } else {
-                logger.info("DevTools not supported for browser: {}", browserType);
+                logger.info("DevTools bu tarayıcı için desteklenmiyor: {}", browserType);
             }
             
             logger.info("TestAutomation_with_DevTools WebDriver initialized successfully for browser: {}", browserType);
@@ -69,21 +66,21 @@ public class WebDriverConfig {
     }
     
     /**
-     * Create local WebDriver instance using WebDriverManager
+     * WebDriverManager kullanarak yerel WebDriver örneği oluşturur
      */
     private WebDriver createLocalDriver(String browserType) {
         switch (browserType.toLowerCase()) {
             case "chrome":
-                // Use automatic Chrome version detection
+                // Otomatik Chrome versiyon tespiti kullan
                 WebDriverManager.chromedriver().setup();
                 ChromeOptions chromeOptions = new ChromeOptions();
-                // Basic Chrome options
+                // Temel Chrome seçenekleri
                 chromeOptions.addArguments("--no-sandbox");
                 chromeOptions.addArguments("--disable-dev-shm-usage");
                 chromeOptions.addArguments("--disable-gpu");
                 chromeOptions.addArguments("--remote-allow-origins=*");
                 
-                // DevTools için ek Chrome options
+                // DevTools için ek Chrome seçenekleri
                 chromeOptions.addArguments("--disable-web-security");
                 chromeOptions.addArguments("--allow-running-insecure-content");
                 chromeOptions.addArguments("--disable-features=VizDisplayCompositor");
@@ -110,28 +107,28 @@ public class WebDriverConfig {
     }
     
     /**
-     * Get WebDriverWait instance
+     * WebDriverWait örneğini alır
      */
     public WebDriverWait getWait() {
         return wait;
     }
     
     /**
-     * Get WebDriver instance
+     * WebDriver örneğini alır
      */
     public WebDriver getDriver() {
         return driver;
     }
     
     /**
-     * Get DevTools Helper instance
+     * DevTools Helper örneğini alır
      */
     public DevToolsHelper getDevToolsHelper() {
         return devToolsHelper;
     }
     
     /**
-     * Enable all DevTools monitoring features
+     * Tüm DevTools izleme özelliklerini etkinleştirir
      */
     public void enableDevToolsMonitoring() {
         if (devToolsHelper != null && devToolsHelper.isEnabled()) {
@@ -143,7 +140,7 @@ public class WebDriverConfig {
     }
     
     /**
-     * Enable only network monitoring
+     * Sadece network izlemeyi etkinleştirir
      */
     public void enableNetworkMonitoring() {
         if (devToolsHelper != null && devToolsHelper.isEnabled()) {
@@ -155,7 +152,7 @@ public class WebDriverConfig {
     }
     
     /**
-     * Enable selective network monitoring (only specific URLs)
+     * Seçici network izlemeyi etkinleştirir (sadece belirli URL'ler)
      */
     public void enableSelectiveNetworkMonitoring(List<String> targetUrls) {
         if (devToolsHelper != null && devToolsHelper.isEnabled()) {
@@ -167,7 +164,7 @@ public class WebDriverConfig {
     }
     
     /**
-     * Enable test step monitoring (only user interactions and form submissions)
+     * Test adımı izlemeyi etkinleştirir (sadece kullanıcı etkileşimleri ve form gönderimleri)
      */
     public void enableTestStepMonitoring() {
         if (devToolsHelper != null && devToolsHelper.isEnabled()) {
@@ -179,7 +176,7 @@ public class WebDriverConfig {
     }
     
     /**
-     * Enable only console logging
+     * Sadece console loglamayı etkinleştirir
      */
     public void enableConsoleLogging() {
         if (devToolsHelper != null && devToolsHelper.isEnabled()) {
@@ -191,7 +188,7 @@ public class WebDriverConfig {
     }
     
     /**
-     * Block specific URLs
+     * Belirli URL'leri engeller
      */
     public void blockUrls(java.util.List<String> urlsToBlock) {
         if (devToolsHelper != null && devToolsHelper.isEnabled()) {
@@ -202,7 +199,7 @@ public class WebDriverConfig {
     }
     
     /**
-     * Get network statistics
+     * Network istatistiklerini alır
      */
     public DevToolsHelper.NetworkStats getNetworkStats() {
         if (devToolsHelper != null && devToolsHelper.isEnabled()) {
@@ -212,7 +209,7 @@ public class WebDriverConfig {
     }
     
     /**
-     * Quit WebDriver and cleanup resources
+     * WebDriver'ı kapatır ve kaynakları temizler
      */
     public void quitDriver() {
         if (devToolsHelper != null) {
@@ -235,7 +232,7 @@ public class WebDriverConfig {
     }
     
     /**
-     * Navigate to URL
+     * URL'ye git
      */
     public void navigateTo(String url) {
         if (driver != null) {
@@ -245,7 +242,7 @@ public class WebDriverConfig {
     }
     
     /**
-     * Get current URL
+     * Mevcut URL'yi alır
      */
     public String getCurrentUrl() {
         if (driver != null) {
@@ -255,7 +252,7 @@ public class WebDriverConfig {
     }
     
     /**
-     * Get page title
+     * Sayfa başlığını alır
      */
     public String getPageTitle() {
         if (driver != null) {
@@ -265,7 +262,7 @@ public class WebDriverConfig {
     }
     
     /**
-     * Check if DevTools is available
+     * DevTools'un kullanılabilir olup olmadığını kontrol eder
      */
     public boolean isDevToolsAvailable() {
         return devToolsHelper != null && devToolsHelper.isEnabled();

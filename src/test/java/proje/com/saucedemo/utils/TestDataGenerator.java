@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Test data generator utility for AutomationExercise tests
+ * AutomationExercise testleri için test verisi oluşturucu yardımcı sınıf
  */
 public class TestDataGenerator {
     
@@ -17,7 +17,7 @@ public class TestDataGenerator {
     private static final Faker faker = new Faker();
     private static final Random random = new Random();
     
-    // Product names for random selection
+    // Rastgele seçim için ürün isimleri
     private static final String[] PRODUCT_NAMES = {
         "Blue Top",
         "Men Tshirt",
@@ -56,8 +56,8 @@ public class TestDataGenerator {
     };
     
     /**
-     * Generate random first name
-     * @return Random first name
+     * Rastgele ad oluşturur
+     * @return Rastgele ad
      */
     public static String generateFirstName() {
         String firstName = faker.name().firstName();
@@ -66,8 +66,8 @@ public class TestDataGenerator {
     }
     
     /**
-     * Generate random last name
-     * @return Random last name
+     * Rastgele soyad oluşturur
+     * @return Rastgele soyad
      */
     public static String generateLastName() {
         String lastName = faker.name().lastName();
@@ -76,8 +76,8 @@ public class TestDataGenerator {
     }
     
     /**
-     * Generate random postal code
-     * @return Random postal code
+     * Rastgele posta kodu oluşturur
+     * @return Rastgele posta kodu
      */
     public static String generatePostalCode() {
         String postalCode = faker.address().zipCode();
@@ -86,9 +86,9 @@ public class TestDataGenerator {
     }
     
     /**
-     * Generate random product names for cart
-     * @param count Number of products to generate
-     * @return List of random product names
+     * Sepet için rastgele ürün isimleri oluşturur
+     * @param count Oluşturulacak ürün sayısı
+     * @return Rastgele ürün isimleri listesi
      */
     public static List<String> generateRandomProducts(int count) {
         List<String> selectedProducts = new ArrayList<>();

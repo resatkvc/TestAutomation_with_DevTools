@@ -12,14 +12,14 @@ import java.time.Duration;
 import java.util.List;
 
 /**
- * Page Object for AutomationExercise Checkout Page
+ * AutomationExercise Ödeme Sayfası için Page Object
  */
 public class CheckoutPage {
     private static final Logger logger = LoggerFactory.getLogger(CheckoutPage.class);
     private final WebDriver driver;
     private final WebDriverWait wait;
 
-    // Locators
+    // Locator'lar
     private final By checkoutTitle = By.cssSelector(".breadcrumbs h2");
     private final By addressDetailsTitle = By.cssSelector(".address_details h3");
     private final By reviewOrderTitle = By.cssSelector(".review-order h3");
@@ -47,13 +47,13 @@ public class CheckoutPage {
     }
 
     /**
-     * Navigate to checkout page
+     * Ödeme sayfasına git
      */
     public void navigateToCheckout() {
-        logger.info("Navigating to checkout page");
+        logger.info("Ödeme sayfasına gidiliyor");
         driver.get("https://www.automationexercise.com/checkout");
         
-        // Wait for checkout page to load - try multiple locators
+        // Ödeme sayfasının yüklenmesini bekle - birden fazla locator dene
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".breadcrumbs")));
         } catch (Exception e) {
@@ -64,46 +64,46 @@ public class CheckoutPage {
             }
         }
         
-        // Additional wait for page to be fully loaded
+        // Sayfanın tamamen yüklenmesi için ek bekleme
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
         
-        logger.info("Successfully navigated to checkout page");
+        logger.info("Ödeme sayfasına başarıyla gidildi");
     }
 
     /**
-     * Fill delivery address information
+     * Teslimat adresi bilgilerini doldur
      */
     public void fillDeliveryAddress(String name, String email, String address, String city, 
                                    String state, String zipcode, String mobileNumber, String country) {
-        logger.info("Filling delivery address information");
+        logger.info("Teslimat adresi bilgileri dolduruluyor");
         
-        // Fill name - try multiple locators based on GitHub project
+        // İsim doldur - GitHub projesine göre birden fazla locator dene
         WebElement nameElement;
         try {
-            // First try the most common locator
+            // Önce en yaygın locator'ı dene
             nameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[name='name']")));
         } catch (Exception e) {
             try {
-                // Try by ID
+                // ID ile dene
                 nameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("name")));
             } catch (Exception e2) {
                 try {
-                    // Try by placeholder
+                    // Placeholder ile dene
                     nameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[placeholder*='Name']")));
                 } catch (Exception e3) {
                     try {
-                        // Try by type and name attribute
+                        // Type ve name attribute ile dene
                         nameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[type='text'][name*='name']")));
                     } catch (Exception e4) {
                         try {
-                            // Try by any input with name containing 'name'
+                            // Name içeren herhangi bir input ile dene
                             nameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[name*='name']")));
                         } catch (Exception e5) {
-                            // Try by first name field
+                            // İlk isim alanı ile dene
                             nameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[name='first_name']")));
                         }
                     }
@@ -113,128 +113,128 @@ public class CheckoutPage {
         nameElement.clear();
         nameElement.sendKeys(name);
         
-        // Fill email
+        // Email doldur
         WebElement emailElement = wait.until(ExpectedConditions.visibilityOfElementLocated(emailField));
         emailElement.clear();
         emailElement.sendKeys(email);
         
-        // Fill address
+        // Adres doldur
         WebElement addressElement = wait.until(ExpectedConditions.visibilityOfElementLocated(addressField));
         addressElement.clear();
         addressElement.sendKeys(address);
         
-        // Fill city
+        // Şehir doldur
         WebElement cityElement = wait.until(ExpectedConditions.visibilityOfElementLocated(cityField));
         cityElement.clear();
         cityElement.sendKeys(city);
         
-        // Fill state
+        // Eyalet doldur
         WebElement stateElement = wait.until(ExpectedConditions.visibilityOfElementLocated(stateField));
         stateElement.clear();
         stateElement.sendKeys(state);
         
-        // Fill zipcode
+        // Posta kodu doldur
         WebElement zipcodeElement = wait.until(ExpectedConditions.visibilityOfElementLocated(zipcodeField));
         zipcodeElement.clear();
         zipcodeElement.sendKeys(zipcode);
         
-        // Fill mobile number
+        // Mobil numara doldur
         WebElement mobileElement = wait.until(ExpectedConditions.visibilityOfElementLocated(mobileNumberField));
         mobileElement.clear();
         mobileElement.sendKeys(mobileNumber);
         
-        // Fill country
+        // Ülke doldur
         WebElement countryElement = wait.until(ExpectedConditions.visibilityOfElementLocated(countryField));
         countryElement.clear();
         countryElement.sendKeys(country);
         
-        logger.info("Delivery address information filled successfully");
+        logger.info("Teslimat adresi bilgileri başarıyla dolduruldu");
     }
 
     /**
-     * Add comment to order
+     * Siparişe yorum ekle
      */
     public void addComment(String comment) {
-        logger.info("Adding comment to order: {}", comment);
+        logger.info("Siparişe yorum ekleniyor: {}", comment);
         WebElement commentElement = wait.until(ExpectedConditions.visibilityOfElementLocated(commentField));
         commentElement.clear();
         commentElement.sendKeys(comment);
-        logger.info("Comment added successfully");
+        logger.info("Yorum başarıyla eklendi");
     }
 
     /**
-     * Click on Place Order button
+     * Sipariş Ver butonuna tıkla
      */
     public void clickPlaceOrder() {
-        logger.info("Clicking on Place Order button");
+        logger.info("Sipariş Ver butonuna tıklanıyor");
         WebElement placeOrderBtn = wait.until(ExpectedConditions.elementToBeClickable(placeOrderButton));
         placeOrderBtn.click();
-        logger.info("Successfully clicked on Place Order button");
+        logger.info("Sipariş Ver butonuna başarıyla tıklandı");
     }
 
     /**
-     * Get delivery address details
+     * Teslimat adresi detaylarını al
      */
     public String getDeliveryAddress() {
-        logger.info("Getting delivery address details");
+        logger.info("Teslimat adresi detayları alınıyor");
         try {
             WebElement addressElement = wait.until(ExpectedConditions.visibilityOfElementLocated(deliveryAddress));
             return addressElement.getText();
         } catch (Exception e) {
-            logger.warn("Could not get delivery address");
+            logger.warn("Teslimat adresi alınamadı");
             return "";
         }
     }
 
     /**
-     * Get billing address details
+     * Fatura adresi detaylarını al
      */
     public String getBillingAddress() {
-        logger.info("Getting billing address details");
+        logger.info("Fatura adresi detayları alınıyor");
         try {
             WebElement addressElement = wait.until(ExpectedConditions.visibilityOfElementLocated(billingAddress));
             return addressElement.getText();
         } catch (Exception e) {
-            logger.warn("Could not get billing address");
+            logger.warn("Fatura adresi alınamadı");
             return "";
         }
     }
 
     /**
-     * Get order summary
+     * Sipariş özetini al
      */
     public String getOrderSummary() {
-        logger.info("Getting order summary");
+        logger.info("Sipariş özeti alınıyor");
         try {
             WebElement summaryElement = wait.until(ExpectedConditions.visibilityOfElementLocated(orderSummary));
             return summaryElement.getText();
         } catch (Exception e) {
-            logger.warn("Could not get order summary");
+            logger.warn("Sipariş özeti alınamadı");
             return "";
         }
     }
 
     /**
-     * Get total amount
+     * Toplam tutarı al
      */
     public String getTotalAmount() {
-        logger.info("Getting total amount");
+        logger.info("Toplam tutar alınıyor");
         try {
             List<WebElement> totalElements = driver.findElements(totalAmount);
             if (!totalElements.isEmpty()) {
                 return totalElements.get(totalElements.size() - 1).getText();
             }
         } catch (Exception e) {
-            logger.warn("Could not get total amount");
+            logger.warn("Toplam tutar alınamadı");
         }
         return "0";
     }
 
     /**
-     * Get product names in checkout
+     * Ödeme sayfasındaki ürün isimlerini al
      */
     public List<String> getProductNames() {
-        logger.info("Getting product names in checkout");
+        logger.info("Ödeme sayfasındaki ürün isimleri alınıyor");
         List<WebElement> elements = driver.findElements(productNames);
         return elements.stream()
                 .map(WebElement::getText)
@@ -242,10 +242,10 @@ public class CheckoutPage {
     }
 
     /**
-     * Get product prices in checkout
+     * Ödeme sayfasındaki ürün fiyatlarını al
      */
     public List<String> getProductPrices() {
-        logger.info("Getting product prices in checkout");
+        logger.info("Ödeme sayfasındaki ürün fiyatları alınıyor");
         List<WebElement> elements = driver.findElements(productPrices);
         return elements.stream()
                 .map(WebElement::getText)
@@ -253,10 +253,10 @@ public class CheckoutPage {
     }
 
     /**
-     * Get product quantities in checkout
+     * Ödeme sayfasındaki ürün miktarlarını al
      */
     public List<String> getProductQuantities() {
-        logger.info("Getting product quantities in checkout");
+        logger.info("Ödeme sayfasındaki ürün miktarları alınıyor");
         List<WebElement> elements = driver.findElements(productQuantities);
         return elements.stream()
                 .map(WebElement::getText)
@@ -264,7 +264,7 @@ public class CheckoutPage {
     }
 
     /**
-     * Check if page is loaded
+     * Sayfanın yüklenip yüklenmediğini kontrol et
      */
     public boolean isPageLoaded() {
         try {
@@ -276,34 +276,34 @@ public class CheckoutPage {
     }
 
     /**
-     * Get page title
+     * Sayfa başlığını al
      */
     public String getPageTitle() {
         return driver.getTitle();
     }
 
     /**
-     * Get current URL
+     * Mevcut URL'yi al
      */
     public String getCurrentUrl() {
         return driver.getCurrentUrl();
     }
 
     /**
-     * Verify checkout contains specific product
+     * Ödeme sayfasının belirli ürünü içerip içermediğini doğrula
      */
     public boolean containsProduct(String productName) {
-        logger.info("Checking if checkout contains product: {}", productName);
+        logger.info("Ödeme sayfasının ürün içerip içermediği kontrol ediliyor: {}", productName);
         List<String> productNames = getProductNames();
         return productNames.stream()
                 .anyMatch(name -> name.contains(productName));
     }
 
     /**
-     * Get product quantity by product name
+     * Ürün adına göre ürün miktarını al
      */
     public String getProductQuantityByName(String productName) {
-        logger.info("Getting quantity for product: {}", productName);
+        logger.info("Ürün için miktar alınıyor: {}", productName);
         List<WebElement> productElements = driver.findElements(productNames);
         List<WebElement> quantityElements = driver.findElements(productQuantities);
         
@@ -316,10 +316,10 @@ public class CheckoutPage {
     }
 
     /**
-     * Get product price by product name
+     * Ürün adına göre ürün fiyatını al
      */
     public String getProductPriceByName(String productName) {
-        logger.info("Getting price for product: {}", productName);
+        logger.info("Ürün için fiyat alınıyor: {}", productName);
         List<WebElement> productElements = driver.findElements(productNames);
         List<WebElement> priceElements = driver.findElements(productPrices);
         

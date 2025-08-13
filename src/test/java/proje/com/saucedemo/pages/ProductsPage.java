@@ -12,14 +12,14 @@ import java.time.Duration;
 import java.util.List;
 
 /**
- * Page Object for AutomationExercise Products Page
+ * AutomationExercise Ürünler Sayfası için Page Object
  */
 public class ProductsPage {
     private static final Logger logger = LoggerFactory.getLogger(ProductsPage.class);
     private final WebDriver driver;
     private final WebDriverWait wait;
 
-    // Locators
+    // Locator'lar
     private final By productsTitle = By.cssSelector(".features_items h2");
     private final By productCards = By.cssSelector(".single-products");
     private final By productNames = By.cssSelector(".single-products h2");
@@ -49,28 +49,28 @@ public class ProductsPage {
     }
 
     /**
-     * Navigate to products page
+     * Ürünler sayfasına git
      */
     public void navigateToProducts() {
-        logger.info("Navigating to products page");
+        logger.info("Ürünler sayfasına gidiliyor");
         driver.get("https://www.automationexercise.com/products");
         wait.until(ExpectedConditions.visibilityOfElementLocated(productsTitle));
-        logger.info("Successfully navigated to products page");
+        logger.info("Ürünler sayfasına başarıyla gidildi");
     }
 
     /**
-     * Get all product cards
+     * Tüm ürün kartlarını al
      */
     public List<WebElement> getProductCards() {
-        logger.info("Getting all product cards");
+        logger.info("Tüm ürün kartları alınıyor");
         return driver.findElements(productCards);
     }
 
     /**
-     * Get product names
+     * Ürün isimlerini al
      */
     public List<String> getProductNames() {
-        logger.info("Getting product names");
+        logger.info("Ürün isimleri alınıyor");
         List<WebElement> elements = driver.findElements(productNames);
         return elements.stream()
                 .map(WebElement::getText)
@@ -78,10 +78,10 @@ public class ProductsPage {
     }
 
     /**
-     * Get product prices
+     * Ürün fiyatlarını al
      */
     public List<String> getProductPrices() {
-        logger.info("Getting product prices");
+        logger.info("Ürün fiyatları alınıyor");
         List<WebElement> elements = driver.findElements(productPrices);
         return elements.stream()
                 .map(WebElement::getText)
@@ -89,75 +89,75 @@ public class ProductsPage {
     }
 
     /**
-     * Get all add to cart buttons
+     * Tüm sepete ekle butonlarını al
      */
     public List<WebElement> getAddToCartButtons() {
-        logger.info("Getting all add to cart buttons");
+        logger.info("Tüm sepete ekle butonları alınıyor");
         return driver.findElements(addToCartButtons);
     }
 
     /**
-     * Add random product to cart
+     * Rastgele ürünü sepete ekle
      */
     public void addRandomProductToCart() {
-        logger.info("Adding random product to cart");
+        logger.info("Rastgele ürün sepete ekleniyor");
         List<WebElement> addToCartButtons = getAddToCartButtons();
         
         if (!addToCartButtons.isEmpty()) {
             int randomIndex = (int) (Math.random() * addToCartButtons.size());
             WebElement randomButton = addToCartButtons.get(randomIndex);
             
-            // Scroll to the button
+            // Butona kaydır
             ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", randomButton);
             
             wait.until(ExpectedConditions.elementToBeClickable(randomButton));
             randomButton.click();
             
-            // Wait for success message or modal
+            // Başarı mesajı veya modal için bekle
             try {
                 wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".modal-content")));
-                logger.info("Product added to cart successfully");
+                logger.info("Ürün başarıyla sepete eklendi");
             } catch (Exception e) {
-                logger.info("Product added to cart (no modal detected)");
+                logger.info("Ürün sepete eklendi (modal tespit edilmedi)");
             }
         } else {
-            logger.warn("No add to cart buttons found");
+            logger.warn("Sepete ekle butonu bulunamadı");
         }
     }
 
     /**
-     * Add specific product to cart by index
+     * Belirli indeksteki ürünü sepete ekle
      */
     public void addProductToCartByIndex(int index) {
-        logger.info("Adding product to cart by index: {}", index);
+        logger.info("İndekse göre ürün sepete ekleniyor: {}", index);
         List<WebElement> addToCartButtons = getAddToCartButtons();
         
         if (index >= 0 && index < addToCartButtons.size()) {
             WebElement button = addToCartButtons.get(index);
             
-            // Scroll to the button
+            // Butona kaydır
             ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", button);
             
             wait.until(ExpectedConditions.elementToBeClickable(button));
             button.click();
             
-            // Wait for success message or modal
+            // Başarı mesajı veya modal için bekle
             try {
                 wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".modal-content")));
-                logger.info("Product added to cart successfully");
+                logger.info("Ürün başarıyla sepete eklendi");
             } catch (Exception e) {
-                logger.info("Product added to cart (no modal detected)");
+                logger.info("Ürün sepete eklendi (modal tespit edilmedi)");
             }
         } else {
-            logger.warn("Invalid index: {}", index);
+            logger.warn("Geçersiz indeks: {}", index);
         }
     }
 
     /**
-     * Search for products
+     * Ürün ara
      */
     public void searchProducts(String searchTerm) {
-        logger.info("Searching for products: {}", searchTerm);
+        logger.info("Ürün aranıyor: {}", searchTerm);
         
         WebElement searchInputElement = wait.until(ExpectedConditions.visibilityOfElementLocated(searchInput));
         searchInputElement.clear();
@@ -167,14 +167,14 @@ public class ProductsPage {
         searchBtn.click();
         
         wait.until(ExpectedConditions.visibilityOfElementLocated(searchResults));
-        logger.info("Search completed");
+        logger.info("Arama tamamlandı");
     }
 
     /**
-     * Click on category
+     * Kategoriye tıkla
      */
     public void clickCategory(String category) {
-        logger.info("Clicking on category: {}", category);
+        logger.info("Kategoriye tıklanıyor: {}", category);
         
         By categoryLocator;
         switch (category.toLowerCase()) {
@@ -188,20 +188,20 @@ public class ProductsPage {
                 categoryLocator = categoryKids;
                 break;
             default:
-                logger.warn("Unknown category: {}", category);
+                logger.warn("Bilinmeyen kategori: {}", category);
                 return;
         }
         
         WebElement categoryElement = wait.until(ExpectedConditions.elementToBeClickable(categoryLocator));
         categoryElement.click();
-        logger.info("Category clicked successfully");
+        logger.info("Kategori başarıyla tıklandı");
     }
 
     /**
-     * Click on brand
+     * Markaya tıkla
      */
     public void clickBrand(String brand) {
-        logger.info("Clicking on brand: {}", brand);
+        logger.info("Markaya tıklanıyor: {}", brand);
         
         By brandLocator;
         switch (brand.toLowerCase()) {
@@ -234,55 +234,55 @@ public class ProductsPage {
                 brandLocator = brandBiba;
                 break;
             default:
-                logger.warn("Unknown brand: {}", brand);
+                logger.warn("Bilinmeyen marka: {}", brand);
                 return;
         }
         
         WebElement brandElement = wait.until(ExpectedConditions.elementToBeClickable(brandLocator));
         brandElement.click();
-        logger.info("Brand clicked successfully");
+        logger.info("Marka başarıyla tıklandı");
     }
 
     /**
-     * Click on View Cart button
+     * Sepeti Görüntüle butonuna tıkla
      */
     public void clickViewCart() {
-        logger.info("Clicking on View Cart button");
+        logger.info("Sepeti Görüntüle butonuna tıklanıyor");
         try {
             WebElement viewCartBtn = wait.until(ExpectedConditions.elementToBeClickable(viewCartButton));
             viewCartBtn.click();
-            logger.info("Successfully clicked on View Cart button");
+            logger.info("Sepeti Görüntüle butonuna başarıyla tıklandı");
         } catch (Exception e) {
-            logger.info("View Cart button not found, navigating to cart page directly");
+            logger.info("Sepeti Görüntüle butonu bulunamadı, sepet sayfasına doğrudan gidiliyor");
             driver.get("https://www.automationexercise.com/view_cart");
         }
     }
 
     /**
-     * Click on Continue Shopping button
+     * Alışverişe Devam Et butonuna tıkla
      */
     public void clickContinueShopping() {
-        logger.info("Clicking on Continue Shopping button");
+        logger.info("Alışverişe Devam Et butonuna tıklanıyor");
         try {
             WebElement continueBtn = wait.until(ExpectedConditions.elementToBeClickable(continueShoppingButton));
             continueBtn.click();
-            logger.info("Successfully clicked on Continue Shopping button");
+            logger.info("Alışverişe Devam Et butonuna başarıyla tıklandı");
         } catch (Exception e) {
-            logger.warn("Continue Shopping button not found");
+            logger.warn("Alışverişe Devam Et butonu bulunamadı");
         }
     }
 
     /**
-     * Get search results count
+     * Arama sonuçları sayısını al
      */
     public int getSearchResultsCount() {
-        logger.info("Getting search results count");
+        logger.info("Arama sonuçları sayısı alınıyor");
         List<WebElement> results = driver.findElements(searchResults);
         return results.size();
     }
 
     /**
-     * Check if page is loaded
+     * Sayfanın yüklenip yüklenmediğini kontrol et
      */
     public boolean isPageLoaded() {
         try {
@@ -294,14 +294,14 @@ public class ProductsPage {
     }
 
     /**
-     * Get page title
+     * Sayfa başlığını al
      */
     public String getPageTitle() {
         return driver.getTitle();
     }
 
     /**
-     * Get current URL
+     * Mevcut URL'yi al
      */
     public String getCurrentUrl() {
         return driver.getCurrentUrl();

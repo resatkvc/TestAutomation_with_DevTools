@@ -11,14 +11,14 @@ import org.slf4j.LoggerFactory;
 import java.time.Duration;
 
 /**
- * Page Object for AutomationExercise Payment Page
+ * AutomationExercise Ödeme Sayfası için Page Object
  */
 public class PaymentPage {
     private static final Logger logger = LoggerFactory.getLogger(PaymentPage.class);
     private final WebDriver driver;
     private final WebDriverWait wait;
 
-    // Locators
+    // Locator'lar
     private final By paymentTitle = By.cssSelector(".breadcrumbs h2");
     private final By cardNameField = By.id("name_on_card");
     private final By cardNumberField = By.id("card_number");
@@ -38,147 +38,147 @@ public class PaymentPage {
     }
 
     /**
-     * Navigate to payment page
+     * Ödeme sayfasına git
      */
     public void navigateToPayment() {
-        logger.info("Navigating to payment page");
+        logger.info("Ödeme sayfasına gidiliyor");
         driver.get("https://www.automationexercise.com/payment");
         wait.until(ExpectedConditions.visibilityOfElementLocated(paymentTitle));
-        logger.info("Successfully navigated to payment page");
+        logger.info("Ödeme sayfasına başarıyla gidildi");
     }
 
     /**
-     * Fill card information
+     * Kart bilgilerini doldur
      */
     public void fillCardInformation(String cardName, String cardNumber, String cvc, 
                                    String expiryMonth, String expiryYear) {
-        logger.info("Filling card information");
+        logger.info("Kart bilgileri dolduruluyor");
         
-        // Fill card name
+        // Kart sahibi adını doldur
         WebElement cardNameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(cardNameField));
         cardNameElement.clear();
         cardNameElement.sendKeys(cardName);
         
-        // Fill card number
+        // Kart numarasını doldur
         WebElement cardNumberElement = wait.until(ExpectedConditions.visibilityOfElementLocated(cardNumberField));
         cardNumberElement.clear();
         cardNumberElement.sendKeys(cardNumber);
         
-        // Fill CVC
+        // CVC doldur
         WebElement cvcElement = wait.until(ExpectedConditions.visibilityOfElementLocated(cvcField));
         cvcElement.clear();
         cvcElement.sendKeys(cvc);
         
-        // Fill expiry month
+        // Son kullanma ayını doldur
         WebElement expiryMonthElement = wait.until(ExpectedConditions.visibilityOfElementLocated(expiryMonthField));
         expiryMonthElement.clear();
         expiryMonthElement.sendKeys(expiryMonth);
         
-        // Fill expiry year
+        // Son kullanma yılını doldur
         WebElement expiryYearElement = wait.until(ExpectedConditions.visibilityOfElementLocated(expiryYearField));
         expiryYearElement.clear();
         expiryYearElement.sendKeys(expiryYear);
         
-        logger.info("Card information filled successfully");
+        logger.info("Kart bilgileri başarıyla dolduruldu");
     }
 
     /**
-     * Click on Pay and Confirm Order button
+     * Öde ve Siparişi Onayla butonuna tıkla
      */
     public void clickPayAndConfirmOrder() {
-        logger.info("Clicking on Pay and Confirm Order button");
+        logger.info("Öde ve Siparişi Onayla butonuna tıklanıyor");
         WebElement payButton = wait.until(ExpectedConditions.elementToBeClickable(payAndConfirmOrderButton));
         payButton.click();
-        logger.info("Successfully clicked on Pay and Confirm Order button");
+        logger.info("Öde ve Siparişi Onayla butonuna başarıyla tıklandı");
     }
 
     /**
-     * Check if order was placed successfully
+     * Siparişin başarıyla verilip verilmediğini kontrol et
      */
     public boolean isOrderPlaced() {
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(orderPlacedMessage));
-            logger.info("Order placed successfully");
+            logger.info("Sipariş başarıyla verildi");
             return true;
         } catch (Exception e) {
-            logger.warn("Order placement failed");
+            logger.warn("Sipariş verme başarısız");
             return false;
         }
     }
 
     /**
-     * Get order confirmation message
+     * Sipariş onay mesajını al
      */
     public String getOrderConfirmationMessage() {
-        logger.info("Getting order confirmation message");
+        logger.info("Sipariş onay mesajı alınıyor");
         try {
             WebElement messageElement = wait.until(ExpectedConditions.visibilityOfElementLocated(orderConfirmationMessage));
             return messageElement.getText();
         } catch (Exception e) {
-            logger.warn("Could not get order confirmation message");
+            logger.warn("Sipariş onay mesajı alınamadı");
             return "";
         }
     }
 
     /**
-     * Get order details
+     * Sipariş detaylarını al
      */
     public String getOrderDetails() {
-        logger.info("Getting order details");
+        logger.info("Sipariş detayları alınıyor");
         try {
             WebElement detailsElement = wait.until(ExpectedConditions.visibilityOfElementLocated(orderDetails));
             return detailsElement.getText();
         } catch (Exception e) {
-            logger.warn("Could not get order details");
+            logger.warn("Sipariş detayları alınamadı");
             return "";
         }
     }
 
     /**
-     * Click on Download Invoice button
+     * Fatura İndir butonuna tıkla
      */
     public void clickDownloadInvoice() {
-        logger.info("Clicking on Download Invoice button");
+        logger.info("Fatura İndir butonuna tıklanıyor");
         try {
             WebElement downloadButton = wait.until(ExpectedConditions.elementToBeClickable(downloadInvoiceButton));
             downloadButton.click();
-            logger.info("Successfully clicked on Download Invoice button");
+            logger.info("Fatura İndir butonuna başarıyla tıklandı");
         } catch (Exception e) {
-            logger.warn("Download Invoice button not found");
+            logger.warn("Fatura İndir butonu bulunamadı");
         }
     }
 
     /**
-     * Click on Continue button
+     * Devam Et butonuna tıkla
      */
     public void clickContinue() {
-        logger.info("Clicking on Continue button");
+        logger.info("Devam Et butonuna tıklanıyor");
         WebElement continueBtn = wait.until(ExpectedConditions.elementToBeClickable(continueButton));
         continueBtn.click();
-        logger.info("Successfully clicked on Continue button");
+        logger.info("Devam Et butonuna başarıyla tıklandı");
     }
 
     /**
-     * Complete payment process with random card data
+     * Rastgele kart verileriyle ödeme sürecini tamamla
      */
     public void completePaymentWithRandomData() {
-        logger.info("Completing payment with random card data");
+        logger.info("Rastgele kart verileriyle ödeme tamamlanıyor");
         
-        // Generate random card data
+        // Rastgele kart verileri oluştur
         String cardName = "Test User " + System.currentTimeMillis();
-        String cardNumber = "4111111111111111"; // Test card number
-        String cvc = String.valueOf(100 + (int)(Math.random() * 900)); // Random 3-digit CVC
-        String expiryMonth = String.valueOf(1 + (int)(Math.random() * 12)); // Random month 1-12
-        String expiryYear = String.valueOf(2025 + (int)(Math.random() * 10)); // Random year 2025-2034
+        String cardNumber = "4111111111111111"; // Test kart numarası
+        String cvc = String.valueOf(100 + (int)(Math.random() * 900)); // Rastgele 3 haneli CVC
+        String expiryMonth = String.valueOf(1 + (int)(Math.random() * 12)); // Rastgele ay 1-12
+        String expiryYear = String.valueOf(2025 + (int)(Math.random() * 10)); // Rastgele yıl 2025-2034
         
         fillCardInformation(cardName, cardNumber, cvc, expiryMonth, expiryYear);
         clickPayAndConfirmOrder();
         
-        logger.info("Payment completed with random data");
+        logger.info("Rastgele verilerle ödeme tamamlandı");
     }
 
     /**
-     * Check if page is loaded
+     * Sayfanın yüklenip yüklenmediğini kontrol et
      */
     public boolean isPageLoaded() {
         try {
@@ -190,21 +190,21 @@ public class PaymentPage {
     }
 
     /**
-     * Get page title
+     * Sayfa başlığını al
      */
     public String getPageTitle() {
         return driver.getTitle();
     }
 
     /**
-     * Get current URL
+     * Mevcut URL'yi al
      */
     public String getCurrentUrl() {
         return driver.getCurrentUrl();
     }
 
     /**
-     * Verify payment form is displayed
+     * Ödeme formunun görüntülenip görüntülenmediğini doğrula
      */
     public boolean isPaymentFormDisplayed() {
         try {
@@ -218,7 +218,7 @@ public class PaymentPage {
     }
 
     /**
-     * Get card name field value
+     * Kart sahibi adı alanı değerini al
      */
     public String getCardNameValue() {
         try {
@@ -230,7 +230,7 @@ public class PaymentPage {
     }
 
     /**
-     * Get card number field value
+     * Kart numarası alanı değerini al
      */
     public String getCardNumberValue() {
         try {
@@ -242,7 +242,7 @@ public class PaymentPage {
     }
 
     /**
-     * Get CVC field value
+     * CVC alanı değerini al
      */
     public String getCvcValue() {
         try {
@@ -254,7 +254,7 @@ public class PaymentPage {
     }
 
     /**
-     * Get expiry month field value
+     * Son kullanma ayı alanı değerini al
      */
     public String getExpiryMonthValue() {
         try {
@@ -266,7 +266,7 @@ public class PaymentPage {
     }
 
     /**
-     * Get expiry year field value
+     * Son kullanma yılı alanı değerini al
      */
     public String getExpiryYearValue() {
         try {

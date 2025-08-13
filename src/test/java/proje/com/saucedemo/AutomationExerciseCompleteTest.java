@@ -16,9 +16,9 @@ import proje.com.saucedemo.verification.VerificationHelper;
 import java.util.List;
 
 /**
- * Selenium DevTools Automation - Complete AutomationExercise test automation
- * Tests the full e-commerce flow from signup/login to order completion
- * Includes comprehensive network monitoring using DevTools API
+ * Selenium DevTools Otomasyonu - Tam AutomationExercise test otomasyonu
+ * Kayıt/giriş'ten sipariş tamamlamaya kadar tam e-ticaret akışını test eder
+ * DevTools API kullanarak kapsamlı network izleme içerir
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AutomationExerciseCompleteTest {
@@ -31,7 +31,7 @@ public class AutomationExerciseCompleteTest {
     private static VerificationHelper verificationHelper;
 
     
-    // Page Objects
+    // Sayfa Nesneleri
     private static HomePage homePage;
     private static SignupLoginPage signupLoginPage;
     private static ProductsPage productsPage;
@@ -39,7 +39,7 @@ public class AutomationExerciseCompleteTest {
     private static CheckoutPage checkoutPage;
     private static PaymentPage paymentPage;
     
-    // Test Data
+    // Test Verileri
     private static String userEmail;
     private static String userPassword;
     private static String userName;
@@ -47,26 +47,26 @@ public class AutomationExerciseCompleteTest {
     @BeforeAll
     static void setUp() {
         try {
-            logger.info("=== Setting up Selenium Automation test suite ===");
+            logger.info("=== Selenium Otomasyon test paketi kuruluyor ===");
             
-            // Initialize WebDriver
+            // WebDriver'ı başlat
             webDriverConfig = new WebDriverConfig();
             driver = webDriverConfig.initializeDriver("chrome");
             
-            // Enable test step monitoring - sadece kullanıcı etkileşimlerini izle
+            // Test adımı izlemeyi etkinleştir - sadece kullanıcı etkileşimlerini izle
             if (webDriverConfig.isDevToolsAvailable()) {
                 webDriverConfig.enableTestStepMonitoring();
-                logger.info("Test step monitoring enabled - only user interactions and form submissions will be logged");
+                logger.info("Test adımı izleme etkinleştirildi - sadece kullanıcı etkileşimleri ve form gönderimleri loglanacak");
             } else {
-                logger.warn("DevTools not available - test step monitoring disabled");
+                logger.warn("DevTools kullanılamıyor - test adımı izleme devre dışı");
             }
             
-            // Initialize verification helper
+            // Doğrulama yardımcısını başlat
             verificationHelper = new VerificationHelper(driver);
             
 
             
-            // Initialize page objects
+            // Sayfa nesnelerini başlat
             homePage = new HomePage(driver);
             signupLoginPage = new SignupLoginPage(driver);
             productsPage = new ProductsPage(driver);
@@ -74,98 +74,98 @@ public class AutomationExerciseCompleteTest {
             checkoutPage = new CheckoutPage(driver);
             paymentPage = new PaymentPage(driver);
             
-            // Generate test data
+            // Test verilerini oluştur
             TestDataGenerator.UserInfo userInfo = TestDataGenerator.generateUserInfo();
             userEmail = userInfo.getEmail();
             userPassword = userInfo.getPassword();
             userName = userInfo.getFirstName() + " " + userInfo.getLastName();
             
-            logger.info("Selenium Automation setup completed successfully");
+            logger.info("Selenium Otomasyon kurulumu başarıyla tamamlandı");
             
         } catch (Exception e) {
-            logger.error("Test setup failed: {}", e.getMessage());
-            throw new RuntimeException("Test setup failed", e);
+            logger.error("Test kurulumu başarısız: {}", e.getMessage());
+            throw new RuntimeException("Test kurulumu başarısız", e);
         }
     }
     
     @AfterAll
     static void tearDown() {
         try {
-            logger.info("=== Cleaning up Selenium Automation test resources ===");
+            logger.info("=== Selenium Otomasyon test kaynakları temizleniyor ===");
             
 
             
-            // Generate HTML Reports
-            logger.info("=== Generating HTML Reports ===");
+            // HTML Raporları oluştur
+            logger.info("=== HTML Raporları Oluşturuluyor ===");
             HTMLReportGenerator reportGenerator = new HTMLReportGenerator();
             reportGenerator.generateAllReports();
-            logger.info("HTML reports generated successfully");
+            logger.info("HTML raporları başarıyla oluşturuldu");
             
-            // Quit WebDriver
+            // WebDriver'ı kapat
             if (driver != null) {
                 webDriverConfig.quitDriver();
-                logger.info("WebDriver quit successfully");
+                logger.info("WebDriver başarıyla kapatıldı");
             }
             
-            logger.info("=== Selenium Automation test suite cleanup completed ===");
+            logger.info("=== Selenium Otomasyon test paketi temizliği tamamlandı ===");
             
         } catch (Exception e) {
-            logger.error("Test cleanup failed: {}", e.getMessage());
+            logger.error("Test temizliği başarısız: {}", e.getMessage());
         }
     }
     
     @Test
     @Order(1)
-    @DisplayName("Step 1: Navigate to AutomationExercise and Create Account")
+    @DisplayName("Adım 1: AutomationExercise'e Git ve Hesap Oluştur")
     void testCreateAccount() {
         long startTime = System.currentTimeMillis();
         
         try {
-            logger.info("=== Step 1: Creating new account ===");
+            logger.info("=== Adım 1: Yeni hesap oluşturuluyor ===");
             
-            // Navigate to the site with explicit wait
-            logger.info("Navigating to: {}", BASE_URL);
+            // Siteye açık bekleme ile git
+            logger.info("Siteye gidiliyor: {}", BASE_URL);
             driver.get(BASE_URL);
             
-            // Wait for page to load completely
+            // Sayfanın tamamen yüklenmesini bekle
             Thread.sleep(3000);
-            logger.info("Page loaded successfully");
+            logger.info("Sayfa başarıyla yüklendi");
             
 
             
-            // Click signup/login with retry mechanism
-            logger.info("Attempting to click signup/login link...");
+            // Kayıt/giriş linkine yeniden deneme mekanizması ile tıkla
+            logger.info("Kayıt/giriş linkine tıklamaya çalışılıyor...");
             int maxRetries = 3;
             for (int i = 0; i < maxRetries; i++) {
                 try {
                     homePage.clickSignupLogin();
-                    logger.info("Successfully clicked signup/login link");
+                    logger.info("Kayıt/giriş linkine başarıyla tıklandı");
                     break;
                 } catch (Exception e) {
-                    logger.warn("Attempt {} failed to click signup/login: {}", i + 1, e.getMessage());
+                    logger.warn("Deneme {} kayıt/giriş tıklaması başarısız: {}", i + 1, e.getMessage());
                     if (i == maxRetries - 1) throw e;
                     Thread.sleep(2000);
                 }
             }
             
-            // Wait for signup page to load
+            // Kayıt sayfasının yüklenmesini bekle
             Thread.sleep(3000);
             
-            // Start signup process
-            logger.info("Starting signup for user: {} with email: {}", userName, userEmail);
+            // Kayıt sürecini başlat
+            logger.info("Kullanıcı için kayıt başlatılıyor: {} e-posta ile: {}", userName, userEmail);
             signupLoginPage.startSignup(userName, userEmail);
             
-            // Check if email already exists
+            // E-posta zaten var mı kontrol et
             Thread.sleep(2000);
             if (signupLoginPage.isSignupEmailExists()) {
-                logger.info("Email already exists, trying with different email");
+                logger.info("E-posta zaten mevcut, farklı e-posta ile deneme yapılıyor");
                 userEmail = "test" + System.currentTimeMillis() + "@example.com";
                 signupLoginPage.startSignup(userName, userEmail);
                 Thread.sleep(2000);
             }
             
-            // Fill account information
-            logger.info("Filling account information...");
+            // Hesap bilgilerini doldur
+            logger.info("Hesap bilgileri dolduruluyor...");
             TestDataGenerator.AccountInfo accountInfo = TestDataGenerator.generateAccountInfo();
             signupLoginPage.fillAccountInformation(
                 accountInfo.getTitle(),
@@ -184,65 +184,65 @@ public class AutomationExerciseCompleteTest {
                 accountInfo.getZipcode(),
                 accountInfo.getMobileNumber()
             );
-            logger.info("Account information filled successfully");
+            logger.info("Hesap bilgileri başarıyla dolduruldu");
             
-            // Create account
-            logger.info("Creating account...");
+            // Hesabı oluştur
+            logger.info("Hesap oluşturuluyor...");
             signupLoginPage.createAccount();
             
-            // Wait for account creation
+            // Hesap oluşturma işlemini bekle
             Thread.sleep(5000);
             
-            // Verify account creation
+            // Hesap oluşturmayı doğrula
             boolean accountCreated = signupLoginPage.isAccountCreated();
             verificationHelper.verifyAccountCreated(accountCreated);
             
             long duration = System.currentTimeMillis() - startTime;
-            logger.info("Account creation verification completed in {} ms", duration);
+            logger.info("Hesap oluşturma doğrulaması {} ms'de tamamlandı", duration);
 
             
-            // Log network statistics for this test step
+            // Bu test adımı için ağ istatistiklerini logla
             if (webDriverConfig.isDevToolsAvailable()) {
                 var networkStats = webDriverConfig.getNetworkStats();
-                logger.info("Step 1 Network Statistics: {}", networkStats);
+                logger.info("Adım 1 Ağ İstatistikleri: {}", networkStats);
             }
             
-            logger.info("=== Step 1 completed: Account created successfully ===");
+            logger.info("=== Adım 1 tamamlandı: Hesap başarıyla oluşturuldu ===");
             
         } catch (Exception e) {
-            logger.error("Step 1 failed: {}", e.getMessage());
+            logger.error("Adım 1 başarısız: {}", e.getMessage());
             logger.error("Stack trace: ", e);
 
-            throw new RuntimeException("Step 1 failed", e);
+            throw new RuntimeException("Adım 1 başarısız", e);
         }
     }
     
     @Test
     @Order(2)
-    @DisplayName("Step 2: Add Random Products to Cart")
+    @DisplayName("Adım 2: Sepete Rastgele Ürünler Ekle")
     void testAddProductsToCart() {
         try {
-            logger.info("=== Step 2: Adding products to cart ===");
+            logger.info("=== Adım 2: Sepete ürünler ekleniyor ===");
             
-            // Navigate to products page with retry
-            logger.info("Navigating to products page...");
+            // Ürünler sayfasına yeniden deneme ile git
+            logger.info("Ürünler sayfasına gidiliyor...");
             int maxRetries = 3;
             for (int i = 0; i < maxRetries; i++) {
                 try {
                     productsPage.navigateToProducts();
                     Thread.sleep(3000);
-                    verificationHelper.verifyPageLoaded("Products page", productsPage.isPageLoaded());
-                    logger.info("Successfully navigated to products page");
+                    verificationHelper.verifyPageLoaded("Ürünler sayfası", productsPage.isPageLoaded());
+                    logger.info("Ürünler sayfasına başarıyla gidildi");
                     break;
                 } catch (Exception e) {
-                    logger.warn("Attempt {} failed to navigate to products: {}", i + 1, e.getMessage());
+                    logger.warn("Deneme {} ürünler sayfasına gitme başarısız: {}", i + 1, e.getMessage());
                     if (i == maxRetries - 1) throw e;
                     Thread.sleep(2000);
                 }
             }
             
-            // Add first product with retry
-            logger.info("Adding first product to cart...");
+            // İlk ürünü yeniden deneme ile ekle
+            logger.info("İlk ürün sepete ekleniyor...");
             int productRetries = 3;
             for (int i = 0; i < productRetries; i++) {
                 try {
@@ -250,25 +250,25 @@ public class AutomationExerciseCompleteTest {
                     Thread.sleep(3000);
                     productsPage.clickContinueShopping();
                     Thread.sleep(2000);
-                    logger.info("Added first product to cart successfully");
+                    logger.info("İlk ürün sepete başarıyla eklendi");
                     break;
                 } catch (Exception e) {
-                    logger.warn("Attempt {} failed to add first product: {}", i + 1, e.getMessage());
+                    logger.warn("Deneme {} ilk ürün ekleme başarısız: {}", i + 1, e.getMessage());
                     if (i == productRetries - 1) throw e;
                     Thread.sleep(3000);
                 }
             }
             
-            // Add second product with retry
-            logger.info("Adding second product to cart...");
+            // İkinci ürünü yeniden deneme ile ekle
+            logger.info("İkinci ürün sepete ekleniyor...");
             for (int i = 0; i < productRetries; i++) {
                 try {
                     productsPage.addRandomProductToCart();
                     Thread.sleep(3000);
-                    logger.info("Added second product to cart successfully");
+                    logger.info("İkinci ürün sepete başarıyla eklendi");
                     break;
                 } catch (Exception e) {
-                    logger.warn("Attempt {} failed to add second product: {}", i + 1, e.getMessage());
+                    logger.warn("Deneme {} ikinci ürün ekleme başarısız: {}", i + 1, e.getMessage());
                     if (i == productRetries - 1) throw e;
                     Thread.sleep(3000);
                 }
@@ -276,99 +276,99 @@ public class AutomationExerciseCompleteTest {
             
 
             
-            // Log network statistics for this test step
+            // Bu test adımı için ağ istatistiklerini logla
             if (webDriverConfig.isDevToolsAvailable()) {
                 var networkStats = webDriverConfig.getNetworkStats();
-                logger.info("Step 2 Network Statistics: {}", networkStats);
+                logger.info("Adım 2 Ağ İstatistikleri: {}", networkStats);
             }
             
-            logger.info("=== Step 2 completed: Products added to cart ===");
+            logger.info("=== Adım 2 tamamlandı: Ürünler sepete eklendi ===");
             
         } catch (Exception e) {
-            logger.error("Step 2 failed: {}", e.getMessage());
+            logger.error("Adım 2 başarısız: {}", e.getMessage());
             logger.error("Stack trace: ", e);
-            throw new RuntimeException("Step 2 failed", e);
+            throw new RuntimeException("Adım 2 başarısız", e);
         }
     }
     
     @Test
     @Order(3)
-    @DisplayName("Step 3: Navigate to Cart and Verify Products")
+    @DisplayName("Adım 3: Sepete Git ve Ürünleri Doğrula")
     void testVerifyCartProducts() {
         try {
-            logger.info("=== Step 3: Verifying cart products ===");
+            logger.info("=== Adım 3: Sepet ürünleri doğrulanıyor ===");
             
-            // Navigate to cart with retry
-            logger.info("Navigating to cart page...");
+            // Sepete yeniden deneme ile git
+            logger.info("Sepet sayfasına gidiliyor...");
             int maxRetries = 3;
             for (int i = 0; i < maxRetries; i++) {
                 try {
                     cartPage.navigateToCart();
                     Thread.sleep(3000);
-                    verificationHelper.verifyPageLoaded("Cart page", cartPage.isPageLoaded());
-                    logger.info("Successfully navigated to cart page");
+                    verificationHelper.verifyPageLoaded("Sepet sayfası", cartPage.isPageLoaded());
+                    logger.info("Sepet sayfasına başarıyla gidildi");
                     break;
                 } catch (Exception e) {
-                    logger.warn("Attempt {} failed to navigate to cart: {}", i + 1, e.getMessage());
+                    logger.warn("Deneme {} sepete gitme başarısız: {}", i + 1, e.getMessage());
                     if (i == maxRetries - 1) throw e;
                     Thread.sleep(2000);
                 }
             }
             
-            // Verify cart is not empty
+            // Sepetin boş olmadığını doğrula
             Thread.sleep(2000);
             verificationHelper.verifyCartNotEmpty(cartPage.getCartItemsCount() > 0);
             
-            // Get and verify products
+            // Ürünleri al ve doğrula
             List<String> cartProductNames = cartPage.getProductNames();
-            logger.info("Products in cart: {}", cartProductNames);
+            logger.info("Sepetteki ürünler: {}", cartProductNames);
             
             for (String productName : cartProductNames) {
                 verificationHelper.verifyProductInCart(cartPage.containsProduct(productName), productName);
             }
             
-            logger.info("Cart Products: {}", String.join(", ", cartProductNames));
+            logger.info("Sepet Ürünleri: {}", String.join(", ", cartProductNames));
             
-            // Log network statistics for this test step
+            // Bu test adımı için ağ istatistiklerini logla
             if (webDriverConfig.isDevToolsAvailable()) {
                 var networkStats = webDriverConfig.getNetworkStats();
-                logger.info("Step 3 Network Statistics: {}", networkStats);
+                logger.info("Adım 3 Ağ İstatistikleri: {}", networkStats);
             }
             
-            logger.info("=== Step 3 completed: Cart verification successful ===");
+            logger.info("=== Adım 3 tamamlandı: Sepet doğrulaması başarılı ===");
             
         } catch (Exception e) {
-            logger.error("Step 3 failed: {}", e.getMessage());
+            logger.error("Adım 3 başarısız: {}", e.getMessage());
             logger.error("Stack trace: ", e);
-            throw new RuntimeException("Step 3 failed", e);
+            throw new RuntimeException("Adım 3 başarısız", e);
         }
     }
     
     @Test
     @Order(4)
-    @DisplayName("Step 4: Complete Checkout and Payment")
+    @DisplayName("Adım 4: Ödeme ve Ödeme İşlemini Tamamla")
     void testCompleteCheckoutAndPayment() {
         try {
-            logger.info("=== Step 4: Completing checkout and payment ===");
+            logger.info("=== Adım 4: Ödeme ve ödeme işlemi tamamlanıyor ===");
             
-            // Proceed to checkout with retry
-            logger.info("Proceeding to checkout...");
+            // Ödemeye yeniden deneme ile devam et
+            logger.info("Ödemeye devam ediliyor...");
             int checkoutRetries = 3;
             for (int i = 0; i < checkoutRetries; i++) {
                 try {
                     cartPage.clickProceedToCheckout();
                     Thread.sleep(5000);
-                    logger.info("Successfully proceeded to checkout");
+                    logger.info("Ödemeye başarıyla devam edildi");
                     break;
                 } catch (Exception e) {
-                    logger.warn("Attempt {} failed to proceed to checkout: {}", i + 1, e.getMessage());
+                    logger.warn("Deneme {} ödemeye devam etme başarısız: {}", i + 1, e.getMessage());
                     if (i == checkoutRetries - 1) throw e;
                     Thread.sleep(3000);
                 }
             }
             
-            // Fill delivery address
-            logger.info("Filling delivery address...");
+            // Teslimat adresini doldur
+            logger.info("Teslimat adresi dolduruluyor...");
             TestDataGenerator.CheckoutInfo checkoutInfo = TestDataGenerator.generateCheckoutInfo();
             
             checkoutPage.fillDeliveryAddress(
@@ -383,51 +383,51 @@ public class AutomationExerciseCompleteTest {
             );
             Thread.sleep(2000);
             
-            // Add comment and place order
-            logger.info("Adding comment and placing order...");
-            checkoutPage.addComment("DevTools test order - " + System.currentTimeMillis());
+            // Yorum ekle ve sipariş ver
+            logger.info("Yorum ekleniyor ve sipariş veriliyor...");
+            checkoutPage.addComment("DevTools test siparişi - " + System.currentTimeMillis());
             checkoutPage.clickPlaceOrder();
             Thread.sleep(5000);
             
-            logger.info("Checkout Details - Name: {} {} | Address: {} | City: {} | Country: {}", 
+            logger.info("Ödeme Detayları - İsim: {} {} | Adres: {} | Şehir: {} | Ülke: {}", 
                 checkoutInfo.getFirstName(), checkoutInfo.getLastName(),
                 checkoutInfo.getAddress(), checkoutInfo.getCity(), checkoutInfo.getCountry());
             
-            logger.info("Order placed successfully");
+            logger.info("Sipariş başarıyla verildi");
             
-            // Complete payment
-            logger.info("Completing payment...");
+            // Ödemeyi tamamla
+            logger.info("Ödeme tamamlanıyor...");
             paymentPage.completePaymentWithRandomData();
             Thread.sleep(3000);
             
             verificationHelper.verifyOrderPlaced(paymentPage.isOrderPlaced());
             
             String confirmationMessage = paymentPage.getOrderConfirmationMessage();
-            logger.info("Order confirmation: {}", confirmationMessage);
+            logger.info("Sipariş onayı: {}", confirmationMessage);
             
-            // Download invoice and continue
-            logger.info("Downloading invoice and continuing...");
+            // Faturayı indir ve devam et
+            logger.info("Fatura indiriliyor ve devam ediliyor...");
             paymentPage.clickDownloadInvoice();
             Thread.sleep(2000);
             paymentPage.clickContinue();
             Thread.sleep(2000);
             
 
-            // Log network statistics for this test step
+            // Bu test adımı için ağ istatistiklerini logla
             if (webDriverConfig.isDevToolsAvailable()) {
                 var networkStats = webDriverConfig.getNetworkStats();
-                logger.info("Step 4 Network Statistics: {}", networkStats);
+                logger.info("Adım 4 Ağ İstatistikleri: {}", networkStats);
             }
             
-            logger.info("Payment completed successfully");
+            logger.info("Ödeme başarıyla tamamlandı");
             
-            logger.info("=== Step 4 completed: Full checkout and payment successful ===");
+            logger.info("=== Adım 4 tamamlandı: Tam ödeme ve ödeme işlemi başarılı ===");
             
         } catch (Exception e) {
-            logger.error("Step 4 failed: {}", e.getMessage());
+            logger.error("Adım 4 başarısız: {}", e.getMessage());
             logger.error("Stack trace: ", e);
 
-            throw new RuntimeException("Step 4 failed", e);
+            throw new RuntimeException("Adım 4 başarısız", e);
         }
     }
 } 

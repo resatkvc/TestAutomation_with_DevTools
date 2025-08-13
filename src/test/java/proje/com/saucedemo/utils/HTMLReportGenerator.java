@@ -16,7 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * HTML Report Generator - Log dosyalarını HTML raporlarına dönüştürür
+ * HTML Rapor Oluşturucu - Log dosyalarını HTML raporlarına dönüştürür
  * Renkli, interaktif ve detaylı raporlar oluşturur
  * 
  * @author TestAutomation_with_DevTools
@@ -40,7 +40,7 @@ public class HTMLReportGenerator {
     }
     
     /**
-     * Tüm log dosyalarını HTML raporlarına dönüştür
+     * Tüm log dosyalarını HTML raporlarına dönüştürür
      */
     public void generateAllReports() {
         try {
@@ -63,7 +63,7 @@ public class HTMLReportGenerator {
     }
     
     /**
-     * Ana test raporu oluştur
+     * Ana test raporu oluşturur
      */
     private void generateMainReport() throws Exception {
         String logFile = logDirectory + "/test-automation.log";
@@ -85,7 +85,7 @@ public class HTMLReportGenerator {
     }
     
     /**
-     * DevTools Network raporu oluştur
+     * DevTools Network raporu oluşturur
      */
     private void generateDevToolsNetworkReport() throws Exception {
         String logFile = logDirectory + "/devtools-network.log";

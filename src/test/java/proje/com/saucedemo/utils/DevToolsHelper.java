@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * DevTools Helper - Chrome DevTools Protocol (CDP) entegrasyonu için yardımcı sınıf
- * Network monitoring, console logging, performance tracking ve request interception özellikleri
+ * Network izleme, console loglama, performance takibi ve request yakalama özellikleri
  * 
  * @author TestAutomation_with_DevTools
  * @version 1.0
@@ -48,7 +48,7 @@ public class DevToolsHelper {
     
     /**
      * DevTools Helper constructor
-     * @param driver WebDriver instance (ChromeDriver/EdgeDriver)
+     * @param driver WebDriver örneği (ChromeDriver/EdgeDriver)
      */
     public DevToolsHelper(WebDriver driver) {
         this.driver = driver;
@@ -56,7 +56,7 @@ public class DevToolsHelper {
     }
     
     /**
-     * DevTools oturumunu başlat
+     * DevTools oturumunu başlatır
      */
     private void initializeDevTools() {
         try {
@@ -76,14 +76,14 @@ public class DevToolsHelper {
     }
     
     /**
-     * Network monitoring'i etkinleştir (tüm istekler)
+     * Network izlemeyi etkinleştirir (tüm istekler)
      */
     public void enableNetworkMonitoring() {
         enableSelectiveNetworkMonitoring(null);
     }
     
     /**
-     * Seçici network monitoring'i etkinleştir (sadece belirli URL'ler)
+     * Seçici network izlemeyi etkinleştirir (sadece belirli URL'ler)
      * @param targetUrls İzlenecek URL'ler (null ise tümü izlenir)
      */
     public void enableSelectiveNetworkMonitoring(List<String> targetUrls) {

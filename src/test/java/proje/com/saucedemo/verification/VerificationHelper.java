@@ -12,8 +12,8 @@ import java.time.Duration;
 import java.util.List;
 
 /**
- * Verification helper class for AutomationExercise test automation
- * Contains all verification methods in one place
+ * AutomationExercise test otomasyonu için doğrulama yardımcı sınıfı
+ * Tüm doğrulama metodlarını tek yerde içerir
  */
 public class VerificationHelper {
     
@@ -27,9 +27,9 @@ public class VerificationHelper {
     }
     
     /**
-     * Verify page is loaded
-     * @param pageName Name of the page for logging
-     * @param isLoaded Boolean indicating if page is loaded
+     * Sayfanın yüklendiğini doğrular
+     * @param pageName Loglama için sayfa adı
+     * @param isLoaded Sayfanın yüklenip yüklenmediğini gösteren boolean
      */
     public void verifyPageLoaded(String pageName, boolean isLoaded) {
         if (isLoaded) {
@@ -41,8 +41,8 @@ public class VerificationHelper {
     }
     
     /**
-     * Verify account was created successfully
-     * @param isCreated Boolean indicating if account was created
+     * Hesabın başarıyla oluşturulduğunu doğrular
+     * @param isCreated Hesabın oluşturulup oluşturulmadığını gösteren boolean
      */
     public void verifyAccountCreated(boolean isCreated) {
         if (isCreated) {
@@ -54,8 +54,8 @@ public class VerificationHelper {
     }
     
     /**
-     * Verify cart is not empty
-     * @param isNotEmpty Boolean indicating if cart is not empty
+     * Sepetin boş olmadığını doğrular
+     * @param isNotEmpty Sepetin boş olup olmadığını gösteren boolean
      */
     public void verifyCartNotEmpty(boolean isNotEmpty) {
         if (isNotEmpty) {
@@ -67,9 +67,9 @@ public class VerificationHelper {
     }
     
     /**
-     * Verify product is in cart
-     * @param isInCart Boolean indicating if product is in cart
-     * @param productName Name of the product
+     * Ürünün sepette olduğunu doğrular
+     * @param isInCart Ürünün sepette olup olmadığını gösteren boolean
+     * @param productName Ürün adı
      */
     public void verifyProductInCart(boolean isInCart, String productName) {
         if (isInCart) {
@@ -81,8 +81,8 @@ public class VerificationHelper {
     }
     
     /**
-     * Verify order was placed successfully
-     * @param isPlaced Boolean indicating if order was placed
+     * Siparişin başarıyla verildiğini doğrular
+     * @param isPlaced Siparişin verilip verilmediğini gösteren boolean
      */
     public void verifyOrderPlaced(boolean isPlaced) {
         if (isPlaced) {
@@ -94,9 +94,9 @@ public class VerificationHelper {
     }
     
     /**
-     * Verify current URL
-     * @param currentUrl Current URL
-     * @param expectedUrl Expected URL
+     * Mevcut URL'yi doğrular
+     * @param currentUrl Mevcut URL
+     * @param expectedUrl Beklenen URL
      */
     public void verifyCurrentUrl(String currentUrl, String expectedUrl) {
         if (currentUrl.equals(expectedUrl)) {

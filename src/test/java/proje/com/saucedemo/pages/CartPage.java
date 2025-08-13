@@ -12,14 +12,14 @@ import java.time.Duration;
 import java.util.List;
 
 /**
- * Page Object for AutomationExercise Cart Page
+ * AutomationExercise Sepet Sayfası için Page Object
  */
 public class CartPage {
     private static final Logger logger = LoggerFactory.getLogger(CartPage.class);
     private final WebDriver driver;
     private final WebDriverWait wait;
 
-    // Locators - Updated based on GitHub project
+    // Locator'lar - GitHub projesine göre güncellendi
     private final By cartTitle = By.cssSelector("#cart_info_table");
     private final By cartItems = By.cssSelector("#cart_info_table tbody tr");
     private final By productNames = By.cssSelector(".cart_description h4 a");
@@ -42,13 +42,13 @@ public class CartPage {
     }
 
     /**
-     * Navigate to cart page
+     * Sepet sayfasına git
      */
     public void navigateToCart() {
-        logger.info("Navigating to cart page");
+        logger.info("Sepet sayfasına gidiliyor");
         driver.get("https://www.automationexercise.com/view_cart");
         
-        // Wait for cart page to load - try multiple locators based on GitHub project
+        // Sepet sayfasının yüklenmesini bekle - GitHub projesine göre birden fazla locator dene
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(cartPageTitle));
         } catch (Exception e) {
@@ -59,22 +59,22 @@ public class CartPage {
             }
         }
         
-        logger.info("Successfully navigated to cart page");
+        logger.info("Sepet sayfasına başarıyla gidildi");
     }
 
     /**
-     * Get all cart items
+     * Tüm sepet öğelerini al
      */
     public List<WebElement> getCartItems() {
-        logger.info("Getting all cart items");
+        logger.info("Tüm sepet öğeleri alınıyor");
         return driver.findElements(cartItems);
     }
 
     /**
-     * Get product names in cart
+     * Sepetteki ürün isimlerini al
      */
     public List<String> getProductNames() {
-        logger.info("Getting product names in cart");
+        logger.info("Sepetteki ürün isimleri alınıyor");
         List<WebElement> elements = driver.findElements(productNames);
         return elements.stream()
                 .map(WebElement::getText)
@@ -82,10 +82,10 @@ public class CartPage {
     }
 
     /**
-     * Get product prices in cart
+     * Sepetteki ürün fiyatlarını al
      */
     public List<String> getProductPrices() {
-        logger.info("Getting product prices in cart");
+        logger.info("Sepetteki ürün fiyatları alınıyor");
         List<WebElement> elements = driver.findElements(productPrices);
         return elements.stream()
                 .map(WebElement::getText)
@@ -93,10 +93,10 @@ public class CartPage {
     }
 
     /**
-     * Get product quantities in cart
+     * Sepetteki ürün miktarlarını al
      */
     public List<String> getProductQuantities() {
-        logger.info("Getting product quantities in cart");
+        logger.info("Sepetteki ürün miktarları alınıyor");
         List<WebElement> elements = driver.findElements(productQuantities);
         return elements.stream()
                 .map(WebElement::getText)
@@ -104,10 +104,10 @@ public class CartPage {
     }
 
     /**
-     * Get total prices in cart
+     * Sepetteki toplam fiyatları al
      */
     public List<String> getTotalPrices() {
-        logger.info("Getting total prices in cart");
+        logger.info("Sepetteki toplam fiyatlar alınıyor");
         List<WebElement> elements = driver.findElements(totalPrices);
         return elements.stream()
                 .map(WebElement::getText)
@@ -115,44 +115,44 @@ public class CartPage {
     }
 
     /**
-     * Delete product from cart by index
+     * İndekse göre ürünü sepetten sil
      */
     public void deleteProductByIndex(int index) {
-        logger.info("Deleting product from cart by index: {}", index);
+        logger.info("İndekse göre ürün sepetten siliniyor: {}", index);
         List<WebElement> deleteButtons = driver.findElements(this.deleteButtons);
         
         if (index >= 0 && index < deleteButtons.size()) {
             WebElement deleteButton = deleteButtons.get(index);
             deleteButton.click();
-            logger.info("Product deleted from cart");
+            logger.info("Ürün sepetten silindi");
         } else {
-            logger.warn("Invalid index: {}", index);
+            logger.warn("Geçersiz indeks: {}", index);
         }
     }
 
     /**
-     * Delete all products from cart
+     * Sepetteki tüm ürünleri sil
      */
     public void deleteAllProducts() {
-        logger.info("Deleting all products from cart");
+        logger.info("Sepetteki tüm ürünler siliniyor");
         List<WebElement> deleteButtons = driver.findElements(this.deleteButtons);
         
         for (WebElement deleteButton : deleteButtons) {
             deleteButton.click();
             try {
-                Thread.sleep(1000); // Wait for deletion to complete
+                Thread.sleep(1000); // Silme işleminin tamamlanmasını bekle
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
         }
-        logger.info("All products deleted from cart");
+        logger.info("Sepetteki tüm ürünler silindi");
     }
 
     /**
-     * Update product quantity by index
+     * İndekse göre ürün miktarını güncelle
      */
     public void updateProductQuantity(int index, String newQuantity) {
-        logger.info("Updating product quantity by index: {} to: {}", index, newQuantity);
+        logger.info("İndekse göre ürün miktarı güncelleniyor: {} to: {}", index, newQuantity);
         List<WebElement> quantityInputs = driver.findElements(this.quantityInputs);
         
         if (index >= 0 && index < quantityInputs.size()) {
@@ -160,41 +160,41 @@ public class CartPage {
             quantityInput.clear();
             quantityInput.sendKeys(newQuantity);
             
-            // Click update button if available
+            // Güncelle butonu varsa tıkla
             try {
                 WebElement updateButton = wait.until(ExpectedConditions.elementToBeClickable(updateCartButton));
                 updateButton.click();
-                logger.info("Product quantity updated");
+                logger.info("Ürün miktarı güncellendi");
             } catch (Exception e) {
-                logger.warn("Update button not found");
+                logger.warn("Güncelle butonu bulunamadı");
             }
         } else {
-            logger.warn("Invalid index: {}", index);
+            logger.warn("Geçersiz indeks: {}", index);
         }
     }
 
     /**
-     * Click on Proceed to Checkout button
+     * Ödemeye Geç butonuna tıkla
      */
     public void clickProceedToCheckout() {
-        logger.info("Clicking on Proceed to Checkout button");
+        logger.info("Ödemeye Geç butonuna tıklanıyor");
         WebElement proceedButton = wait.until(ExpectedConditions.elementToBeClickable(proceedToCheckoutButton));
         proceedButton.click();
-        logger.info("Successfully clicked on Proceed to Checkout button");
+        logger.info("Ödemeye Geç butonuna başarıyla tıklandı");
     }
 
     /**
-     * Click on Continue Shopping button
+     * Alışverişe Devam Et butonuna tıkla
      */
     public void clickContinueShopping() {
-        logger.info("Clicking on Continue Shopping button");
+        logger.info("Alışverişe Devam Et butonuna tıklanıyor");
         WebElement continueButton = wait.until(ExpectedConditions.elementToBeClickable(continueShoppingButton));
         continueButton.click();
-        logger.info("Successfully clicked on Continue Shopping button");
+        logger.info("Alışverişe Devam Et butonuna başarıyla tıklandı");
     }
 
     /**
-     * Check if cart is empty
+     * Sepetin boş olup olmadığını kontrol et
      */
     public boolean isCartEmpty() {
         try {
@@ -206,44 +206,44 @@ public class CartPage {
     }
 
     /**
-     * Get cart empty message
+     * Sepet boş mesajını al
      */
     public String getCartEmptyMessage() {
         try {
             WebElement messageElement = wait.until(ExpectedConditions.visibilityOfElementLocated(cartEmptyMessage));
             return messageElement.getText();
         } catch (Exception e) {
-            return "Cart is not empty";
+            return "Sepet boş değil";
         }
     }
 
     /**
-     * Get cart items count
+     * Sepet öğeleri sayısını al
      */
     public int getCartItemsCount() {
-        logger.info("Getting cart items count");
+        logger.info("Sepet öğeleri sayısı alınıyor");
         List<WebElement> items = getCartItems();
         return items.size();
     }
 
     /**
-     * Get total cart value
+     * Toplam sepet değerini al
      */
     public String getTotalCartValue() {
-        logger.info("Getting total cart value");
+        logger.info("Toplam sepet değeri alınıyor");
         try {
             List<WebElement> totalElements = driver.findElements(cartTotal);
             if (!totalElements.isEmpty()) {
                 return totalElements.get(totalElements.size() - 1).getText();
             }
         } catch (Exception e) {
-            logger.warn("Could not get total cart value");
+            logger.warn("Toplam sepet değeri alınamadı");
         }
         return "0";
     }
 
     /**
-     * Check if page is loaded
+     * Sayfanın yüklenip yüklenmediğini kontrol et
      */
     public boolean isPageLoaded() {
         try {
@@ -255,34 +255,34 @@ public class CartPage {
     }
 
     /**
-     * Get page title
+     * Sayfa başlığını al
      */
     public String getPageTitle() {
         return driver.getTitle();
     }
 
     /**
-     * Get current URL
+     * Mevcut URL'yi al
      */
     public String getCurrentUrl() {
         return driver.getCurrentUrl();
     }
 
     /**
-     * Verify cart contains specific product
+     * Sepetin belirli ürünü içerip içermediğini doğrula
      */
     public boolean containsProduct(String productName) {
-        logger.info("Checking if cart contains product: {}", productName);
+        logger.info("Sepetin ürün içerip içermediği kontrol ediliyor: {}", productName);
         List<String> productNames = getProductNames();
         return productNames.stream()
                 .anyMatch(name -> name.contains(productName));
     }
 
     /**
-     * Get product quantity by product name
+     * Ürün adına göre ürün miktarını al
      */
     public String getProductQuantityByName(String productName) {
-        logger.info("Getting quantity for product: {}", productName);
+        logger.info("Ürün için miktar alınıyor: {}", productName);
         List<WebElement> productElements = driver.findElements(productNames);
         List<WebElement> quantityElements = driver.findElements(quantityInputs);
         

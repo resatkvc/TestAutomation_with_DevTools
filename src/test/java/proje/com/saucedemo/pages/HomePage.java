@@ -12,14 +12,14 @@ import java.time.Duration;
 import java.util.List;
 
 /**
- * Page Object for AutomationExercise Home Page
+ * AutomationExercise Ana Sayfa için Page Object
  */
 public class HomePage {
     private static final Logger logger = LoggerFactory.getLogger(HomePage.class);
     private final WebDriver driver;
     private final WebDriverWait wait;
 
-    // Locators
+    // Locator'lar
     private final By signupLoginLink = By.cssSelector("a[href='/login']");
     private final By productsLink = By.cssSelector("a[href='/products']");
     private final By cartLink = By.cssSelector("a[href='/view_cart']");
@@ -39,50 +39,50 @@ public class HomePage {
     }
 
     /**
-     * Navigate to the home page
+     * Ana sayfaya git
      */
     public void navigateToHome() {
-        logger.info("Navigating to AutomationExercise home page");
+        logger.info("AutomationExercise ana sayfasına gidiliyor");
         driver.get("https://www.automationexercise.com/");
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.tagName("body")));
-        logger.info("Successfully navigated to home page");
+        logger.info("Ana sayfaya başarıyla gidildi");
     }
 
     /**
-     * Click on Signup/Login link
+     * Kayıt/Giriş linkine tıkla
      */
     public void clickSignupLogin() {
-        logger.info("Clicking on Signup/Login link");
+        logger.info("Kayıt/Giriş linkine tıklanıyor");
         WebElement element = wait.until(ExpectedConditions.elementToBeClickable(signupLoginLink));
         element.click();
-        logger.info("Successfully clicked on Signup/Login link");
+        logger.info("Kayıt/Giriş linkine başarıyla tıklandı");
     }
 
     /**
-     * Click on Products link
+     * Ürünler linkine tıkla
      */
     public void clickProducts() {
-        logger.info("Clicking on Products link");
+        logger.info("Ürünler linkine tıklanıyor");
         WebElement element = wait.until(ExpectedConditions.elementToBeClickable(productsLink));
         element.click();
-        logger.info("Successfully clicked on Products link");
+        logger.info("Ürünler linkine başarıyla tıklandı");
     }
 
     /**
-     * Click on Cart link
+     * Sepet linkine tıkla
      */
     public void clickCart() {
-        logger.info("Clicking on Cart link");
+        logger.info("Sepet linkine tıklanıyor");
         WebElement element = wait.until(ExpectedConditions.elementToBeClickable(cartLink));
         element.click();
-        logger.info("Successfully clicked on Cart link");
+        logger.info("Sepet linkine başarıyla tıklandı");
     }
 
     /**
-     * Subscribe to newsletter
+     * Bültene abone ol
      */
     public void subscribeToNewsletter(String email) {
-        logger.info("Subscribing to newsletter with email: {}", email);
+        logger.info("Bültene abone olunuyor, email: {}", email);
         WebElement emailField = wait.until(ExpectedConditions.visibilityOfElementLocated(subscriptionEmail));
         emailField.clear();
         emailField.sendKeys(email);
@@ -91,80 +91,80 @@ public class HomePage {
         subscribeBtn.click();
         
         wait.until(ExpectedConditions.visibilityOfElementLocated(successMessage));
-        logger.info("Successfully subscribed to newsletter");
+        logger.info("Bültene başarıyla abone olundu");
     }
 
     /**
-     * Get all add to cart buttons
+     * Tüm sepete ekle butonlarını al
      */
     public List<WebElement> getAddToCartButtons() {
-        logger.info("Getting all add to cart buttons");
+        logger.info("Tüm sepete ekle butonları alınıyor");
         return driver.findElements(addToCartButtons);
     }
 
     /**
-     * Add random product to cart
+     * Rastgele ürünü sepete ekle
      */
     public void addRandomProductToCart() {
-        logger.info("Adding random product to cart");
+        logger.info("Rastgele ürün sepete ekleniyor");
         List<WebElement> addToCartButtons = getAddToCartButtons();
         
         if (!addToCartButtons.isEmpty()) {
             int randomIndex = (int) (Math.random() * addToCartButtons.size());
             WebElement randomButton = addToCartButtons.get(randomIndex);
             
-            // Scroll to the button
+            // Butona kaydır
             ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", randomButton);
             
             wait.until(ExpectedConditions.elementToBeClickable(randomButton));
             randomButton.click();
             
-            // Wait for success message or modal
+            // Başarı mesajı veya modal için bekle
             try {
                 wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".modal-content")));
-                logger.info("Product added to cart successfully");
+                logger.info("Ürün başarıyla sepete eklendi");
             } catch (Exception e) {
-                logger.info("Product added to cart (no modal detected)");
+                logger.info("Ürün sepete eklendi (modal tespit edilmedi)");
             }
         } else {
-            logger.warn("No add to cart buttons found");
+            logger.warn("Sepete ekle butonu bulunamadı");
         }
     }
 
     /**
-     * Click on View Cart button
+     * Sepeti Görüntüle butonuna tıkla
      */
     public void clickViewCart() {
-        logger.info("Clicking on View Cart button");
+        logger.info("Sepeti Görüntüle butonuna tıklanıyor");
         try {
             WebElement viewCartBtn = wait.until(ExpectedConditions.elementToBeClickable(viewCartButton));
             viewCartBtn.click();
-            logger.info("Successfully clicked on View Cart button");
+            logger.info("Sepeti Görüntüle butonuna başarıyla tıklandı");
         } catch (Exception e) {
-            logger.info("View Cart button not found, navigating to cart page directly");
+            logger.info("Sepeti Görüntüle butonu bulunamadı, sepet sayfasına doğrudan gidiliyor");
             driver.get("https://www.automationexercise.com/view_cart");
         }
     }
 
     /**
-     * Click on Continue Shopping button
+     * Alışverişe Devam Et butonuna tıkla
      */
     public void clickContinueShopping() {
-        logger.info("Clicking on Continue Shopping button");
+        logger.info("Alışverişe Devam Et butonuna tıklanıyor");
         try {
             WebElement continueBtn = wait.until(ExpectedConditions.elementToBeClickable(continueShoppingButton));
             continueBtn.click();
-            logger.info("Successfully clicked on Continue Shopping button");
+            logger.info("Alışverişe Devam Et butonuna başarıyla tıklandı");
         } catch (Exception e) {
-            logger.warn("Continue Shopping button not found");
+            logger.warn("Alışverişe Devam Et butonu bulunamadı");
         }
     }
 
     /**
-     * Get product names from the page
+     * Sayfadaki ürün isimlerini al
      */
     public List<String> getProductNames() {
-        logger.info("Getting product names from the page");
+        logger.info("Sayfadaki ürün isimleri alınıyor");
         List<WebElement> elements = driver.findElements(productNames);
         return elements.stream()
                 .map(WebElement::getText)
@@ -172,10 +172,10 @@ public class HomePage {
     }
 
     /**
-     * Get product prices from the page
+     * Sayfadaki ürün fiyatlarını al
      */
     public List<String> getProductPrices() {
-        logger.info("Getting product prices from the page");
+        logger.info("Sayfadaki ürün fiyatları alınıyor");
         List<WebElement> elements = driver.findElements(productPrices);
         return elements.stream()
                 .map(WebElement::getText)
@@ -183,7 +183,7 @@ public class HomePage {
     }
 
     /**
-     * Check if page is loaded
+     * Sayfanın yüklenip yüklenmediğini kontrol et
      */
     public boolean isPageLoaded() {
         try {
@@ -195,14 +195,14 @@ public class HomePage {
     }
 
     /**
-     * Get page title
+     * Sayfa başlığını al
      */
     public String getPageTitle() {
         return driver.getTitle();
     }
 
     /**
-     * Get current URL
+     * Mevcut URL'yi al
      */
     public String getCurrentUrl() {
         return driver.getCurrentUrl();
