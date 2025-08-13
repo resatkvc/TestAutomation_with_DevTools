@@ -466,11 +466,6 @@ TestDataGenerator.AccountInfo accountInfo = TestDataGenerator.generateAccountInf
 - README'yi güncelleyin
 - Yeni özellikler için dokümantasyon ekleyin
 
-## 📄 Lisans
-
-Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için `LICENSE` dosyasına bakın.
-
----
 
 ## 🎉 Teşekkürler
 
@@ -487,6 +482,6 @@ Bu proje aşağıdaki açık kaynak projeleri kullanır:
 
 **⭐ Bu projeyi beğendiyseniz yıldız vermeyi unutmayın!**
 
-**📧 İletişim:** [your-email@example.com](mailto:your-email@example.com)
+**📧 İletişim:** [kavciresat@gmail.com](kavciresat@gmail.com)
 
-**🌐 Website:** [https://your-website.com](https://your-website.com)
+**🌐 Website:** [https://www.linkedin.com/in/kavci/](https://www.linkedin.com/in/kavci/)
